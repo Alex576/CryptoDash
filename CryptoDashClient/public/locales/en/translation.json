@@ -1,0 +1,32 @@
+{
+  "Login": "Login",
+  "Register": {
+    "Title": "Register in CryptoDash",
+    "Description": "Enter your email and password",
+    "Errors": {
+      "DifferentPasswords": "Passwords must be equals",
+      "BadPasswordOrEmail": "Wrong password or email"
+    }
+  },
+  "Control": {
+    "Email": "Email",
+    "Password": "Password",
+    "RepeatPassword": "Repeat Password"
+  },
+  "Form": {
+    "Loading": "Loading..."
+  },
+  "Button": {
+    "Enter": "Enter",
+    "Register": "Register"
+  },
+  "SideBar": {
+    "Dashboard": "Dashboard",
+    "Protfolio": "Portfolio",
+    "Settings": "Settings",
+    "Subjects": "Subjects"
+  },
+  "Utils": {
+    "CheckingSession": "Checking session..."
+  }
+}

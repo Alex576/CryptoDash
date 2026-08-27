@@ -8,13 +8,20 @@ import { AuthModule } from './modules/auth/auth.module';
 import { AuthGuard } from './modules/auth/guards/auth.guard';
 import { CryptoEngineModule } from './modules/crypto-engine/crypto-engine.module';
 import { DataMigratorModule } from './modules/data-migrator/data-migrator.module';
+import { LayoutModule } from './modules/layout/layout.module';
+import { ObjectEntitiesModule } from './modules/object-entities/object-entities.module';
 import { PortfoliosModule } from './modules/portfolios/portfolios.module';
+import { SettingsModule } from './modules/settings/settings.module';
 
 @Module({
   imports: [
+    ObjectEntitiesModule,
+    // ControlsBuilderModule,
+    SettingsModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    LayoutModule,
     CryptoEngineModule,
     PortfoliosModule,
     AuthModule,
@@ -38,7 +45,7 @@ import { PortfoliosModule } from './modules/portfolios/portfolios.module';
         // Для локального пет-проекта на этапе разработки true — это нормально (как EnsureCreated в EF Core).
         synchronize: true,
 
-        logging: true, // Включает логирование SQL-запросов в консоль бэкенда
+        // logging: true, // Включает логирование SQL-запросов в консоль бэкенда
       }),
     }),
   ],

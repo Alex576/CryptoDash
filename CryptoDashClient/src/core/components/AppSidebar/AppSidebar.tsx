@@ -22,6 +22,7 @@ import type { ForwardRefExoticComponent, RefAttributes } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import { Account } from "../Account";
+import { ThemeSwitcher } from "../ThemeSwitcher";
 
 export interface SidebarProps {
   prop?: string;
@@ -75,7 +76,9 @@ export function AppSidebar({ prop = "default value" }: SidebarProps) {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader></SidebarHeader>
+      <SidebarHeader>
+        <ThemeSwitcher />
+      </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
           <SidebarGroup>

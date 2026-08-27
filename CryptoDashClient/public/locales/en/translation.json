@@ -11,7 +11,14 @@
   "Control": {
     "Email": "Email",
     "Password": "Password",
-    "RepeatPassword": "Repeat Password"
+    "RepeatPassword": "Repeat Password",
+    "Name": {
+      "Tool": "Tool"
+    },
+    "Combo": {
+      "NoItems": "No Items",
+      "SelectAll": "Select All"
+    }
   },
   "Form": {
     "Loading": "Loading..."
@@ -28,5 +35,8 @@
   },
   "Utils": {
     "CheckingSession": "Checking session..."
+  },
+  "Error": {
+    "NotFoundSwitchCase": "Not found suitable case for type {{type}}"
   }
 }

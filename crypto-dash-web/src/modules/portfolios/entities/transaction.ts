@@ -21,12 +21,12 @@ export class Transaction {
   @JoinColumn({ name: 'portfolio_id' })
   portfolio: Portfolio;
 
-  @Column({ name: 'asset_id' })
-  assetId: string;
+  @Column({ name: 'subject_id' })
+  subjectId: string;
 
   @ManyToOne(() => Subject, (asset) => asset.transactions)
-  @JoinColumn({ name: 'asset_id' })
-  asset: Subject;
+  @JoinColumn({ name: 'subject_id' })
+  subject: Subject;
 
   @Column({ type: 'enum', enum: TransactionType })
   type: TransactionType;

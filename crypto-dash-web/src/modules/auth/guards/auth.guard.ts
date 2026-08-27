@@ -4,15 +4,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { IS_PUBLIC_KEY } from '../../../metas/public';
+import { AuthService } from '../auth.service';
 import { AuthModel } from '../models/auth.model';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    private readonly jwtService: JwtService,
+    private readonly authService: AuthService,
     private reflector: Reflector,
   ) {}
 
@@ -31,14 +31,14 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      const payload = await this.jwtService.verifyAsync(token);
+      const payload = await this.authService.verifyAccessToken(token);
       const authModel: AuthModel = {
         id: payload.sub,
         username: payload.username,
         accessToken: token,
       };
       request['user'] = authModel;
-    } catch {
+    } catch (err) {
       throw new UnauthorizedException();
     }
     return true;

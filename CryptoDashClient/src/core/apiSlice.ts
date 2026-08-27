@@ -9,8 +9,30 @@ export const apiSlice = createApi({
 });
 
 export const subjectApiSlice = createApi({
-    reducerPath: 'subjectApi', // Имя ключа в Redux Store
+    reducerPath: 'subjectApi',
     baseQuery: baseQueryWithReauth(),
-    tagTypes: ['Subject'], // Теги для автоматического обновления кэша (аналог изменения данных)
+    tagTypes: ['Subject'],
+    endpoints: () => ({}),
+});
+
+
+export const layoutApiSlice = createApi({
+    reducerPath: 'layoutApi',
+    baseQuery: baseQueryWithReauth(),
+    tagTypes: ['Layout'],
+    endpoints: () => ({}),
+});
+
+export const dashboardApiSlice = createApi({
+    reducerPath: 'dashboardApi',
+    baseQuery: baseQueryWithReauth(),
+    tagTypes: ['Chart', 'Table'],
+    endpoints: () => ({}),
+});
+
+export const settingsApiSlice = createApi({
+    reducerPath: 'settingsApi',
+    baseQuery: baseQueryWithReauth(),
+    tagTypes: [],
     endpoints: () => ({}),
 });

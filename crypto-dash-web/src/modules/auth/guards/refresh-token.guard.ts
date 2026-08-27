@@ -19,7 +19,7 @@ export class RefreshTokenGuard implements CanActivate {
     }
 
     try {
-      const payload = await this.authService.verifyToken(token);
+      const payload = await this.authService.verifyRefreshToken(token);
 
       const authModel: RefreshModel = {
         id: payload.sub,

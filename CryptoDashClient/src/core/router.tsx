@@ -4,6 +4,7 @@ import {
   Login,
   Portfolio,
   Register,
+  Settings,
   Subjects,
   Workbook,
 } from "./components";
@@ -31,6 +32,10 @@ export const router = createBrowserRouter([
           {
             path: "/portfolio",
             element: <Portfolio />,
+          },
+          {
+            path: "/settings",
+            element: <Settings />,
           },
           {
             path: "/subjects",

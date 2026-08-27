@@ -62,9 +62,17 @@ export class AuthService {
     return { token: await this.getAccessToken(payload) };
   }
 
-  async verifyToken(refreshToken: string): Promise<TokenPayload> {
-    return await this.jwtService.verifyAsync(refreshToken, {
-      secret: this.configService.getOrThrow('SECRET_REFRESH_TOKEN'),
+  async verifyAccessToken(refreshToken: string): Promise<TokenPayload> {
+    return await this.verifyToken(refreshToken, 'SECRET_ACCESS_TOKEN');
+  }
+
+  async verifyRefreshToken(refreshToken: string): Promise<TokenPayload> {
+    return await this.verifyToken(refreshToken, 'SECRET_REFRESH_TOKEN');
+  }
+
+  private verifyToken(token: string, tokenKey: 'SECRET_REFRESH_TOKEN' | 'SECRET_ACCESS_TOKEN'): Promise<TokenPayload> {
+    return this.jwtService.verifyAsync(token, {
+      secret: this.configService.getOrThrow(tokenKey),
     });
   }
 
@@ -75,7 +83,7 @@ export class AuthService {
   private async getAccessToken(payload: TokenPayload): Promise<string> {
     return await this.jwtService.signAsync(payload, {
       secret: this.configService.getOrThrow('SECRET_ACCESS_TOKEN'),
-      expiresIn: '2h',
+      expiresIn: '15m',
     });
   }
 }

@@ -3,14 +3,19 @@ import {
   type ComboSettings,
   type FormControl,
 } from "@/core/components/Form/models/FormModels";
+import { ControlContext } from ".";
 import { MultiSelect } from "../MultiSelect";
 import { SingleSelect } from "../SingleSelect";
 
 export interface ControlSwitchProps {
   control: FormControl;
+  onControlValueChanged: (_control: FormControl, _value: unknown) => void;
 }
 
-export function ControlSwitch({ control }: ControlSwitchProps) {
+export function ControlSwitch({
+  control,
+  onControlValueChanged,
+}: ControlSwitchProps) {
   const controlSwitch = () => {
     switch (control.type) {
       case ControlType.Combo: {
@@ -40,5 +45,13 @@ export function ControlSwitch({ control }: ControlSwitchProps) {
         break;
     }
   };
-  return controlSwitch();
+  return (
+    <ControlContext
+      value={{
+        onValueChanged: onControlValueChanged,
+      }}
+    >
+      {controlSwitch()}
+    </ControlContext>
+  );
 }

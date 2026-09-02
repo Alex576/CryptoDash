@@ -6,4 +6,5 @@ export interface ClassModel {
 // ClassModel field id = ClassCode
 export enum ClassCode {
   Tool = 1,
+  Crypto = 2,
 }

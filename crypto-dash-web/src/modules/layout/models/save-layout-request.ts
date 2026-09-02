@@ -1,4 +1,4 @@
-import { DashboardLayout } from './layout-model';
+import { DashboardLayout } from '../../settings/models/settings-layout';
 import { ToolCode } from './tool-code';
 
 export class SaveLayoutRequest {

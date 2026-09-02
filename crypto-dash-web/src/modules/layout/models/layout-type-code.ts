@@ -1,6 +1,8 @@
 export enum LayoutTypeCode {
-  DashboardLayout = 1,
-  DashboardChartLayout = 2,
-  DashboardTableLayout = 3,
-  DashboardItemFormLayout = 4,
+  Layout = 1,
+  Form = 2,
+  Filter = 3,
+  Table = 4,
+  Dashboard = 5,
+  DashboardItem = 6,
 }

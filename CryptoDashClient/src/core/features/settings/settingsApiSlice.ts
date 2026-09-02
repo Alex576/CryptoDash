@@ -1,5 +1,5 @@
 import { settingsApiSlice } from "@/core/apiSlice";
-import type { GetSettingsFiltersModel, GetSettingsLayoutModel, SettingsLayout } from "./models/settings";
+import type { GetSettingsFiltersModel, GetSettingsLayoutModel, SettingFilters, SettingsLayout } from "./models/settings";
 
 export const subjectApiEndpoints = settingsApiSlice.injectEndpoints({
     endpoints: (builder) => ({
@@ -10,7 +10,7 @@ export const subjectApiEndpoints = settingsApiSlice.injectEndpoints({
                 body: data,
             }),
         }),
-        getFilters: builder.query<SettingsLayout, GetSettingsFiltersModel>({
+        getFilters: builder.query<SettingFilters, GetSettingsFiltersModel>({
             query: (data) => ({
                 url: '/settings/getFilters',
                 method: 'POST',

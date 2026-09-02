@@ -1,12 +1,6 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
-import {
-  AddLayoutItemRequest,
-  AddLayoutItemResponse,
-  DashboardChartLayoutRequest,
-  DashboardChartLayoutResponse,
-} from './models/chart-models';
+import { DashboardChartLayoutRequest, DashboardChartLayoutResponse } from './models/chart-models';
 import { LayoutDataType } from './models/layout-model';
-import { SaveLayoutRequest } from './models/save-layout-request';
 import { ToolCode } from './models/tool-code';
 import { LayoutService } from './services/layout.service';
 
@@ -19,15 +13,15 @@ export class LayoutController {
     return await this.layoutService.getLayout(tool);
   }
 
-  @Post('saveLayout')
-  async saveLayout(@Body() model: SaveLayoutRequest): Promise<void> {
-    await this.layoutService.saveLayout(model.tool, model.layout);
-  }
+  // @Post('saveLayout')
+  // async saveLayout(@Body() model: SaveLayoutRequest): Promise<void> {
+  //   await this.layoutService.saveLayout(model.tool, model.layout);
+  // }
 
-  @Post('addLayoutItem')
-  async addLayoutItem(@Body() model: AddLayoutItemRequest): Promise<AddLayoutItemResponse> {
-    return await this.layoutService.addLayoutItem(model.tool, model.type);
-  }
+  // @Post('addLayoutItem')
+  // async addLayoutItem(@Body() model: AddLayoutItemRequest): Promise<AddLayoutItemResponse> {
+  //   return await this.layoutService.addLayoutItem(model.tool, model.type);
+  // }
 
   @Post('getChartData')
   async getChartData(@Body() model: DashboardChartLayoutRequest): Promise<DashboardChartLayoutResponse | null> {

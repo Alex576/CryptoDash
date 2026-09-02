@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
 import { ObjectEntity } from './object-entity';
 
 @Entity('class_entities')
@@ -9,6 +9,6 @@ export class ClassEntity {
   @Column({ name: 'name' })
   name: string;
 
-  @ManyToMany(() => ObjectEntity, (o) => o.classes)
+  @ManyToOne(() => ObjectEntity, (o) => o.class)
   objects: ObjectEntity[];
 }

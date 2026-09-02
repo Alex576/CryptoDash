@@ -1,4 +1,5 @@
-import { BaseDashboardItem, DashboardItemType } from './layout-model';
+import { DashboardTypeCode } from '../../settings/models/dashboard-type-code';
+import { BaseDashboardItem } from './layout-model';
 import { ToolCode } from './tool-code';
 
 export class DashboardChartLayoutRequest {
@@ -8,7 +9,7 @@ export class DashboardChartLayoutRequest {
 
 export class AddLayoutItemRequest {
   tool: ToolCode;
-  type: DashboardItemType;
+  type: DashboardTypeCode;
 }
 
 export interface DashboardChartLayoutResponse {
@@ -19,6 +20,6 @@ export interface DashboardChartLayoutResponse {
 
 export interface AddLayoutItemResponse {
   id: number;
-  type: DashboardItemType;
+  type: DashboardTypeCode;
   options: BaseDashboardItem;
 }

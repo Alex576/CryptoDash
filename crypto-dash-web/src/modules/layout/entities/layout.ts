@@ -1,14 +1,18 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, Tree, TreeChildren, TreeParent } from 'typeorm';
 import { LayoutModel } from '../models/layout-model';
 import { LayoutType } from './layout-type';
 import { Tool } from './tool';
 
 @Entity('layout')
+@Tree('materialized-path')
 export class Layout {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   id: number;
 
-  @Column({ type: 'jsonb', default: {} })
+  @Column()
+  name: string;
+
+  @Column({ type: 'jsonb', default: null, nullable: true })
   options: LayoutModel;
 
   @Column({ name: 'tool_id', type: 'int' })
@@ -24,4 +28,10 @@ export class Layout {
   @ManyToOne(() => LayoutType, (type) => type.layout)
   @JoinColumn({ name: 'type_id' })
   type: LayoutType;
+
+  @TreeParent({ onDelete: 'CASCADE' })
+  parent: Layout;
+
+  @TreeChildren()
+  children: Layout[];
 }

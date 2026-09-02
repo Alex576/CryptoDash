@@ -1,4 +1,8 @@
 import { NotImplementedException } from '@nestjs/common';
+import { LayoutTypeCode } from '../../../layout/models/layout-type-code';
+import { ToolCode } from '../../../layout/models/tool-code';
+import { FormControlData } from '../../../settings/models/control-models';
+import { ControlState } from '../../../settings/models/control-state';
 import {
   BaseControlSettings,
   ComboSettings,
@@ -7,14 +11,11 @@ import {
   FormControl,
   InputSettings,
   Item,
-} from '../../../share/form';
-import { ControlState, FormControlData } from '../../layout/models/control-models';
-import { LayoutTypeCode } from '../../layout/models/layout-type-code';
-import { ToolCode } from '../../layout/models/tool-code';
+} from '../../models/form';
 
 export abstract class BaseControlsBuilderService<TData = unknown> {
-  abstract getFilters(tool: ToolCode | undefined, controls: FormControlData[], data: TData): FormControl[];
-  abstract getFormControls(tool: ToolCode, layoutCode: LayoutTypeCode);
+  // abstract getFilters(tool: ToolCode | undefined, controls: FormControlData[], data: TData): FormControl[];
+  abstract getControls(tool: ToolCode, layoutCode: LayoutTypeCode);
   abstract getComboItems(control: FormControlData, data: TData): Item[];
 
   protected buildControls(controls: FormControlData[], data: TData): FormControl[] {
@@ -25,12 +26,16 @@ export abstract class BaseControlsBuilderService<TData = unknown> {
     const controlSettings = this.getControlSettings(control, data);
 
     return {
-      id: `${control.name}_${control.type}_${id}`,
+      id: this.getControlId(control, id),
       name: control.name,
       type: control.type,
       settings: controlSettings,
       value: this.getControlValue(control, data, controlSettings),
     };
+  }
+
+  protected getControlId(control: FormControlData, id: number): string {
+    return control.customId ?? `${control.name}_${control.type}_${id}`;
   }
 
   protected getControlValue(control: FormControlData, data: TData, controlSettings: ControlSettings): unknown {
@@ -58,7 +63,12 @@ export abstract class BaseControlsBuilderService<TData = unknown> {
       default:
         throw new NotImplementedException();
     }
+    settings.isEditable = this.isEditable(control);
     return settings;
+  }
+
+  protected isEditable(control: FormControlData): boolean {
+    return control.states.includes(ControlState.IsEditable);
   }
 
   private isRequired(control: FormControlData): boolean {

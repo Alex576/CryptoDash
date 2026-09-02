@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ClassEntity } from './class-entity';
 
 @Entity('object_entities')
@@ -15,7 +15,7 @@ export class ObjectEntity {
   @Column({ name: 'class_id' })
   classId: number;
 
-  @ManyToMany(() => ClassEntity, (x) => x.objects, { cascade: true })
+  @OneToMany(() => ClassEntity, (x) => x.objects, { cascade: true })
   @JoinTable({ name: 'class_id' })
-  classes: ClassEntity[];
+  class: ClassEntity;
 }

@@ -32,6 +32,10 @@ export default tseslint.config(
       'prettier/prettier': ['warn', { endOfLine: 'auto' }],
       '@typescript-eslint/no-unused-vars': 'off',
       'no-unused-vars': 'off',
+      '@typescript-eslint/no-unsafe-enum-comparison': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
     },
   },
   {

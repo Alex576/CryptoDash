@@ -6,15 +6,20 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthGuard } from './modules/auth/guards/auth.guard';
+import { CacheModule } from './modules/cache/cache.module';
+import { CoreModule } from './modules/core.module';
 import { CryptoEngineModule } from './modules/crypto-engine/crypto-engine.module';
 import { DataMigratorModule } from './modules/data-migrator/data-migrator.module';
 import { LayoutModule } from './modules/layout/layout.module';
 import { ObjectEntitiesModule } from './modules/object-entities/object-entities.module';
 import { PortfoliosModule } from './modules/portfolios/portfolios.module';
 import { SettingsModule } from './modules/settings/settings.module';
+import { getTypeOrmConfig } from './typeorm.config';
 
 @Module({
   imports: [
+    CoreModule,
+    CacheModule,
     ObjectEntitiesModule,
     // ControlsBuilderModule,
     SettingsModule,
@@ -29,24 +34,7 @@ import { SettingsModule } from './modules/settings/settings.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get<string>('DB_HOST'),
-        port: configService.get<number>('DB_PORT'),
-        username: configService.get<string>('DB_USERNAME'),
-        password: configService.get<string>('DB_PASSWORD'),
-        database: configService.get<string>('DB_NAME'),
-
-        // Автоматически искать файлы *.entity.ts по всему проекту
-        entities: [__dirname + '/**/entities/*.{ts,js}'],
-
-        // Авто-синхронизация схем.
-        // ВНИМАНИЕ: Для продакшена ставьте false и используйте миграции.
-        // Для локального пет-проекта на этапе разработки true — это нормально (как EnsureCreated в EF Core).
-        synchronize: true,
-
-        // logging: true, // Включает логирование SQL-запросов в консоль бэкенда
-      }),
+      useFactory: (configService: ConfigService) => getTypeOrmConfig(configService),
     }),
   ],
   controllers: [AppController],
@@ -55,6 +43,7 @@ import { SettingsModule } from './modules/settings/settings.module';
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
+
     AppService,
   ],
 })

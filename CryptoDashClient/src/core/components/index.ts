@@ -17,3 +17,4 @@ export { Form } from './Form';
 export * from './Separator/Separator';
 export { Settings } from './Settings';
 
+export {SidePanel} from './SidePanel';

@@ -1,18 +1,11 @@
-import { Injectable, Logger, NotImplementedException, OnApplicationBootstrap } from '@nestjs/common';
+import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
+import { DashboardLayout } from '../../settings/models/settings-layout';
 import { Layout } from '../entities/layout';
 import { LayoutType } from '../entities/layout-type';
-import { AddLayoutItemResponse, DashboardChartLayoutResponse } from '../models/chart-models';
-import {
-  BaseDashboardItem,
-  ChartType,
-  DashboardChartLayout,
-  DashboardItemType,
-  DashboardLayout,
-  DashboardTableLayout,
-  LayoutDataType,
-} from '../models/layout-model';
+import { DashboardChartLayoutResponse } from '../models/chart-models';
+import { DashboardChartLayout } from '../models/layout-model';
 import { LayoutTypeCode } from '../models/layout-type-code';
 import { ToolCode } from '../models/tool-code';
 
@@ -62,84 +55,84 @@ export class LayoutService implements OnApplicationBootstrap {
 
   async getLayout<T extends DashboardLayout = DashboardLayout>(tool: ToolCode): Promise<T> {
     const layout = await this.layoutDataRepository.findOne({
-      where: { toolId: tool, typeId: LayoutTypeCode.DashboardLayout },
+      where: { toolId: tool, typeId: LayoutTypeCode.Layout },
     });
     return (layout?.options.data as T) ?? (this.getDefaultLayout() as T);
   }
 
-  async saveLayout<T extends DashboardLayout = DashboardLayout>(tool: ToolCode, layout: T): Promise<void> {
-    const data =
-      (await this.layoutDataRepository.findOne({
-        where: { toolId: tool, typeId: LayoutTypeCode.DashboardLayout },
-      })) ?? this.layoutDataRepository.create();
+  // async saveLayout<T extends DashboardLayout = DashboardLayout>(tool: ToolCode, layout: T): Promise<void> {
+  //   const data =
+  //     (await this.layoutDataRepository.findOne({
+  //       where: { toolId: tool, typeId: LayoutTypeCode.Layout },
+  //     })) ?? this.layoutDataRepository.create();
 
-    data.options.data = layout;
-    await this.layoutDataRepository.save(data);
-  }
+  //   data.options.data = layout;
+  //   await this.layoutDataRepository.save(data);
+  // }
 
-  async addLayoutItem(tool: ToolCode, type: DashboardItemType): Promise<AddLayoutItemResponse> {
-    const layout =
-      (await this.layoutDataRepository.findOneBy({ toolId: tool, typeId: LayoutTypeCode.DashboardLayout })) ??
-      this.layoutDataRepository.create({ options: {}, typeId: LayoutTypeCode.DashboardLayout, toolId: tool });
+  // async addLayoutItem(tool: ToolCode, type: DashboardTypeCode): Promise<AddLayoutItemResponse> {
+  //   const layout =
+  //     (await this.layoutDataRepository.findOneBy({ toolId: tool, typeId: LayoutTypeCode.Layout })) ??
+  //     this.layoutDataRepository.create({ options: {}, typeId: LayoutTypeCode.Layout, toolId: tool });
 
-    let data: DashboardLayout;
-    if (!layout.options.data) {
-      data = this.getDefaultLayout();
-      layout.options.data = data;
-    } else {
-      data = layout.options.data as DashboardLayout;
-    }
+  //   let data: DashboardLayout;
+  //   if (!layout.options.data) {
+  //     data = this.getDefaultLayout();
+  //     layout.options.data = data;
+  //   } else {
+  //     data = layout.options.data as DashboardLayout;
+  //   }
 
-    const layoutType = this.getLayoutTypeCode(type);
-    const chartEntity = this.layoutDataRepository.create({
-      toolId: tool,
-      options: {},
-      typeId: layoutType,
-    });
-    const emptyData: LayoutDataType | null = getEmptyData();
+  //   const layoutType = LayoutTypeCode.DashboardItem; // this.getLayoutTypeCode(type);
+  //   const chartEntity = this.layoutDataRepository.create({
+  //     toolId: tool,
+  //     options: {},
+  //     typeId: layoutType,
+  //   });
+  //   const emptyData: LayoutDataType | null = getEmptyData(DashboardTypeCode.Chart); //todo add param!
 
-    if (!emptyData) {
-      this.logger.error(`Not implemented type ${layoutType}`);
-      throw new NotImplementedException();
-    }
+  //   if (!emptyData) {
+  //     this.logger.error(`Not implemented type ${layoutType}`);
+  //     throw new NotImplementedException();
+  //   }
 
-    chartEntity.options.data = emptyData;
-    const options: BaseDashboardItem = {
-      options: {
-        x: 0,
-        y: 0,
-        width: 12, // Math.round(data.layout.cols.lg / 3),
-        height: 8, // Math.round(data.layout.rowHeight / 5),
-      },
-      type: type,
-      id: -1,
-    };
-    await this.dataSource.transaction(async (manager) => {
-      const savedEntity = await manager.save(Layout, chartEntity);
-      options.id = savedEntity.id;
-      data.items.push(options);
-      await manager.save(Layout, layout);
-    });
-    return { options: options, id: options.id, type: options.type };
+  //   chartEntity.options.data = emptyData;
+  //   const options: BaseDashboardItem = {
+  //     options: {
+  //       x: 0,
+  //       y: 0,
+  //       width: 12, // Math.round(data.layout.cols.lg / 3),
+  //       height: 8, // Math.round(data.layout.rowHeight / 5),
+  //     },
+  //     type: type,
+  //     id: -1,
+  //   };
+  //   await this.dataSource.transaction(async (manager) => {
+  //     const savedEntity = await manager.save(Layout, chartEntity);
+  //     options.id = savedEntity.id;
+  //     data.items.push(options);
+  //     await manager.save(Layout, layout);
+  //   });
+  //   return { options: options, id: options.id, type: options.type };
 
-    function getEmptyData(): LayoutDataType | null {
-      switch (layoutType) {
-        // case LayoutTypeCode.DashboardLayout:
-        case LayoutTypeCode.DashboardChartLayout:
-          return getEmptyChartData();
-        case LayoutTypeCode.DashboardTableLayout:
-          return {} as DashboardTableLayout; //todo
-        default:
-          return null;
-      }
-    }
+  //   function getEmptyData(type: DashboardTypeCode): LayoutDataType | null {
+  //     switch (type) {
+  //       // case LayoutTypeCode.DashboardLayout:
+  //       case DashboardTypeCode.Chart:
+  //         return getEmptyChartData();
+  //       case DashboardTypeCode.Table:
+  //         return {} as DashboardTableLayout; //todo
+  //       default:
+  //         return null;
+  //     }
+  //   }
 
-    function getEmptyChartData(): DashboardChartLayout {
-      return {
-        type: ChartType.Bars,
-      };
-    }
-  }
+  //   function getEmptyChartData(): DashboardChartLayout {
+  //     return {
+  //       type: ChartType.Bars,
+  //     };
+  //   }
+  // }
 
   async getChartData(id: number, tool: ToolCode): Promise<DashboardChartLayoutResponse | null> {
     const chartEntity = await this.layoutDataRepository.findOne({ where: { id: id, toolId: tool } });
@@ -158,14 +151,14 @@ export class LayoutService implements OnApplicationBootstrap {
     };
   }
 
-  private getLayoutTypeCode(type: DashboardItemType): LayoutTypeCode {
-    switch (type) {
-      case DashboardItemType.Chart:
-        return LayoutTypeCode.DashboardChartLayout;
-      case DashboardItemType.Table:
-        return LayoutTypeCode.DashboardTableLayout;
-    }
-  }
+  // private getLayoutTypeCode(type: DashboardItemType): LayoutTypeCode {
+  //   switch (type) {
+  //     case DashboardItemType.Chart:
+  //       return LayoutTypeCode.DashboardChartLayout;
+  //     case DashboardItemType.Table:
+  //       return LayoutTypeCode.DashboardTableLayout;
+  //   }
+  // }
 }
 
 // async function fillEntity<TableEntity extends object, K extends keyof TableEntity>(

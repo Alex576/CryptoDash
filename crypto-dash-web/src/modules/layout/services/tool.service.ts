@@ -21,7 +21,7 @@ export class ToolService implements OnApplicationBootstrap {
     this.logger.log('Checking Tool...');
 
     const count = await this.toolRepository.count();
-    const currentEnumCount = Object.keys(ToolCode).length;
+    const currentEnumCount = Object.keys(ToolCode).filter((x) => isNaN(Number(x))).length;
     if (count === currentEnumCount) {
       this.logger.log('Table Tool Contains data. Skip.');
       return;

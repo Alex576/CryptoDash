@@ -1,27 +1,13 @@
-import { Button } from "#components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "#components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverHeader,
-  PopoverTitle,
-  PopoverTrigger,
-} from "#components/ui/popover";
-import { cn } from "#lib/utils";
-import { Separator } from "@/core/components";
+import { CommandEmpty, CommandItem } from "#components/ui/command";
 import type {
   ComboSettings,
   FormControl,
 } from "@/core/components/Form/models/FormModels";
-import { CheckIcon, ChevronDown } from "lucide-react";
-import { useMemo, useState } from "react";
+import { CheckIcon } from "lucide-react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { BaseSelect } from "../BaseSelect/BaseSelect";
+import { ControlContext } from "../ControlSwitch";
 
 export interface SingleSelectProps {
   control: FormControl;
@@ -31,9 +17,13 @@ export interface SingleSelectProps {
 
 export function SingleSelect({ control, settings, value }: SingleSelectProps) {
   const { t } = useTranslation();
+  const { onValueChanged } = useContext(ControlContext);
   const [currentValue, setValue] = useState<number>(value);
-  const [isOpened, setOpened] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string>("");
+  useEffect(
+    () => onValueChanged(control, currentValue),
+    [control, currentValue, onValueChanged],
+  );
 
   const filteredItems = useMemo(() => {
     if (!searchValue) {
@@ -55,14 +45,11 @@ export function SingleSelect({ control, settings, value }: SingleSelectProps) {
   const items = useMemo(() => {
     return filteredItems.map((item) => (
       <CommandItem key={item.id} onSelect={() => setValue(item.id)}>
-        <div
-          className={cn(
-            "mr-2 flex h-4 w-4 items-center justify-center",
-            currentValue === item.id ? "" : "[&_svg]:invisible",
-          )}
-        >
-          <CheckIcon />
-        </div>
+        {currentValue === item.id && (
+          <div className="mr-2 flex h-4 w-4 items-center justify-center">
+            <CheckIcon />
+          </div>
+        )}
         <span>{item.name}</span>
       </CommandItem>
     ));
@@ -70,45 +57,15 @@ export function SingleSelect({ control, settings, value }: SingleSelectProps) {
 
   return (
     <div>
-      <Popover
-        open={isOpened}
-        onOpenChange={setOpened}
-        modal={false}
-        onOpenChangeComplete={() => {
-          if (!isOpened) {
-            setSearchValue("");
-          }
-        }}
+      <BaseSelect
+        label={label}
+        onSearchValue={(searchValue: string) => setSearchValue(searchValue)}
       >
-        <PopoverTrigger
-          render={
-            <Button className="min-w-16">
-              <div>{label}</div>
-              <ChevronDown
-                className={cn(
-                  "h-4 cursor-pointer text-muted transition-transform duration-300",
-                  isOpened ? "rotate-180" : "",
-                )}
-              />
-            </Button>
-          }
-        ></PopoverTrigger>
-        <PopoverContent align="start">
-          <PopoverHeader>
-            <PopoverTitle></PopoverTitle>
-          </PopoverHeader>
-          <Command shouldFilter={false}>
-            <CommandInput value={searchValue} onValueChange={setSearchValue} />
-            <Separator />
-            <CommandList className="px-1">
-              {!filteredItems.length && (
-                <CommandEmpty>{t("Control.Combo.NoItems")}</CommandEmpty>
-              )}
-              {items}
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
+        {!filteredItems.length && (
+          <CommandEmpty>{t("Control.Combo.NoItems")}</CommandEmpty>
+        )}
+        {items}
+      </BaseSelect>
     </div>
   );
 }

@@ -7,10 +7,19 @@ export enum ControlType {
 export type ControlSettings = ComboSettings | InputSettings;
 
 export abstract class BaseControlSettings {
-  constructor(public isRequired: boolean = false) {}
+  public isEditable: boolean;
+  public isRequired: boolean;
+  constructor({ isEditable = false, isRequired = true }: { isEditable?: boolean; isRequired?: boolean }) {
+    this.isEditable = isEditable;
+    this.isRequired = isRequired;
+  }
 }
 
-export class InputSettings extends BaseControlSettings {}
+export class InputSettings extends BaseControlSettings {
+  constructor() {
+    super({});
+  }
+}
 export class ComboSettings extends BaseControlSettings {
   public items: Item[];
   public isMultiple: boolean;
@@ -24,7 +33,7 @@ export class ComboSettings extends BaseControlSettings {
     isMultiple?: boolean;
     isRequired?: boolean;
   }) {
-    super(isRequired);
+    super({ isRequired });
     this.items = items;
     this.isMultiple = isMultiple;
   }
@@ -41,4 +50,8 @@ export interface FormControl {
 export interface Item {
   id: number;
   name: string;
+}
+
+export class Form {
+  controls: FormControl[];
 }

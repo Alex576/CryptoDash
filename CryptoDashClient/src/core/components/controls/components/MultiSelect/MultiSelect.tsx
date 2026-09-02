@@ -1,27 +1,15 @@
-import { useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 
-import { Button } from "#components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "#components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverHeader,
-  PopoverTitle,
-  PopoverTrigger,
-} from "#components/ui/popover";
+import { CommandEmpty, CommandItem } from "#components/ui/command";
 import { cn } from "#lib/utils";
 import type {
   ComboSettings,
   FormControl,
 } from "@/core/components/Form/models/FormModels";
-import { CheckIcon, ChevronDown } from "lucide-react";
+import { CheckIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { BaseSelect } from "../BaseSelect/BaseSelect";
+import { ControlContext } from "../ControlSwitch";
 
 export interface MultiSelectProps {
   control: FormControl;
@@ -31,10 +19,14 @@ export interface MultiSelectProps {
 
 export function MultiSelect({ control, settings, value }: MultiSelectProps) {
   const { t } = useTranslation();
+  const { onValueChanged } = useContext(ControlContext);
   const [currentValue, setValue] = useState<number[]>(value);
-  const [isOpened, setOpened] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string>("");
 
+  useEffect(
+    () => onValueChanged(control, currentValue),
+    [control, currentValue, onValueChanged],
+  );
   const filteredItems = useMemo(() => {
     if (!searchValue) {
       return settings.items;
@@ -99,6 +91,35 @@ export function MultiSelect({ control, settings, value }: MultiSelectProps) {
   const showSelectAll = !!filteredItems.length;
   return (
     <div>
+      <BaseSelect
+        label={label}
+        onSearchValue={(searchValue: string) => setSearchValue(searchValue)}
+      >
+        {!filteredItems.length && (
+          <CommandEmpty>{t("Control.Combo.NoItems")}</CommandEmpty>
+        )}
+        {showSelectAll && (
+          <CommandItem
+            key="all"
+            forceMount={showSelectAll}
+            onSelect={toggleAll}
+          >
+            <div
+              className={cn(
+                "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                currentValue.length === items.length
+                  ? "bg-primary text-primary-foreground"
+                  : "opacity-50 [&_svg]:invisible",
+              )}
+            >
+              <CheckIcon />
+            </div>
+            <span>{t("Control.Combo.SelectAll")}</span>
+          </CommandItem>
+        )}
+        {items}
+      </BaseSelect>
+      {/* 
       <Popover
         open={isOpened}
         onOpenChange={setOpened}
@@ -131,6 +152,7 @@ export function MultiSelect({ control, settings, value }: MultiSelectProps) {
               value={searchValue}
               onValueChange={setSearchValue}
             ></CommandInput>
+            <Separator />
             <CommandList>
               {!filteredItems.length && (
                 <CommandEmpty>{t("Control.Combo.NoItems")}</CommandEmpty>
@@ -158,7 +180,7 @@ export function MultiSelect({ control, settings, value }: MultiSelectProps) {
             </CommandList>
           </Command>
         </PopoverContent>
-      </Popover>
+      </Popover> */}
     </div>
   );
 }

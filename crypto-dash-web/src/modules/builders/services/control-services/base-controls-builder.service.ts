@@ -12,6 +12,7 @@ import {
   InputSettings,
   Item,
 } from '../../models/form';
+import { FormBuilderHelpers } from '../../utils/constants';
 
 export abstract class BaseControlsBuilderService<TData = unknown> {
   // abstract getFilters(tool: ToolCode | undefined, controls: FormControlData[], data: TData): FormControl[];
@@ -35,7 +36,7 @@ export abstract class BaseControlsBuilderService<TData = unknown> {
   }
 
   protected getControlId(control: FormControlData, id: number): string {
-    return control.customId ?? `${control.name}_${control.type}_${id}`;
+    return control.customId ?? FormBuilderHelpers.getFormControlId(control, id);
   }
 
   protected getControlValue(control: FormControlData, data: TData, controlSettings: ControlSettings): unknown {

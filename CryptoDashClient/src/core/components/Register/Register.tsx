@@ -10,6 +10,7 @@ import {
 } from "#components/ui/card";
 import { Input } from "#components/ui/input";
 import { useRegisterMutation } from "@/core/features/auth/api/authApiSlice";
+import { ResultCode } from "@/core/share/result-code";
 import { useAppDispatch } from "@/core/store";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -35,8 +36,8 @@ export function Register({ prop = "default value" }: RegisterProps) {
 
     try {
       // unwrap() разворачивает результат, позволяя перехватить ошибку в блоке catch
-      const userData = await register({ email, password }).unwrap();
-      if (userData.isSuccess) {
+      const userData = await register({ login: email, password }).unwrap();
+      if (userData.code === ResultCode.Success) {
         navigate("/login");
       }
     } catch (err) {

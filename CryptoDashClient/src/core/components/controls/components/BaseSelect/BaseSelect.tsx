@@ -13,9 +13,10 @@ import {
 import { cn } from "#lib/utils";
 import { Separator } from "@/core/components";
 import { ChevronDown } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export interface BaseSelectProps {
-  label: string;
+  label: string | null;
   onSearchValue: (_searchValue: string) => void;
 }
 
@@ -26,6 +27,7 @@ export function BaseSelect({
 }: React.PropsWithChildren<BaseSelectProps>) {
   const [isOpened, setOpened] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string>("");
+  const { t } = useTranslation();
 
   const handleSearch = (value: string) => {
     setSearchValue(value);
@@ -45,8 +47,10 @@ export function BaseSelect({
       >
         <PopoverTrigger
           render={
-            <Button className="min-w-16">
-              <div>{label}</div>
+            <Button className="min-w-16 group-[*]/form:w-full flex justify-between">
+              <div className={label ? "" : "italic text-primary-foreground/60"}>
+                {label || t("Form.Control.Placeholder.PleaseEnter")}
+              </div>
               <ChevronDown
                 className={cn(
                   "h-4 cursor-pointer text-muted transition-transform duration-300",

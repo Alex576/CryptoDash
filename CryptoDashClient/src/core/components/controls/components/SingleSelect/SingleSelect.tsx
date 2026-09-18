@@ -1,48 +1,62 @@
 import { CommandEmpty, CommandItem } from "#components/ui/command";
+import { Field, FieldLabel } from "#components/ui/field";
+import { cn } from "#lib/utils";
 import type {
-  ComboSettings,
   FormControl,
+  Item,
 } from "@/core/components/Form/models/FormModels";
+import { cva, type VariantProps } from "class-variance-authority";
 import { CheckIcon } from "lucide-react";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { BaseSelect } from "../BaseSelect/BaseSelect";
 import { ControlContext } from "../ControlSwitch";
 
-export interface SingleSelectProps {
+const fieldVariants = cva("", {
+  variants: {
+    isChanged: {
+      true: "text-orange-400",
+      false: "",
+    },
+  },
+});
+
+export interface SingleSelectProps extends VariantProps<typeof fieldVariants> {
   control: FormControl;
-  settings: ComboSettings;
+  items: Item[];
+  isRequired?: boolean;
+  isChanged?: boolean;
   value: number;
 }
 
-export function SingleSelect({ control, settings, value }: SingleSelectProps) {
+export function SingleSelect({
+  control,
+  items,
+  value,
+  isChanged,
+}: SingleSelectProps) {
   const { t } = useTranslation();
-  const { onValueChanged } = useContext(ControlContext);
+  const { onValueChanged, onStateChanged } = useContext(ControlContext);
   const [currentValue, setValue] = useState<number>(value);
   const [searchValue, setSearchValue] = useState<string>("");
-  useEffect(
-    () => onValueChanged(control, currentValue),
-    [control, currentValue, onValueChanged],
-  );
+  const previousValue = useRef<number>(value);
 
   const filteredItems = useMemo(() => {
     if (!searchValue) {
-      return settings.items;
+      return items;
     }
-    return settings.items.filter((item) =>
+    return items.filter((item) =>
       item.name.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()),
     );
-  }, [searchValue, settings]);
-  const label = useMemo<string>(() => {
+  }, [items, searchValue]);
+  const label = useMemo<string | null>(() => {
     if (!currentValue) {
-      return t(control.name);
+      return null;
     }
-    return (
-      settings.items.find((item) => item.id === currentValue)?.name ?? "ERROR"
-    );
-  }, [currentValue, t, control, settings]);
+    return items.find((item) => item.id === currentValue)?.name ?? "ERROR";
+  }, [currentValue, items]);
 
-  const items = useMemo(() => {
+  const selectableItems = useMemo(() => {
     return filteredItems.map((item) => (
       <CommandItem key={item.id} onSelect={() => setValue(item.id)}>
         {currentValue === item.id && (
@@ -55,8 +69,19 @@ export function SingleSelect({ control, settings, value }: SingleSelectProps) {
     ));
   }, [currentValue, filteredItems]);
 
+  useEffect(() => {
+    if (previousValue.current !== currentValue) {
+      onValueChanged(control, currentValue);
+      previousValue.current = currentValue;
+      onStateChanged(control, { isValid: true, isChanged: true });
+    }
+  }, [previousValue, currentValue, onValueChanged, control, onStateChanged]);
   return (
-    <div>
+    // <div>
+    <Field>
+      <FieldLabel className={cn(fieldVariants({ isChanged }))}>
+        {t(control.name)}
+      </FieldLabel>
       <BaseSelect
         label={label}
         onSearchValue={(searchValue: string) => setSearchValue(searchValue)}
@@ -64,8 +89,9 @@ export function SingleSelect({ control, settings, value }: SingleSelectProps) {
         {!filteredItems.length && (
           <CommandEmpty>{t("Control.Combo.NoItems")}</CommandEmpty>
         )}
-        {items}
+        {selectableItems}
       </BaseSelect>
-    </div>
+    </Field>
+    // </div>
   );
 }

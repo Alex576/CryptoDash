@@ -5,7 +5,6 @@ import { DashboardLayout } from '../../settings/models/settings-layout';
 import { Layout } from '../entities/layout';
 import { LayoutType } from '../entities/layout-type';
 import { DashboardChartLayoutResponse } from '../models/chart-models';
-import { DashboardChartLayout } from '../models/layout-model';
 import { LayoutTypeCode } from '../models/layout-type-code';
 import { ToolCode } from '../models/tool-code';
 
@@ -137,7 +136,7 @@ export class LayoutService implements OnApplicationBootstrap {
   async getChartData(id: number, tool: ToolCode): Promise<DashboardChartLayoutResponse | null> {
     const chartEntity = await this.layoutDataRepository.findOne({ where: { id: id, toolId: tool } });
     if (!chartEntity?.options.data) return null;
-    const chart = chartEntity.options.data as DashboardChartLayout;
+    // const chart = chartEntity.options.data as DashboardChartLayout;
     return { id: id, tool: tool };
   }
 

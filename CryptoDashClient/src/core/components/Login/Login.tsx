@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "#components/ui/card";
 import { Input } from "#components/ui/input";
+import { ResultCode } from "@/core/share/result-code";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../features/auth/api/authApiSlice";
@@ -32,12 +33,12 @@ export function Login({ prop = "default value" }: LoginProps) {
 
     try {
       // unwrap() разворачивает результат, позволяя перехватить ошибку в блоке catch
-      const userData = await login({ email, password }).unwrap();
-
-      // Сохраняем полученные данные (user и token) в локальный стейт Redux
-      dispatch(setCredentials(userData));
-
-      navigate("/");
+      const loginResult = await login({ login: email, password }).unwrap();
+      if (loginResult.code === ResultCode.Success) {
+        // Сохраняем полученные данные (user и token) в локальный стейт Redux
+        dispatch(setCredentials(loginResult.data));
+        navigate("/");
+      }
     } catch (err) {
       console.error("Ошибка авторизации:", err);
     }

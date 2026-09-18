@@ -1,10 +1,12 @@
 import { Card, CardContent, CardHeader } from "#components/ui/card";
+import { DashboardPreviewForm } from "@/core/components/Form/components";
 import { SidePanel } from "@/core/components/SidePanel";
 import {
   type DashboardItem,
   type DashboardPreviewData,
 } from "@/core/features/settings/models/settings";
 import { ToolCode } from "@/core/share/tool-code";
+import { useState } from "react";
 import {
   Responsive,
   useContainerWidth,
@@ -17,6 +19,8 @@ export interface DashboardPreviewProps {
 
 export function DashboardPreview({ data }: DashboardPreviewProps) {
   const { width, containerRef, mounted } = useContainerWidth();
+  // const [canClose, setCanClose] = useState<boolean>(true);
+
   const dashboardOptions: ResponsiveGridLayoutProps = {
     cols: data.layout.cols ?? { lg: 32, md: 26, sm: 20, xs: 12, xxs: 6 },
     width: width,
@@ -47,9 +51,11 @@ export function DashboardPreview({ data }: DashboardPreviewProps) {
   return (
     <div className="h-full flex flex-col gap-1">
       <div className="flex">
-        <SidePanel toolCode={ToolCode.Dashboard} />
+        <SidePanel toolCode={ToolCode.Dashboard}>
+          <DashboardPreviewForm />
+        </SidePanel>
       </div>
-      <div className="grow bg-primary-foreground" ref={containerRef}>
+      <div className="grow bg-secondary" ref={containerRef}>
         {mounted && (
           <Responsive {...dashboardOptions}>
             {data.items.map((item) => dashboardContent(item))}

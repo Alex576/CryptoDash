@@ -3,7 +3,7 @@ import { tryParse } from "@/core/utils";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { AuthResponse } from "./models/auth";
 
-interface User {
+export interface User {
     id: string;
     email: string;
 }

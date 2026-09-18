@@ -8,12 +8,15 @@ export type ControlSettings = ComboSettings | InputSettings;
 
 export interface BaseControlSettings {
     isRequired?: boolean;
+
+    isChanged?: boolean;
+    isInvalid?: boolean;
 }
 export interface InputSettings extends BaseControlSettings {
 
 }
 export interface ComboSettings extends BaseControlSettings {
-    isMultiple?: boolean;
+    allowMultiple?: boolean;
     items: Item[];
 }
 export interface FormControl {
@@ -27,4 +30,13 @@ export interface FormControl {
 export interface Item {
     id: number;
     name: string;
+}
+
+export interface FormValues {
+    controlsValue: FormControlDataValue[];
+}
+
+export interface FormControlDataValue {
+    id: string;
+    value: unknown;
 }

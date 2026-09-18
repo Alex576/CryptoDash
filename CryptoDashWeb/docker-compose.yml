@@ -1,0 +1,51 @@
+services:
+  cryptodashweb:
+    image: ${DOCKER_REGISTRY-}cryptodashweb
+    build:
+      context: .
+      dockerfile: CryptoDashWeb/Dockerfile
+    depends_on:
+      - postgres
+    profiles: ["all"]
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: cryptodash_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: cryptouser
+      POSTGRES_PASSWORD: cryptopassword
+      POSTGRES_DB: cryptodash_db
+    ports:
+      - '5433:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    profiles: ["all", "dev"]
+
+  redis:
+    image: redis:7-alpine
+    container_name: cryptodash_redis
+    restart: always
+    ports:
+      - '6380:6379'
+    volumes:
+      - redis_data:/data
+        # Отключаем персистентность через аргументы команды запуска:
+    # --save ""       -> отключает создание RDB снимков
+    # --appendonly no -> отключает ведение AOF логов
+    command: >
+      redis-server 
+      --save "" 
+      --appendonly no 
+      --maxmemory 6gb 
+      --maxmemory-policy allkeys-lru
+    # Ограничиваем ресурсы самого Docker-контейнера для надежности
+    deploy:
+      resources:
+        limits:
+          memory: 8GB
+    profiles: ["all", "dev"]
+
+volumes:
+  postgres_data:
+  redis_data:

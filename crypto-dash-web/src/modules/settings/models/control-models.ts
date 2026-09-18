@@ -3,7 +3,7 @@ import { ControlState } from './control-state';
 import { FormControlDataSettings } from './form-control-data.settings';
 import { TileItemCode } from './tile-item-code';
 
-export interface FormControlData {
+export class FormControlData {
   name: string;
   tileItemCode: TileItemCode;
   type: ControlType;

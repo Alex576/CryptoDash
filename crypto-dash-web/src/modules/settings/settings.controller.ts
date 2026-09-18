@@ -2,7 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 
 import { Form } from '../builders/models/form';
 import { GetSettingsFiltersModel } from './models/get-settings-filters-model';
-import { GetSettingsFormModel } from './models/get-settings-form-model';
+import { GetSettingsFormModel, SaveSettingsFormModel } from './models/get-settings-form-model';
 import { GetSettingsLayoutModel } from './models/get-settings-layout-model';
 import { SettingFilters } from './models/setting-filters';
 import { SettingsLayout } from './models/settings-layout';
@@ -23,7 +23,17 @@ export class SettingsController {
   }
 
   @Post('getForm')
-  getForm(@Body() model: GetSettingsFormModel): Form {
-    return this.settingsService.getForm(model.toolCode, model.formValues);
+  async getForm(@Body() model: GetSettingsFormModel): Promise<Form> {
+    return await this.settingsService.getForm(model.toolCode, model.dashboardId);
+  }
+
+  @Post('updateForm')
+  async updateForm(@Body() model: GetSettingsFormModel): Promise<Form> {
+    return await this.settingsService.getForm(model.toolCode, model.dashboardId, model.formValues);
+  }
+
+  @Post('saveForm')
+  async saveForm(@Body() model: SaveSettingsFormModel): Promise<void> {
+    return await this.settingsService.saveForm(model.toolCode, model.dashboardId, model.formValues);
   }
 }

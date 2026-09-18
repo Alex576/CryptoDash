@@ -1,0 +1,21 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "cryptodashweb": "StartDebugging",
+        "postgres": "StartWithoutDebugging",
+        "redis": "StartWithoutDebugging"
+      }
+    },
+    "Docker Compose (Server Enviroment)": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "commandLineArgs": "--profile dev",
+      "serviceActions": {
+        "cryptodashweb": "DoNotStart"
+      }
+    }
+  }
+}

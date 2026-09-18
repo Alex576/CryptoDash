@@ -3,17 +3,17 @@ export interface AuthResponse {
     email: string;
     accessToken: string;
 }
-export interface RegisterResponse {
-    isSuccess: boolean;
-}
+// export interface RegisterResponse {
+//     isSuccess: boolean;
+// }
 export interface LoginRequest {
-    email: string;
-    password?: string; // Поле опционально, если используете разные типы входа
+    login: string;
+    password: string;
 }
 
 export interface RegisterRequest {
-    email: string;
-    password?: string;
+    login: string;
+    password: string;
 }
 
 export interface LogoutRequest {

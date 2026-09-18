@@ -1,0 +1,10 @@
+<Solution>
+  <Project Path="CryptoDashWeb.Core/CryptoDashWeb.Core.csproj" />
+  <Project Path="CryptoDashWeb.Data/CryptoDashWeb.Data.csproj" />
+  <Project Path="CryptoDashWeb/CryptoDashWeb.csproj" />
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
+  <Project Path="Security.Core/Security.Core.csproj" />
+  <Project Path="Security.Data/Security.Data.csproj" />
+</Solution>

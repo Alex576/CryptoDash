@@ -17,11 +17,12 @@ export function Settings() {
     isLoading: isLoadingFilters,
     isError: isFiltersError,
   } = useGetFiltersQuery({});
+  const tool = toolCode ?? (filters?.filters?.[0].value as ToolCode) ?? null;
   const {
     data: layout,
     isLoading: isLoadingLayout,
     isError: isLayoutError,
-  } = useGetLayoutQuery({ toolCode: toolCode! }, { skip: !toolCode });
+  } = useGetLayoutQuery({ toolCode: tool! }, { skip: !tool });
 
   const handleFilterValueChange = (control: FormControl, newValue: unknown) => {
     if (control.id === Constant.TOOL_FILTER_ID) {
@@ -32,10 +33,19 @@ export function Settings() {
   if (isFiltersError || isLayoutError || !filters) return <div>Error</div>;
   return (
     <div className="flex flex-col h-full">
-      <ControlSwitch
-        control={filters.toolFilter}
-        onControlValueChanged={handleFilterValueChange}
-      />
+      {filters.filters.map((filter) => (
+        <ControlSwitch
+          key={filter.id}
+          control={filter}
+          onControlValueChanged={handleFilterValueChange}
+          onStateChanged={function (
+            _control: FormControl,
+            _state: { isValid: boolean; isChanged: boolean },
+          ): void {
+            throw new Error("Function not implemented.");
+          }}
+        />
+      ))}
       {layout?.items.map((item) => {
         return <SettingsLayoutSwitch key={item.type} element={item} />;
       })}

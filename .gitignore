@@ -59,3 +59,49 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 **/.vscode/*
 /plan.md
 .vscode
+
+## Core Build Outputs
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+
+## Tooling and OS specific
+.DS_Store
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## IDEs (Visual Studio, VS Code, Rider)
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.peruser
+*.userosscache
+
+## User-secrets configuration (Critical for Security)
+secrets.json
+
+## Publishing/Artifacts output
+publish/
+artifacts/
+
+## Frontend / Client-side dependencies (If using Angular/React/Vue templates)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+## Local environment overrides
+.env
+.env.local
+.env.*.local
+
+## EF Core Migrations / SQLite databases (if you want to exclude local DBs)
+*.db
+*.db-shm
+*.db-wal

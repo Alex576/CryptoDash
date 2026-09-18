@@ -1,4 +1,5 @@
 import { FormControlData } from '../../settings/models/control-models';
+import { DashboardItemData } from '../../settings/models/dashboard-item-data';
 import { DashboardTypeCode } from '../../settings/models/dashboard-type-code';
 import { DashboardLayout } from '../../settings/models/settings-layout';
 
@@ -6,7 +7,7 @@ export class LayoutModel {
   data: LayoutDataType;
 }
 
-export type LayoutDataType = FormLayout | DashboardLayout | DashboardChartLayout | DashboardTableLayout;
+export type LayoutDataType = FormLayout | DashboardLayout | DashboardItemData;
 
 export interface FormLayout {
   controls: FormControlData[];

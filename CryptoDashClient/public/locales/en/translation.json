@@ -21,7 +21,16 @@
     }
   },
   "Form": {
-    "Loading": "Loading..."
+    "Loading": "Loading...",
+    "Control": {
+      "Placeholder": {
+        "PleaseEnter": "Please Enter"
+      }
+    },
+    "Button": {
+      "Close": "Close",
+      "Save": "Save"
+    }
   },
   "Button": {
     "Enter": "Enter",
@@ -38,5 +47,14 @@
   },
   "Error": {
     "NotFoundSwitchCase": "Not found suitable case for type {{type}}"
+  },
+  "Settings": {
+    "Form": {
+      "Control": {
+        "Name": "Name",
+        "Objects": "Objects",
+        "DashboardType": "Dashboard Type"
+      }
+    }
   }
 }

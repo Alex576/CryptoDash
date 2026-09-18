@@ -1,25 +1,26 @@
 import { LogoutUrl } from "@/core/constants";
+import type { OperationResultData } from "@/core/share/operation-result-data";
 import { apiSlice } from "../../../apiSlice";
-import type { AuthResponse, LoginRequest, LogoutRequest, RefreshTokenResponse, RegisterRequest, RegisterResponse } from "../models/auth";
+import type { AuthResponse, LoginRequest, LogoutRequest, RefreshTokenResponse, RegisterRequest } from "../models/auth";
 
 export const authApiEndpoints = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
-        login: builder.mutation<AuthResponse, LoginRequest>({
+        login: builder.mutation<OperationResultData<AuthResponse>, LoginRequest>({
             query: (credentials) => ({
-                url: '/auth/login',
+                url: '/Authentication/Login',
                 method: 'POST',
                 body: credentials,
             }),
         }),
         refresh: builder.mutation<RefreshTokenResponse, void>({
             query: () => ({
-                url: '/auth/refreshToken',
+                url: '/Authorization/RefreshToken',
                 method: 'POST',
             }),
         }),
-        register: builder.mutation<RegisterResponse, RegisterRequest>({
+        register: builder.mutation<OperationResultData<AuthResponse>, RegisterRequest>({
             query: (userData) => ({
-                url: '/auth/register',
+                url: '/Authentication/Register',
                 method: 'POST',
                 body: userData,
             }),

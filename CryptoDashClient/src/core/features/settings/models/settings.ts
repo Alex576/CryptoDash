@@ -65,7 +65,7 @@ export interface SettingsLayout {
 }
 
 export interface SettingFilters {
-    toolFilter: FormControl;
+    filters: FormControl[];
 }
 
 
@@ -76,4 +76,8 @@ export interface GetSettingsFiltersModel {
 
 export interface GetSettingsLayoutModel {
     toolCode: ToolCode;
+}
+
+export interface FormData {
+    controls: FormControl[];
 }

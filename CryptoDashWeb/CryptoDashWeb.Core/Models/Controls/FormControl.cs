@@ -1,0 +1,32 @@
+﻿using CryptoDashWeb.Core.Converters;
+using CryptoDashWeb.Core.Models.Controls.Settings;
+using CryptoDashWeb.Data.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
+namespace CryptoDashWeb.Core.Models.Controls
+{
+    [JsonConverter(typeof(FormControlConverter))]
+    public class FormControl
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public ControlType Type { get; set; }
+        public ControlSettings Settings { get; set; }
+        public JToken? Value { get; set; }
+        public TileItemCode TileItemCode { get; set; }
+        public bool Updated { get; set; }
+
+
+        [JsonConstructor]
+        public FormControl() { }
+
+        public FormControl(FormControlData formControlData)
+        {
+            //Id = ItemCodeHelper.GetItemCode(formControlData);
+            Name = formControlData.Name;
+            Type = formControlData.Type;
+            TileItemCode = formControlData.TileItemCode;
+        }
+    }
+}

@@ -16,6 +16,8 @@ import { ToolModel } from '../layout/models/tool-model';
 import { Constant } from './models/constants';
 import { FormControlData } from './models/control-models';
 import { ControlState } from './models/control-state';
+import { DashboardItemData } from './models/dashboard-item-data';
+import { DashboardTypeCode } from './models/dashboard-type-code';
 import { FormControlDataSettings } from './models/form-control-data.settings';
 import { SettingFilters } from './models/setting-filters';
 import { DashboardLayout, SettingLayoutData, SettingsFormData, SettingsLayout } from './models/settings-layout';
@@ -102,14 +104,53 @@ export class SettingsService {
     }
   }
 
-  getForm(toolCode: ToolCode, formValues?: FormValues): Form {
+  async getForm(toolCode: ToolCode, dashboardId?: number, formValues?: FormValues): Promise<Form> {
     if (toolCode === ToolCode.Dashboard) {
+      const dashboardItem = await this.getDashboardItem(dashboardId);
       const layoutBuilder = new DashboardFormSettingsBuilder();
       const formBuilder = new SettingsDashboardFormBuilder(layoutBuilder.buildControls(), this.objStorage);
-      return formBuilder.getForm(formValues);
+      formBuilder.updateDataByFormValues(dashboardItem, formValues);
+      return formBuilder.getForm(dashboardItem);
     }
-    // const layout = await this.layoutRepository.findOneBy({ toolId: toolCode, typeId: LayoutTypeCode.Form });
 
     // throw new Error('Method not implemented.');
+  }
+
+  //todo move in layout service!!
+  private async getDashboardItem(dashboardId: number): Promise<DashboardItemData> {
+    let dashboardItem: DashboardItemData;
+    if (dashboardId) {
+      const layoutItem = await this.layoutRepository.findOneBy({
+        id: dashboardId,
+        typeId: LayoutTypeCode.DashboardItem,
+      });
+      dashboardItem = (layoutItem?.options?.data as DashboardItemData) ?? {
+        id: -1,
+        name: '',
+        type: DashboardTypeCode.Chart,
+      };
+    } else {
+      dashboardItem = {
+        id: -1,
+        name: '',
+        type: DashboardTypeCode.Chart,
+      };
+    }
+    return dashboardItem;
+  }
+
+  async saveForm(toolCode: ToolCode, dashboardId?: number, formValues?: FormValues): Promise<void> {
+    if (toolCode === ToolCode.Dashboard) {
+      const dashboardItem = await this.getDashboardItem(dashboardId);
+      const layoutBuilder = new DashboardFormSettingsBuilder();
+      const formBuilder = new SettingsDashboardFormBuilder(layoutBuilder.buildControls(), this.objStorage);
+      formBuilder.updateDataByFormValues(dashboardItem, formValues);
+      const layoutEntity = new Layout();
+      // layoutEntity.id = dashboardId;
+      // layoutEntity.
+      // await this.layoutRepository.save(layoutEntity);
+    }
+
+    throw new Error('Method not implemented.');
   }
 }

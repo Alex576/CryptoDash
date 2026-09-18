@@ -1,16 +1,17 @@
 import { fetchBaseQuery, type BaseQueryApi, type BaseQueryFn, type FetchArgs, type FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 import { type RootState } from '../core/store';
 import { Constants } from './constants';
-import { logout, setNewToken } from './features/auth/authSlice';
+import { logout, setNewToken, type User } from './features/auth/authSlice';
 import type { RefreshTokenResponse } from './features/auth/models/auth';
+import { tryParse } from './utils';
 
 const baseQuery = fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_API_URL,
+    baseUrl: import.meta.env.VITE_API_URL + '/api/',
     prepareHeaders: (headers, { getState }): Headers => getHeader(getState, headers),
 });
 
 const secretQuery = fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_API_URL,
+    baseUrl: import.meta.env.VITE_API_URL + '/api/',
     credentials: 'include',
     prepareHeaders: (headers, { getState }): Headers => getHeader(getState, headers),
 });
@@ -28,7 +29,7 @@ export function baseQueryWithReauth(useCredentials: boolean = false): BaseQueryF
         if (result.error?.status === 401) {
             const refreshResult = await secretQuery(
                 {
-                    url: '/auth/refreshToken',
+                    url: '/api/Authorization/RefreshToken',
                     method: 'POST',
                 },
                 api,
@@ -53,6 +54,10 @@ function getHeader(getState: () => unknown, headers: Headers) {
     const token = (getState() as RootState).auth.token || localStorage.getItem(Constants.AccessToken);
     if (token) {
         headers.set('authorization', `Bearer ${token}`);
+    }
+    const userId = (getState() as RootState).auth.user?.id || tryParse<User>(localStorage.getItem(Constants.User))?.id;
+    if (userId) {
+        headers.set('userId', userId);
     }
     return headers;
 }

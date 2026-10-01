@@ -1,0 +1,11 @@
+button[matIconButton]:not(:disabled) {
+    color: color-mix(in srgb, var(--mat-button-text-label-text-color), white 70%);
+    transition: color 0.1s linear;
+    &:hover {
+        color: var(--mat-button-text-label-text-color);
+    }
+
+    &.active {
+        color: var(--mat-button-text-label-text-color);
+    }
+}

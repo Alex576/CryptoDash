@@ -3,9 +3,6 @@ using CryptoDashWeb.Data.DBModels;
 using CryptoDashWeb.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CryptoDashWeb.Data.Services
 {
@@ -15,10 +12,10 @@ namespace CryptoDashWeb.Data.Services
         {
         }
 
-        public async Task<LayoutModel<TData>?> GetLayout<TData>(int tileCode) where TData : class
+        public async Task<LayoutModel<TData>> GetLayout<TData>(int tileCode) where TData : class
         {
             var layout = await _context.Layouts.FirstOrDefaultAsync(x => x.TileId == tileCode);
-            return layout == null ? null : new LayoutModel<TData>(layout);
+            return new LayoutModel<TData>(layout, tileCode);
         }
 
         public async Task SaveLayout(int tileCode, object layout)

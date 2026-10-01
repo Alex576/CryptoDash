@@ -20,13 +20,13 @@ namespace Security.Core.Services
 
         public string GenerateAccessToken(User user)
         {
-            var jwt = CreateToken(user.Email, TimeSpan.FromMinutes(m_JWTModel.AccessTokenExpireInMinutes), m_JWTModel.SecretKey);
+            var jwt = CreateToken(user.Email, TimeSpan.FromMinutes(m_JWTModel.AccessTokenExpireInMinutes), m_JWTModel.SecretAccessKey);
             return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
 
         public string GenerateAccessToken(UserModel user)
         {
-            var jwt = CreateToken(user.Name, TimeSpan.FromMinutes(m_JWTModel.AccessTokenExpireInMinutes), m_JWTModel.SecretKey);
+            var jwt = CreateToken(user.Name, TimeSpan.FromMinutes(m_JWTModel.AccessTokenExpireInMinutes), m_JWTModel.SecretAccessKey);
             return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
 
@@ -42,7 +42,17 @@ namespace Security.Core.Services
             return encodedJwt;
         }
 
+        public async Task<bool> ValidateAccessToken(string token)
+        {
+            return await ValidateToken(token, m_JWTModel.SecretAccessKey);
+        }
+
         public async Task<bool> ValidateRefreshToken(string token)
+        {
+            return await ValidateToken(token, m_JWTModel.SecretRefreshKey);
+        }
+
+        private async Task<bool> ValidateToken(string token, string secretKey)
         {
             var tokenHandler = new JsonWebTokenHandler();
             if (!tokenHandler.CanReadToken(token))
@@ -55,7 +65,7 @@ namespace Security.Core.Services
                 ValidIssuer = m_JWTModel.Issuer,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(m_JWTModel.SecretRefreshKey))
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey))
             });
             return result.IsValid;
         }

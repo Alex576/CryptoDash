@@ -6,7 +6,7 @@ namespace CryptoDashWeb.Data.DBContext
 {
     public class CryptoDashContext : DbContext
     {
-        public virtual DbSet<Tile> TileItems { get; set; }
+        public virtual DbSet<Tile> Tiles { get; set; }
         public virtual DbSet<Layout> Layouts { get; set; }
         public virtual DbSet<TileType> TileTypes { get; set; }
         public CryptoDashContext(DbContextOptions<CryptoDashContext> options)

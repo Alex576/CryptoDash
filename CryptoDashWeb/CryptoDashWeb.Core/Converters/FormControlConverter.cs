@@ -1,7 +1,6 @@
 ﻿using CryptoDashWeb.Core.Models;
 using CryptoDashWeb.Core.Models.Controls;
 using CryptoDashWeb.Core.Models.Controls.Settings;
-using CryptoDashWeb.Data.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 

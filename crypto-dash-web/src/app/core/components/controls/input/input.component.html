@@ -1,0 +1,6 @@
+<div class="input">
+  <mat-form-field [class.changed]="updated()" [class.invalid]="isInvalid()">
+    <mat-label>{{name() | translate}}</mat-label>
+    <input matInput [formControl]="formControl">
+  </mat-form-field>
+</div>

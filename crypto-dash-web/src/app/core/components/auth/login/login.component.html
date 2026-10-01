@@ -1,0 +1,42 @@
+<div class="login">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <div class="login__header">CryptoDash</div>
+      </mat-card-title>
+      <mat-card-subtitle>
+        <div class="login__title">{{'Login.Title'| translate }}</div>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <form class="form" [formGroup]="loginForm">
+        <mat-form-field>
+          <mat-label>{{'Control.Login' | translate }}</mat-label>
+          <input tabindex="1" matInput type="text" [formControl]="loginForm.controls.login">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>{{'Control.Password' | translate}}</mat-label>
+          <input tabindex="2" matInput type="password" [formControl]="loginForm.controls.password">
+        </mat-form-field>
+      </form>
+
+    </mat-card-content>
+    <mat-card-actions>
+      <div class="login__actions">
+        <button tabIndex="4"
+                matButton="outlined"
+                (click)="onRegister()">
+          {{'Button.Register' | translate }}
+        </button>
+        <button tabIndex="3"
+                matButton="filled"
+                [disabled]="isLoginDisabled()"
+                (click)="onLogin()">
+          {{'Button.Login' | translate }}
+        </button>
+
+      </div>
+    </mat-card-actions>
+
+  </mat-card>
+</div>

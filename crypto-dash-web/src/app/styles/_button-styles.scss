@@ -1,0 +1,35 @@
+button[mat-button][appearance~="no-border"] {
+    border-radius: 0;
+}
+
+button[mat-button][appearance~="padding-8"] {
+    padding: 0 8px;
+}
+
+button[mat-button][appearance~="hide-text"] {
+    min-width: 0;
+
+    .mat-icon {
+        margin-right: 0;
+    }
+}
+
+button[mat-button]:not(:disabled) {
+    color: color-mix(in srgb, var(--mat-button-text-label-text-color), white 70%);
+    transition: color 0.1s linear;
+    &:hover {
+        color: var(--mat-button-text-label-text-color);
+    }
+
+    &.active {
+        color: var(--mat-button-text-label-text-color);
+    }
+}
+
+button[matButton="outlined"][appearance~="delete"]:not(:disabled) {
+    --mat-button-outlined-outline-color: var(--mat-sys-error);
+    --mat-button-outlined-label-text-color: var(--mat-sys-error);
+    --mat-mdc-button-ripple-color: var(--mat-sys-error);
+    --mat-button-outlined-state-layer-color: var(--mat-sys-error);
+    --mat-button-outlined-ripple-color: color-mix(in srgb, var(--mat-sys-error) 12%, transparent);
+}

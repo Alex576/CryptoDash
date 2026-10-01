@@ -8,10 +8,10 @@ namespace CryptoDashWeb.Data.Models
         public int TileCode { get; set; }
         public TData Layout { get; set; }
 
-        public LayoutModel(Layout layout)
+        public LayoutModel(Layout? layout, int tileCode)
         {
-            TileCode = layout.TileId;
-            Layout = JsonConvert.DeserializeObject<TData>(layout.LayoutJson ?? "") ?? Activator.CreateInstance<TData>();
+            TileCode = tileCode;
+            Layout = JsonConvert.DeserializeObject<TData>(layout?.LayoutJson ?? "") ?? Activator.CreateInstance<TData>();
         }
     }
 }

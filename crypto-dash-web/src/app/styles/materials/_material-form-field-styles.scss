@@ -1,0 +1,39 @@
+mat-form-field {
+    &.changed {
+        //region label
+        .mdc-text-field--filled:not(.mdc-text-field--invalid):not(.mdc-text-field--focused) .mdc-floating-label {
+            color: var(
+                --form-field-changed-indicator-color,
+                var(--mat-form-field-filled-focus-label-text-color, var(--mat-sys-primary))
+            );
+        }
+        .mdc-text-field--filled:not(.mdc-text-field--disabled):not(.mdc-text-field--focused):not(
+                .mdc-text-field--invalid
+            ):hover
+            .mdc-floating-label {
+            color: var(
+                --form-field-changed-indicator-color-hover,
+                var(--mat-form-field-filled-focus-label-text-color, var(--mat-sys-primary))
+            );
+        }
+        //endregion label
+
+        //region border bottom
+        .mdc-text-field--filled:not(.mdc-text-field--invalid) .mdc-line-ripple::before {
+            border-bottom-color: var(
+                --form-field-changed-indicator-color,
+                var(--mat-form-field-filled-focus-active-indicator-color, var(--mat-sys-primary))
+            );
+        }
+        .mdc-text-field--filled:not(.mdc-text-field--disabled):not(.mdc-text-field--focused):not(
+                .mdc-text-field--invalid
+            ):hover
+            .mdc-line-ripple::before {
+            border-bottom-color: var(
+                --form-field-changed-indicator-color-hover,
+                var(--mat-form-field-filled-focus-active-indicator-color, var(--mat-sys-primary))
+            );
+        }
+        //endregion border bottom
+    }
+}

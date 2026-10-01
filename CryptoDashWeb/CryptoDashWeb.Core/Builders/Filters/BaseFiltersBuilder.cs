@@ -1,6 +1,5 @@
 ﻿using CryptoDashWeb.Core.Builders.Controls;
 using CryptoDashWeb.Core.Models.Controls;
-using Newtonsoft.Json.Linq;
 
 namespace CryptoDashWeb.Core.Builders.Filters
 {
@@ -19,7 +18,7 @@ namespace CryptoDashWeb.Core.Builders.Filters
             for (int i = 0; i < _formControlDatas.Count; i++)
             {
                 var controlData = _formControlDatas[i];
-                var control = GetControl(controlData, i);
+                var control = GetControl(controlData);
                 control.Value = GetControlValue(control, controlData, data);
                 filters.Add(control);
             }

@@ -1,0 +1,22 @@
+$toolbar-height: 40px;
+$toolbar-paddings-vertical: 4px;
+$toolbar-paddings-horizontal: 10px;
+$total-toolbar-height: $toolbar-height + $toolbar-paddings-vertical;
+
+.toolbar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: var(--mat-sys-primary-container);
+    color: var(--mat-sys-on-primary-container);
+    padding: $toolbar-paddings-vertical $toolbar-paddings-horizontal;
+    gap: var(--item-ident);
+
+    &_right {
+        .user {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+}

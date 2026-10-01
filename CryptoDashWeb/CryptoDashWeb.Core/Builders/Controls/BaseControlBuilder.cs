@@ -1,17 +1,18 @@
 ﻿using CryptoDashWeb.Core.Models.Controls;
 using CryptoDashWeb.Core.Models.Controls.Settings;
+using CryptoDashWeb.Core.Utils;
 using Newtonsoft.Json.Linq;
 
 namespace CryptoDashWeb.Core.Builders.Controls
 {
     public abstract class BaseControlBuilder<TData> where TData : class
     {
-        private string GetControlId(FormControlData controlData, int index = 0) => $"{controlData.TileItemCode}_${index}";
-        protected FormControl GetControl(FormControlData controlData, int index = 0)
+        protected virtual string GetControlId(FormControlData controlData) => ItemCodeHelper.GetItemCode(controlData);
+        protected FormControl GetControl(FormControlData controlData)
         {
             var control = new FormControl
             {
-                Id = GetControlId(controlData, index),
+                Id = GetControlId(controlData),
                 Name = controlData.Name,
                 TileItemCode = controlData.TileItemCode,
                 Settings = GetControlSettings(controlData),
@@ -26,7 +27,6 @@ namespace CryptoDashWeb.Core.Builders.Controls
             {
                 ControlType.Combo => GetComboSettings(controlData),
                 ControlType.Input => new InputSettings(),
-                ControlType.Toggle => throw new NotImplementedException(),
                 _ => throw new NotImplementedException(),
             };
             settings.Required = IsRequired(controlData);
@@ -44,8 +44,9 @@ namespace CryptoDashWeb.Core.Builders.Controls
             return settings;
         }
         protected abstract List<Item> GetComboItems(FormControlData controlData);
+        protected abstract void UpdateDataByControlValue(TData data, FormControlData controlData, JToken? value);
 
-        protected abstract object GetValue(FormControl control, FormControlData controlData, TData data);
+        protected abstract object? GetValue(FormControl control, FormControlData controlData, TData data);
         protected JToken? GetControlValue(FormControl control, FormControlData controlData, TData data)
         {
             var value = GetValue(control, controlData, data);
@@ -92,7 +93,6 @@ namespace CryptoDashWeb.Core.Builders.Controls
             {
                 ControlType.Combo when control.Settings is ComboSettings comboSettings => comboSettings.AllowMultiple ? new List<int>() : null,
                 ControlType.Input => null,
-                ControlType.Toggle => false,
                 _ => throw new NotImplementedException(),
             };
         }

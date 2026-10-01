@@ -1,0 +1,15 @@
+.login {
+    min-width: 25%;
+    min-height: 35%;
+    .form {
+        display: flex;
+        flex-direction: column;
+    }
+    &__actions {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: var(--item-ident);
+    }
+}

@@ -2,8 +2,9 @@
 {
     public enum ControlType
     {
-        Combo = 1,
-        Input = 2,
-        Toggle = 3,
+        Input = 1,
+        Combo = 2,
+        DateTime = 3,
+        Between = 4,
     }
 }

@@ -1,0 +1,46 @@
+<div class="register">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <div class="register__header">Isunaki</div>
+      </mat-card-title>
+      <mat-card-subtitle>
+        <div class="register__title">{{'Form.Title.Register'| translate }}</div>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <form class="form" [formGroup]="registerForm">
+        <mat-form-field>
+          <mat-label>{{'Form.Control.Login' | translate }}</mat-label>
+          <input tabindex="1" matInput type="text" [formControl]="registerForm.controls.login">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>{{'Form.Control.Password' | translate}}</mat-label>
+          <input tabindex="2" matInput type="password" [formControl]="registerForm.controls.password">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>{{'Form.Control.RepeatPassword' | translate}}</mat-label>
+          <input tabindex="3" matInput type="password" [formControl]="registerForm.controls.repeatPassword">
+        </mat-form-field>
+      </form>
+
+    </mat-card-content>
+    <mat-card-actions>
+      <div class="register__actions">
+        <button tabIndex="5"
+                matButton="outlined"
+                (click)="onBack()">
+          {{'Form.Back' | translate }}
+        </button>
+        <button tabIndex="4"
+                matButton="filled"
+                [disabled]="isRegisterDisabled()"
+                (click)="onRegister()">
+          {{'Form.Register' | translate }}
+        </button>
+
+      </div>
+    </mat-card-actions>
+
+  </mat-card>
+</div>

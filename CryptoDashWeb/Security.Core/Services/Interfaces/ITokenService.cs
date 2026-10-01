@@ -10,6 +10,7 @@ namespace Security.Core.Services.Interfaces
         string GenerateAccessToken(UserModel user);
         JwtSecurityToken GenerateRefreshToken(User user);
         JwtSecurityToken GenerateRefreshToken(UserModel user);
+        Task<bool> ValidateAccessToken(string token);
         Task<bool> ValidateRefreshToken(string token);
     }
 }

@@ -10,7 +10,7 @@ namespace CryptoDashWeb.Core.Builders.Layouts
         {
             var filters = new List<FormControlData>();
 
-            filters.Add(CrateFormControl("Control.Name.Tool", TileItemCode.Tool, ControlType.Combo, [ControlState.Editable, ControlState.Required, ControlState.SelectFirstValueIfEmpty]));
+            filters.Add(CrateFormControl("Control.Tool", TileItemCode.Tool, ControlType.Combo, [ControlState.Editable, ControlState.Required, ControlState.SelectFirstValueIfEmpty]));
             return filters;
         }
     }

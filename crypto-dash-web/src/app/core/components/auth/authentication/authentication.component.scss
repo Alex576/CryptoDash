@@ -1,0 +1,23 @@
+.authentication {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle, var(--mat-sys-primary) 0%, var(--mat-sys-background) 100%);
+
+    &__container {
+        min-width: 25%;
+        min-height: 35%;
+        .form {
+            display: flex;
+            flex-direction: column;
+        }
+        &__actions {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: var(--item-ident);
+        }
+    }
+}

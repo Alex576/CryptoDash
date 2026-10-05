@@ -1,4 +1,5 @@
 ﻿using CryptoDashWeb.Models;
+using CryptoDashWeb.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Security.Core.Services.Interfaces;
@@ -16,14 +17,14 @@ namespace CryptoDashWeb.Controllers.Api
             _authorizationService = authorizationService;
         }
 
-        [HttpPost("[action]")]
+        [HttpGet("[action]")]
         [AllowAnonymous]
-        public async Task<IActionResult> RefreshToken(RefreshTokenModel model)
+        public async Task<IActionResult> RefreshToken()
         {
-            if (!Request.Cookies.TryGetValue(CookieKeys.RefreshToken, out var refreshToken))
+            if (!Request.Cookies.TryGetValue(CookieKeys.RefreshToken, out var refreshToken) || !HttpHelpers.TryGetAccessToken(Request.HttpContext, out var accessToken))
                 return BadRequest();
 
-            var token = await _authorizationService.TryRefreshToken(model.AccessToken, refreshToken);
+            var token = await _authorizationService.TryRefreshToken(accessToken, refreshToken);
             if (token == null)
                 return BadRequest();
             return Ok(new RefreshTokenModel() { AccessToken = token });

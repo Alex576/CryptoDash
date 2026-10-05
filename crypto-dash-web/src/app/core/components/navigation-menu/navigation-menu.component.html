@@ -1,0 +1,35 @@
+<div class="navigation"
+     (mouseenter)="onExpand()"
+     (mouseleave)="onCollapse()">
+  <div class="navigation_container">
+    @for (item of visibleItems(); track item.data.id) {
+
+    <div class="item">
+      <div class="item_element"
+           [class.active]="isActive(item)">
+        <button class="navigation-button"
+                mat-button
+                [attr.appearance]="elementAttribute()"
+                [class.active]="isActive(item)"
+                (click)="onElementClick(item)">
+          <mat-icon class="icon">{{item.data.icon}}</mat-icon>
+          @if (expanded()){
+          {{item.data.name}}
+
+          }
+          @if(expanded() && item.hasChild){
+          <mat-icon iconPositionEnd>{{(item.expanded ? 'keyboard_arrow_down' :'keyboard_arrow_right')}}</mat-icon>
+          }
+        </button>
+      </div>
+    </div>
+
+    }
+  </div>
+  <div class="navigation__environment-settings">
+    <mat-slide-toggle [formControl]="themeFormControl" matTooltip="Auto switch theme" />
+    <button matIconButton (click)="onToggleTheme()">
+      <mat-icon class="icon">sunny</mat-icon>
+    </button>
+  </div>
+</div>

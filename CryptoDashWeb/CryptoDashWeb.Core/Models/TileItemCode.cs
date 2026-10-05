@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CryptoDashWeb.Core.Models
+﻿namespace CryptoDashWeb.Core.Models
 {
     public enum TileItemCode
     {
@@ -12,6 +8,7 @@ namespace CryptoDashWeb.Core.Models
         State = 4,
         Name = 5,
         Classes = 6,
-        Objects = 7
+        Objects = 7,
+        DashboardType = 8
     }
 }

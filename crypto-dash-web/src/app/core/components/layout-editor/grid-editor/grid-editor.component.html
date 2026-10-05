@@ -1,0 +1,11 @@
+<div class="grid-editor">
+  <div class="grid-editor__actions">
+    <button matIconButton (click)="onAddColumn()">
+      <mat-icon class="icon">add</mat-icon>
+    </button>
+
+  </div>
+  <div class="grid-editor__content">
+    <app-ag-grid [grid]="grid()" />
+  </div>
+</div>

@@ -8,6 +8,7 @@ namespace CryptoDashWeb.Data
         public static void InitializeServices(IServiceCollection services)
         {
             services.AddScoped<LayoutContextService>();
+            services.AddScoped<TileItemContextService>();
         }
     }
 }

@@ -24,7 +24,7 @@ namespace CryptoDashWeb.Data.DBModels
         public virtual Tile? Parent { get; set; }
         public virtual ICollection<Tile> Children { get; set; } = new List<Tile>();
 
-        public virtual ICollection<Layout> Layouts { get; set; } = new List<Layout>();
+        public virtual Layout? Layout { get; set; }
 
     }
 }

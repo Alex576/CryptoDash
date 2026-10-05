@@ -1,0 +1,15 @@
+<div class="dashboard-editor">
+  @if (items()) {
+  <div class="dashboard-editor__action-panel">
+    <button matIconButton (click)="onAddItem()">
+      <mat-icon class="icon">add</mat-icon>
+    </button>
+  </div>
+  <div class="dashboard-editor__dashboard">
+    <app-dashboard-panel [options]="options()"
+                         [items]="items()"
+                         (openItem)="onOpenItem($event)">
+    </app-dashboard-panel>
+  </div>
+  }
+</div>

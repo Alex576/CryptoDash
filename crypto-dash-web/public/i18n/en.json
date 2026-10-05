@@ -1,0 +1,72 @@
+{
+  "Login": {
+    "Title": "Login"
+  },
+  "Register": {
+    "Title": "Register in CryptoDash",
+    "Description": "Enter your email and password",
+    "Errors": {
+      "DifferentPasswords": "Passwords must be equals",
+      "BadPasswordOrEmail": "Wrong password or email"
+    }
+  },
+  "Control": {
+    "Email": "Email",
+    "Password": "Password",
+    "RepeatPassword": "Repeat Password",
+    "Login": "Login",
+    "Name": "Name",
+    "Tool": "Tool",
+    "DashboardType": "Dashboard Type",
+    "Combo": {
+      "NoItems": "No Items",
+      "SelectAll": "Select All"
+    }
+  },
+  "Form": {
+    "Loading": "Loading...",
+    "Control": {
+      "Email": "Email",
+      "Password": "Password",
+      "RepeatPassword": "Repeat Password",
+      "Login": "Login",
+      "Name": "Name",
+      "Tool": "Tool",
+      "DashboardType": "Dashboard Type",
+      "Placeholder": {
+        "PleaseEnter": "Please Enter"
+      }
+    },
+    "Button": {
+      "Close": "Close",
+      "Save": "Save",
+      "Delete": "Delete"
+    }
+  },
+  "Button": {
+    "Enter": "Enter",
+    "Register": "Register",
+    "Login": "Login"
+  },
+  "SideBar": {
+    "Dashboard": "Dashboard",
+    "Protfolio": "Portfolio",
+    "Settings": "Settings",
+    "Subjects": "Subjects"
+  },
+  "Utils": {
+    "CheckingSession": "Checking session..."
+  },
+  "Error": {
+    "NotFoundSwitchCase": "Not found suitable case for type {{type}}"
+  },
+  "Settings": {
+    "Form": {
+      "Control": {
+        "Name": "Name",
+        "Objects": "Objects",
+        "DashboardType": "Dashboard Type"
+      }
+    }
+  }
+}

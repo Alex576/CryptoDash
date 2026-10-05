@@ -1,0 +1,8 @@
+.profile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--item-ident);
+    cursor: default;
+    user-select: none;
+}

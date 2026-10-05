@@ -2,17 +2,13 @@ using CryptoDashWeb.Core;
 using CryptoDashWeb.Data.DBContext;
 using CryptoDashWeb.Middlewares;
 using CryptoDashWeb.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using NLog;
 using NLog.Web;
 using Security.Core;
 using Security.Core.Models;
 using Security.Data.DBContext;
-using System.Text;
 
 public partial class Program
 {
@@ -69,46 +65,46 @@ public partial class Program
         builder.Services.Configure<JWTModel>(builder.Configuration.GetSection("JWT"));
         //builder.Services.Configure<KafkaModel>(builder.Configuration.GetSection("Kafka"));
 
-        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters()
-                {
-                    ValidateIssuer = true,
-                    ValidIssuer = jwtConfig.Issuer,
-                    ValidateAudience = true,
-                    ValidAudience = jwtConfig.Audience,
-                    ValidateLifetime = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtConfig.SecretKey)),
-                    ValidateIssuerSigningKey = true,
-                };
-                options.Events = new JwtBearerEvents
-                {
-                    OnMessageReceived = context =>
-                    {
-                        var token = context.Request.Headers["Authorization"];
-                        // Здесь удобно смотреть, пришел ли токен вообще
-                        return Task.CompletedTask;
-                    },
-                    OnAuthenticationFailed = context =>
-                    {
-                        // А здесь можно поймать причину, почему токен отклонен (истек, кривой ключ и т.д.)
-                        Console.WriteLine("Ошибка: " + context.Exception.Message);
-                        return Task.CompletedTask;
-                    },
-                    OnForbidden = context =>
-                    {
-                        return Task.CompletedTask;
-                    }
-                };
-            });
+        //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        //    .AddJwtBearer(options =>
+        //    {
+        //        options.TokenValidationParameters = new TokenValidationParameters()
+        //        {
+        //            ValidateIssuer = true,
+        //            ValidIssuer = jwtConfig.Issuer,
+        //            ValidateAudience = true,
+        //            ValidAudience = jwtConfig.Audience,
+        //            ValidateLifetime = true,
+        //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtConfig.SecretKey)),
+        //            ValidateIssuerSigningKey = true,
+        //        };
+        //        options.Events = new JwtBearerEvents
+        //        {
+        //            OnMessageReceived = context =>
+        //            {
+        //                var token = context.Request.Headers["Authorization"];
+        //                // Здесь удобно смотреть, пришел ли токен вообще
+        //                return Task.CompletedTask;
+        //            },
+        //            OnAuthenticationFailed = context =>
+        //            {
+        //                // А здесь можно поймать причину, почему токен отклонен (истек, кривой ключ и т.д.)
+        //                Console.WriteLine("Ошибка: " + context.Exception.Message);
+        //                return Task.CompletedTask;
+        //            },
+        //            OnForbidden = context =>
+        //            {
+        //                return Task.CompletedTask;
+        //            }
+        //        };
+        //    });
 
-        builder.Services.AddAuthorization(options =>
-        {
-            options.FallbackPolicy = new AuthorizationPolicyBuilder()
-                .RequireAuthenticatedUser()
-                .Build();
-        });
+        //builder.Services.AddAuthorization(options =>
+        //{
+        //    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        //        .RequireAuthenticatedUser()
+        //        .Build();
+        //});
         builder.Services.AddSingleton<IJWTOptions>(s => s.GetRequiredService<IOptions<JWTModel>>().Value);
         //var producerConfig = new ProducerConfig()
         //{
@@ -137,14 +133,14 @@ public partial class Program
         app.UseRouting();
         app.UseCors((options) =>
         {
-            options.WithOrigins("http://localhost:5173", "https://localhost:5173").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+            options.WithOrigins("http://localhost:5173", "https://localhost:5173", "http://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
         });
 
 
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.UseMiddleware<UserProtectionMiddleware>();
+        app.UseMiddleware<AuthMiddleware>();
 
         app.MapControllerRoute(
           name: "default",

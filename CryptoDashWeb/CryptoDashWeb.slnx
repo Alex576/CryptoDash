@@ -1,10 +1,32 @@
 <Solution>
-  <Project Path="CryptoDashWeb.Core/CryptoDashWeb.Core.csproj" />
-  <Project Path="CryptoDashWeb.Data/CryptoDashWeb.Data.csproj" />
-  <Project Path="CryptoDashWeb/CryptoDashWeb.csproj" />
-  <Project Path="docker-compose.dcproj">
-    <Build />
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Release" />
+    <BuildType Name="Test" />
+  </Configurations>
+  <Project Path="CryptoDashWeb.Core/CryptoDashWeb.Core.csproj">
+    <BuildType Solution="Test|*" Project="Debug" />
+    <Build Solution="Test|*" Project="false" />
   </Project>
-  <Project Path="Security.Core/Security.Core.csproj" />
-  <Project Path="Security.Data/Security.Data.csproj" />
+  <Project Path="CryptoDashWeb.Data/CryptoDashWeb.Data.csproj">
+    <BuildType Solution="Test|*" Project="Debug" />
+    <Build Solution="Test|*" Project="false" />
+  </Project>
+  <Project Path="CryptoDashWeb/CryptoDashWeb.csproj">
+    <BuildType Solution="Test|*" Project="Debug" />
+    <Build Solution="Test|*" Project="false" />
+  </Project>
+  <Project Path="docker-compose.dcproj">
+    <BuildType Solution="Test|*" Project="Debug" />
+    <Build Solution="Release|*" />
+    <Build Solution="Test|*" />
+  </Project>
+  <Project Path="Security.Core/Security.Core.csproj">
+    <BuildType Solution="Test|*" Project="Debug" />
+    <Build Solution="Test|*" Project="false" />
+  </Project>
+  <Project Path="Security.Data/Security.Data.csproj">
+    <BuildType Solution="Test|*" Project="Debug" />
+    <Build Solution="Test|*" Project="false" />
+  </Project>
 </Solution>

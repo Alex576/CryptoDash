@@ -46,6 +46,7 @@ namespace CryptoDashWeb.Data.Migrations
                         .HasName("pk_layouts");
 
                     b.HasIndex("TileId")
+                        .IsUnique()
                         .HasDatabaseName("ix_layouts_tile_id");
 
                     b.ToTable("layouts", "dbo");
@@ -75,15 +76,15 @@ namespace CryptoDashWeb.Data.Migrations
                         .HasColumnName("type_code");
 
                     b.HasKey("Id")
-                        .HasName("pk_tile_items");
+                        .HasName("pk_tiles");
 
                     b.HasIndex("ParentId")
-                        .HasDatabaseName("ix_tile_items_parent_id");
+                        .HasDatabaseName("ix_tiles_parent_id");
 
                     b.HasIndex("TypeCode")
-                        .HasDatabaseName("ix_tile_items_type_code");
+                        .HasDatabaseName("ix_tiles_type_code");
 
-                    b.ToTable("tile_items", "dbo");
+                    b.ToTable("tiles", "dbo");
 
                     b.HasData(
                         new
@@ -156,11 +157,11 @@ namespace CryptoDashWeb.Data.Migrations
             modelBuilder.Entity("CryptoDashWeb.Data.DBModels.Layout", b =>
                 {
                     b.HasOne("CryptoDashWeb.Data.DBModels.Tile", "Tile")
-                        .WithMany("Layouts")
-                        .HasForeignKey("TileId")
+                        .WithOne("Layout")
+                        .HasForeignKey("CryptoDashWeb.Data.DBModels.Layout", "TileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_layouts_tile_items_tile_id");
+                        .HasConstraintName("fk_layouts_tiles_tile_id");
 
                     b.Navigation("Tile");
                 });
@@ -171,14 +172,14 @@ namespace CryptoDashWeb.Data.Migrations
                         .WithMany("Children")
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("fk_tile_items_tile_items_parent_id");
+                        .HasConstraintName("fk_tiles_tiles_parent_id");
 
                     b.HasOne("CryptoDashWeb.Data.DBModels.TileType", "TileType")
                         .WithMany("Tiles")
                         .HasForeignKey("TypeCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_tile_items_tile_types_type_code");
+                        .HasConstraintName("fk_tiles_tile_types_type_code");
 
                     b.Navigation("Parent");
 
@@ -189,7 +190,7 @@ namespace CryptoDashWeb.Data.Migrations
                 {
                     b.Navigation("Children");
 
-                    b.Navigation("Layouts");
+                    b.Navigation("Layout");
                 });
 
             modelBuilder.Entity("CryptoDashWeb.Data.DBModels.TileType", b =>

@@ -1,0 +1,41 @@
+<div class="layout-editor">
+  @if (filters()){
+  <div class="layout-editor__filters">
+    <app-filters [filters]="filters()" (valueChanged)="onFilterValueChanged($event)"></app-filters>
+  </div>
+  @let layoutBlocks = layout();
+  <div class="layout-editor__content">
+    @if (layoutBlocks) {
+    @for (item of layoutBlocks.items; track item.tileCode) {
+    @switch (item.tileType) {
+    @case (itemType.Filter) {
+    <app-filters-editor [data]="item.data"
+                        [tileCode]="item.tileCode" />
+    }
+    @case (itemType.Grid) {
+    <!-- <app-grid-editor [data]="item.data"
+                     [tileCode]="item.tileCode" /> -->
+    }
+    @case (itemType.Dashboard) {
+    <app-dashboard-editor [data]="item.data"
+                          [tileCode]="item.tileCode" />
+    }
+    @case (itemType.Form) {
+    <div class="form-editor">
+      <button matButton="filled" (click)="onEditForm(item.tileCode, item.data)">
+        <mat-icon class="icon">assignment</mat-icon>
+        Edit Form
+      </button>
+    </div>
+    }
+    }
+    }
+    }@else {
+    <app-loading />
+    }
+  </div>
+  }
+  @else {
+  <app-loading />
+  }
+</div>

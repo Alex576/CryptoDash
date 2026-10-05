@@ -1,0 +1,10 @@
+<div class="authentication">
+  <div class="authentication__container">
+    @if (isLoginForm()){
+    <app-login (onSubmit)="onLogin($event)" (onRegisterForm)="onSwitchForm()" />
+    }
+    @else {
+    <app-register (onSubmit)="onRegister($event)" (onCancel)="onSwitchForm()" />
+    }
+  </div>
+</div>

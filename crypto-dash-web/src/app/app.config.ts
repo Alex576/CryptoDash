@@ -1,9 +1,13 @@
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { ApplicationConfig, importProvidersFrom, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { provideHttpClient, withInterceptors, withXhr } from '@angular/common/http';
+import {
+  ApplicationConfig,
+  importProvidersFrom,
+  provideBrowserGlobalErrorListeners,
+} from '@angular/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { provideRouter } from '@angular/router';
-import { provideTranslateService } from "@ngx-translate/core";
-import { provideTranslateHttpLoader } from "@ngx-translate/http-loader";
+import { provideTranslateService } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AvatarModule } from 'ngx-avatar-2';
 import { provideToastr } from 'ngx-toastr';
 import { routes } from './app.routes';
@@ -15,11 +19,8 @@ import { Language } from './utils/translations/languages';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideHttpClient(
-      withInterceptors([
-        httpInterceptor,
-        userInterception,
-        errorInterceptor,
-      ])
+      withXhr(),
+      withInterceptors([httpInterceptor, userInterception, errorInterceptor]),
     ),
     provideToastr({
       progressBar: true,
@@ -29,7 +30,7 @@ export const appConfig: ApplicationConfig = {
     provideTranslateService({
       loader: provideTranslateHttpLoader({
         prefix: '/i18n/',
-        suffix: '.json'
+        suffix: '.json',
       }),
       // missingTranslationHandler: provideMissingTranslationHandler(DefaultMissingTranslationHandler),
       fallbackLang: Language.EN,
@@ -37,9 +38,9 @@ export const appConfig: ApplicationConfig = {
     }),
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
-      useValue: { hideRequiredMarker: true }
+      useValue: { hideRequiredMarker: true },
     },
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes)
-  ]
+    provideRouter(routes),
+  ],
 };

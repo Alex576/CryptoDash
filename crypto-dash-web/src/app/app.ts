@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterOutlet } from '@angular/router';
@@ -7,7 +7,8 @@ import { RouterOutlet } from '@angular/router';
   selector: 'app-root',
   imports: [RouterOutlet],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './app.scss',
 })
 export class App {
   protected readonly title = signal('crypto-dash-web');
@@ -18,7 +19,10 @@ export class App {
   constructor() {
     // this.translate.addLangs([Language.RU]);
     this.iconRegistry.setDefaultFontSetClass('material-symbols-rounded');
-    this.iconRegistry.addSvgIconSetInNamespace('dash', this.sanitizer.bypassSecurityTrustResourceUrl('chart-previews.svg'));
+    this.iconRegistry.addSvgIconSetInNamespace(
+      'dash',
+      this.sanitizer.bypassSecurityTrustResourceUrl('chart-previews.svg'),
+    );
     this.setTheme(this.darkThemeName);
   }
 

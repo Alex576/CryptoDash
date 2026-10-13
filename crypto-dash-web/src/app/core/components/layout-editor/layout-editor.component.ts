@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from "@angular/material/icon";
 import { ComboControl } from '../../models/controls/combo-control';
-import { FormControl } from '../../models/controls/form-control';
+import { FormValues } from '../../models/form-editor/form-values';
 import { TileCode } from '../../models/tile-code';
 import { BaseToolComponent } from '../base-tool/base-tool.component';
 import { FiltersComponent } from "../filters/filters.component";
@@ -36,10 +36,10 @@ export class LayoutEditorComponent extends BaseToolComponent {
     this.service.loadLayout(this.toolCode);
   }
 
-  onFilterValueChanged(control: FormControl): void {
-    if (control.id == 'ToolFilter') {
-      this.service.loadLayoutAsync(control.value as number);
-    }
+  onFilterValueChanged(filterValues: FormValues): void {
+    // if (control.id == 'ToolFilter') {
+    this.service.loadLayoutAsync(filterValues);
+    // }
   }
 
   onEditForm(tileCode: TileCode, data: LayoutItemEntity): void {

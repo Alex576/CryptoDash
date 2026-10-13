@@ -38,6 +38,11 @@ namespace CryptoDashWeb.Data.Services
             return await _context.ObjectEntities.AsNoTracking().Where(x => x.ClassCode == classCode).Select(x => new ObjectModel(x)).ToListAsync();
         }
 
+        public async Task<List<ObjectModel>> GetByClass(List<int> classCodes)
+        {
+            return await _context.ObjectEntities.AsNoTracking().Where(x => classCodes.Contains(x.ClassCode)).Select(x => new ObjectModel(x)).ToListAsync();
+        }
+
         public async Task<Dictionary<string, ObjectModel>> GetDictByName(List<string> names)
         {
             return await _context.ObjectEntities.AsNoTracking().Where(x => names.Contains(x.Name)).Select(x => new ObjectModel(x)).ToDictionaryAsync(x => x.Name, x => x);

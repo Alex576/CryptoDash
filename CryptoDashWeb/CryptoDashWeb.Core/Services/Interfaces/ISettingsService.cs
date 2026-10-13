@@ -11,7 +11,7 @@ namespace CryptoDashWeb.Core.Services.Interfaces
     {
         Task<SettingsFilters> GetFilters(ToolCode toolCode);
         Task<FormModel> GetForm(TileCode tileCode, string? itemId);
-        Task<LayoutsModel> GetLayout(ToolCode toolCode);
+        Task<LayoutsModel> GetLayout(FormValues filterValues);
         Task<FormModel> RemoveItem(TileCode tileCode, string itemId);
         Task SaveDashboardItem(TileCode tileCode, DashboardItemChanges model);
         Task<OperationResult> SaveForm(TileCode tileCode, string? itemId, FormValues formValues);

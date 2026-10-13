@@ -1,9 +1,10 @@
-﻿using CryptoDashWeb.Data.Models;
+﻿using CryptoDashWeb.Core.Models.Controls;
+using CryptoDashWeb.Data.Models;
 
 namespace CryptoDashWeb.Models.Settings
 {
     public class GetSettingsLayoutModel
     {
-        public ToolCode ToolCode { get; set; }
+        public FormValues FilterValues { get; set; }
     }
 }

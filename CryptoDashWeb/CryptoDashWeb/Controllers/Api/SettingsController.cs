@@ -30,7 +30,7 @@ namespace CryptoDashWeb.Controllers.Api
         [HttpPost("[action]")]
         public async Task<LayoutsModel> GetLayout(GetSettingsLayoutModel model)
         {
-            return await _service.GetLayout(model.ToolCode);
+            return await _service.GetLayout(model.FilterValues);
         }
 
         [HttpPost("[action]")]

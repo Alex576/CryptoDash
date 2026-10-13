@@ -2,6 +2,7 @@ import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { mergeMap, tap } from 'rxjs';
 import { FormControl } from '../../models/controls/form-control';
+import { FormValues, getFormValues } from '../../models/form-editor/form-values';
 import { TileCode } from '../../models/tile-code';
 import { ToolCode } from '../../models/tool-code';
 import { SidePanelService } from '../../services/side-panel.service';
@@ -27,15 +28,15 @@ export class LayoutEditorService {
     this.api.getFilters(toolCode)
       .pipe(
         tap({ next: (model) => this.filters.set(model.filters) }),
-        mergeMap(() => this.api.getLayout({ toolCode: this.toolFilter().value as number })),
+        mergeMap(() => this.api.getLayout({ filterValues: getFormValues(this.filters()) })),
         tap({ next: (layout) => this.layout.set(layout) }),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
   }
 
-  loadLayoutAsync(toolCode: number): void {
-    this.api.getLayout({ toolCode: toolCode })
+  loadLayoutAsync(filterValues: FormValues): void {
+    this.api.getLayout({ filterValues })
       .pipe(
         takeUntilDestroyed(this.destroyRef),
       )
@@ -43,7 +44,7 @@ export class LayoutEditorService {
   }
 
   reloadLayoutAsync(): void {
-    this.loadLayoutAsync(this.toolFilter().value as number);
+    this.loadLayoutAsync(getFormValues(this.filters()));
   }
 
   applyEditorLayout(result: LayoutEditorModel): void {

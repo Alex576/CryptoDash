@@ -49,8 +49,8 @@ namespace CryptoDashWeb.Core.Builders.Forms
             return controlData.TileItemCode switch
             {
                 TileItemCode.Class => (await _classContextService.GetAll()).Select(x => new Item() { Id = x.Id, Name = x.Name }).ToList(),
-                TileItemCode.Coin => (await _objectContextService.GetByClass((int)ClassCode.Coin)).Select(x => new Item() { Id = x.Id, Name = x.Name }).ToList(),
-                TileItemCode.Currency => (await _objectContextService.GetByClass((int)ClassCode.Currency)).Select(x => new Item() { Id = x.Id, Name = x.Name }).ToList(),
+                TileItemCode.Object => (await _objectContextService.GetByClass(controlData.ControlMasterData.ClassCodes)).Select(x => new Item() { Id = x.Id, Name = x.Name }).ToList(),
+                //TileItemCode.Currency => (await _objectContextService.GetByClass((int)ClassCode.Currency)).Select(x => new Item() { Id = x.Id, Name = x.Name }).ToList(),
                 TileItemCode.DashboardType => GetItemsByEnum<DashboardType>(),
                 TileItemCode.DataView => GetItemsByEnum<DashboardDataView>(),
                 _ => []
@@ -66,12 +66,23 @@ namespace CryptoDashWeb.Core.Builders.Forms
             {
                 TileItemCode.Name => data.Name,
                 TileItemCode.Class => data.ClassCodes,
-                TileItemCode.Coin => data.Objects.Where(x => x.ClassCode == ClassCode.Coin).Select(x => x.Id).ToList(),
-                TileItemCode.Currency => data.Objects.FirstOrDefault(x => x.ClassCode == ClassCode.Currency)?.Id, // todo think to goup all object up in single to avoid multi/single value errors
+                TileItemCode.Object => GetControlObjectValue(controlData, data),
                 TileItemCode.DashboardType => data.Type,
                 TileItemCode.DataView => data.DataView,
                 _ => null
             };
+        }
+
+        private object? GetControlObjectValue(FormControlData controlData, DashboardItemLayoutEx data)
+        {
+            if (controlData.Type == ControlType.Combo)
+            {
+                if (controlData.States.Contains(ControlState.AllowMultiselect))
+                    return data.Objects.IntersectBy(controlData.ControlMasterData.ClassCodes, x => (int)x.ClassCode).Select(x => x.Id).ToList();
+                else
+                    return data.Objects.IntersectBy(controlData.ControlMasterData.ClassCodes, x => (int)x.ClassCode).FirstOrDefault()?.Id;
+            }
+            return data.Objects.IntersectBy(controlData.ControlMasterData.ClassCodes, x => (int)x.ClassCode).FirstOrDefault()?.Id;
         }
 
         public async Task UpdateData(FormValues formValues, DashboardItemLayoutEx data)
@@ -79,7 +90,6 @@ namespace CryptoDashWeb.Core.Builders.Forms
             await data.Initialize(_objectContextService);
 
             var controlIds = _formControlDatas.Select(ItemCodeHelper.GetItemCode).ToList();
-            //data.ObjCodes.Clear();
             foreach (var formValue in formValues.Controls)
             {
                 if (!formValue.Updated.HasValue || !formValue.Updated.Value)
@@ -100,25 +110,22 @@ namespace CryptoDashWeb.Core.Builders.Forms
         {
             switch (controlData.TileItemCode)
             {
-                case TileItemCode.Id:
-                    break;
-                case TileItemCode.Tool:
-                    break;
-                case TileItemCode.TileItem:
-                    break;
-                case TileItemCode.State:
-                    break;
                 case TileItemCode.Name when value.TryParseValue(out string name):
                     data.Name = name;
                     break;
                 case TileItemCode.Class when value.TryParseValue(out List<int> classes):
                     data.ClassCodes = classes;
                     break;
-                case TileItemCode.Coin when value.TryParseValue(out List<int> objs):
-                    data.SetObjects(await _objectContextService.Get(objs));
-                    break;
-                case TileItemCode.Currency when value.TryParseValue(out int obj):
-                    data.SetObjects(await _objectContextService.Get(obj));
+                case TileItemCode.Object when controlData.Type == ControlType.Combo:
+                    {
+                        if (controlData.States.Contains(ControlState.AllowMultiselect))
+                        {
+                            if (value.TryParseValue(out List<int> objs))
+                                data.SetObjects(await _objectContextService.Get(objs));
+                        }
+                        else if (value.TryParseValue(out int obj))
+                            data.SetObjects(await _objectContextService.Get(obj));
+                    }
                     break;
                 case TileItemCode.DashboardType when value.TryParseValue(out DashboardType dashboardType):
                     data.Type = dashboardType;

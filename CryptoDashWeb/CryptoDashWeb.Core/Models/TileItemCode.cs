@@ -14,5 +14,6 @@
         DateRange = 10,
         Currency = 11,
         DataView = 12,
+        Object = 13,
     }
 }

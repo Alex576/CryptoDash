@@ -38,8 +38,11 @@ namespace CryptoDashWeb.Core.Services
             return new SettingsFilters() { Filters = filters };
         }
 
-        public async Task<LayoutsModel> GetLayout(ToolCode toolCode)
+        public async Task<LayoutsModel> GetLayout(FormValues filterValues)
         {
+            if (!filterValues.TryGetValue("ToolFilter", out ToolCode toolCode))
+                throw new ArgumentNullException(nameof(filterValues));
+
             var settingsLayout = new LayoutsModel();
             var layoutTiles = await _tileItemContext.GetFullLayout(toolCode);
             foreach (var tile in layoutTiles)

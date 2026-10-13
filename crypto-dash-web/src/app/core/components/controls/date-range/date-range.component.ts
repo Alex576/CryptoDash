@@ -19,7 +19,7 @@ import { isEqual } from '../../../utils/helper';
   providers: [provideNativeDateAdapter()],
 })
 export class DateRangeComponent {
-  readonly control = input.required<Control<ControlSettings, DateRange>>();
+  readonly control = input.required<Control>();
 
   readonly valueChanged = output<Control>();
   readonly validChanged = output<Control>();

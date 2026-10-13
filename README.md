@@ -1,2 +1,1 @@
 # CryptoDash
-react/nestjs

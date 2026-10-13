@@ -1,0 +1,11 @@
+<div class="date-range">
+  <mat-form-field>
+    <mat-label>{{name() | translate}}</mat-label>
+    <mat-date-range-input [formGroup]="formControl" [rangePicker]="picker">
+      <input matStartDate formControlName="start" [placeholder]="'Form.Control.Placeholder.StartDate' | translate">
+      <input matEndDate formControlName="end" [placeholder]="'Form.Control.Placeholder.EndDate' | translate">
+    </mat-date-range-input>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-date-range-picker #picker></mat-date-range-picker>
+  </mat-form-field>
+</div>

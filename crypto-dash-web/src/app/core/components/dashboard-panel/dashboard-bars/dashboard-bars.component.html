@@ -1,0 +1,8 @@
+<div class="dashboard-bars">
+  @if (chartOption()) {
+  <ag-charts style="display: flex; height: 100%;" [options]="chartOption()" (chartReady)="onChartReady($event)" />
+  }
+  @else {
+  <app-loading />
+  }
+</div>

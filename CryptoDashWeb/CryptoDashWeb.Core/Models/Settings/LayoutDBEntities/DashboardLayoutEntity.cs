@@ -22,6 +22,15 @@ namespace CryptoDashWeb.Core.Models.Settings.LayoutDBEntities
 
         public string Name { get; set; }
         public DashboardType Type { get; set; }
+        public List<int> ObjCodes { get; set; } = [];
+        public List<int> ClassCodes { get; set; } = [];
+
+
+        public DashboardItemLayout(int id = 0, string name = "")
+        {
+            Id = id.ToString();
+            Name = name;
+        }
 
     }
 }

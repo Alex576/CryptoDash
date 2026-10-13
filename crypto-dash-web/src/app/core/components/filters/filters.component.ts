@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, input, OnInit, output } from '@angular/core';
 import { ComboControl } from '../../models/controls/combo-control';
+import { ControlType } from '../../models/controls/control-type';
 import { FormControl } from '../../models/controls/form-control';
+import { DateRangeComponent } from '../controls/date-range/date-range.component';
 import { SelectSwitchComponent } from "../controls/selectors/select-switch/select-switch.component";
 
 @Component({
@@ -8,7 +10,7 @@ import { SelectSwitchComponent } from "../controls/selectors/select-switch/selec
   templateUrl: './filters.component.html',
   styleUrls: ['./filters.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SelectSwitchComponent]
+  imports: [SelectSwitchComponent, DateRangeComponent]
 })
 export class FiltersComponent implements OnInit {
   readonly filters = input.required<ComboControl[], ComboControl[] | ComboControl | null>({
@@ -25,6 +27,7 @@ export class FiltersComponent implements OnInit {
 
   readonly valueChanged = output<FormControl>();
 
+  protected readonly controlType = ControlType;
   constructor() { }
 
   ngOnInit() {

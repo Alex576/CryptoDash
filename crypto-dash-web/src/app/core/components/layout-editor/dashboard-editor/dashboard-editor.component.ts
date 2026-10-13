@@ -5,10 +5,8 @@ import { EditorType } from '../../../models/form-editor/editor-type';
 import { SidePanelType } from '../../../models/side-panel/side-panel-type';
 import { TileCode } from '../../../models/tile-code';
 import { SidePanelService } from '../../../services/side-panel.service';
-import { Constants } from '../../../utils/constants';
 import { DashboardPanelComponent } from "../../dashboard-panel/dashboard-panel.component";
-import { DashboardItem } from '../../dashboard-panel/models/dashboard-item';
-import { DashboardLayout } from '../../dashboard-panel/models/dashboard-layout';
+import { DashboardItem, DashboardItemChanges } from '../../dashboard-panel/models/dashboard-item';
 import { DashboardOptions } from '../../dashboard-panel/models/dashboard-options';
 import { ItemEditorComponent } from '../../side-panel/layout-editors/item-editor/item-editor.component';
 import { LayoutEditorService } from '../layout-editor.service';
@@ -30,15 +28,15 @@ export class DashboardEditorComponent {
 
   constructor() { }
 
-  protected readonly dashboardLayout = computed<DashboardLayout>(() => this.data().dashboardLayout);
-  protected readonly options = computed<DashboardOptions>(() => this.dashboardLayout()?.options);
-  protected readonly items = computed<DashboardItem[]>(() => this.dashboardLayout()?.items ?? []);
+  // protected readonly dashboardLayout = computed<DashboardLayout>(() => this.data());
+  protected readonly options = computed<DashboardOptions>(() => this.data()?.options);
+  protected readonly items = computed<DashboardItem[]>(() => this.data()?.items ?? []);
 
   onAddItem(): void {
-    this.onOpenItem(Constants.AddNewCode);
+    this.onOpenItem();
   }
 
-  onOpenItem(id: string): void {
+  onOpenItem(id?: string): void {
     this.sidePanelService.openSidePanel({
       type: SidePanelType.LayoutDashboardItemEditor,
       componentType: ItemEditorComponent,
@@ -47,5 +45,9 @@ export class DashboardEditorComponent {
       header: 'Dashboard Item'
     },
       [{ provide: LayoutEditorService, useValue: this.layoutEditorService }]);
+  }
+
+  onItemSizeChange(item: DashboardItemChanges): void {
+    this.layoutEditorService.saveDashboardItemAsync(this.tileCode(), item);
   }
 }

@@ -46,6 +46,7 @@ namespace CryptoDashWeb.Data.Services
             var toolCodeColumnName = GetColumnName(tableEntity, nameof(Tile.ToolCode));
             var parentIdColumnName = GetColumnName(tableEntity, nameof(Tile.ParentId));
             var idColumnName = GetColumnName(tableEntity, nameof(Tile.Id));
+            var rankColumnName = GetColumnName(tableEntity, nameof(Tile.Rank));
 
             var sql = $"""
                 WITH RECURSIVE TileTree AS (
@@ -59,7 +60,7 @@ namespace CryptoDashWeb.Data.Services
                     )
                 SELECT * FROM TileTree
             """;
-            return await _context.Tiles.FromSqlRaw(sql).Include(x => x.Layout).ToListAsync();
+            return await _context.Tiles.FromSqlRaw(sql).Include(x => x.Layout).OrderBy(x => x.Rank).ToListAsync();
         }
 
         public async Task<Tile?> GetTile(ToolCode? toolCode, TileTypeCode tileTypeCode)

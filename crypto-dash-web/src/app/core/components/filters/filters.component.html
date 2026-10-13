@@ -1,7 +1,14 @@
 <div class="filters">
   @for (filter of filters(); track filter.id) {
   <div class="filter__item">
-    <app-select-switch [control]="filter" filter (valueChanged)="onValueChanged($event)" />
+    @switch (filter.type) {
+    @case (controlType.Combo) {
+    <app-select-switch [control]="filter" (valueChanged)="onValueChanged($event)" />
+    }
+    @case (controlType.DateRange) {
+    <app-date-range [control]="filter" (valueChanged)="onValueChanged($event)" />
+    }
+    }
   </div>
   }
 </div>

@@ -1,0 +1,8 @@
+<div>
+  <mat-form-field>
+    <!-- <mat-label>{{| translate}}</mat-label> -->
+    <input #searchInput matInput [formControl]="formControl" placeholder="Search..."
+           (keydown)="$event.stopPropagation()">
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+</div>

@@ -3,6 +3,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslatePipe } from '@ngx-translate/core';
+import { isEqual } from '../../../../utils/helper';
+import { SearchComponent } from '../../search/search.component';
 import { BaseSelectComponent } from '../base-select/base-select.component';
 
 @Component({
@@ -10,8 +12,11 @@ import { BaseSelectComponent } from '../base-select/base-select.component';
   templateUrl: './single-select.component.html',
   styleUrls: ['./single-select.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatFormField, MatLabel, MatSelectModule, ReactiveFormsModule, TranslatePipe],
+  imports: [MatFormField, MatLabel, MatSelectModule, ReactiveFormsModule, TranslatePipe, SearchComponent],
 })
 export class SingleSelectComponent extends BaseSelectComponent<number> {
+  protected override isValueEquals(changedValue: number): boolean {
+    return isEqual(changedValue, this.oldValue);
+  }
 
 }

@@ -15,6 +15,9 @@ namespace CryptoDashWeb.Data.DBModels
         [Required]
         public int TypeCode { get; set; }
 
+        [Required]
+        public int Rank { get; set; }
+
         [ForeignKey(nameof(TypeCode))]
         public virtual TileType TileType { get; set; } = null!;
 

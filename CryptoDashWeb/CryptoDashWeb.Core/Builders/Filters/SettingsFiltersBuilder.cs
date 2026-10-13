@@ -18,11 +18,11 @@ namespace CryptoDashWeb.Core.Builders.Filters
                 return "ToolFilter";
             return base.GetControlId(controlData);
         }
-        protected override List<Item> GetComboItems(FormControlData controlData)
+        protected override Task<List<Item>> GetComboItems(FormControlData controlData)
         {
             return controlData.TileItemCode switch
             {
-                TileItemCode.Tool => Enum.GetValues<ToolCode>().Select(x => new Item() { Id = (int)x, Name = x.ToString() }).ToList(),
+                TileItemCode.Tool => Task.FromResult(Enum.GetValues<ToolCode>().Select(x => new Item() { Id = (int)x, Name = x.ToString() }).ToList()),
                 _ => throw new NotImplementedException(),
             };
         }

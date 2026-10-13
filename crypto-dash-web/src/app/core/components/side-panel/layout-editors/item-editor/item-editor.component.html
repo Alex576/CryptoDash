@@ -7,10 +7,12 @@
     </ng-container>
     <ng-container buttons>
       <div class="item-editor__buttons">
+        @if (!isNewItem){
         <button appearance="delete" matButton="outlined"
                 (click)="onDelete()">
           {{ 'Form.Button.Delete' | translate }}
         </button>
+        }
         <button matButton="filled"
                 [disabled]="!canSaveForm()"
                 (click)="onSave()">

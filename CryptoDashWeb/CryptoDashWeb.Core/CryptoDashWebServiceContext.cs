@@ -13,6 +13,8 @@ namespace CryptoDashWeb.Core
 
             services.AddScoped<ISessionService, SessionService>();
             services.AddScoped<ISettingsService, SettingsService>();
+            services.AddScoped<IDashboardService, DashboardService>();
+            services.AddScoped<ICoingeckoService, CoingeckoService>();
         }
     }
 }

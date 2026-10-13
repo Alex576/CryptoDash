@@ -46,7 +46,7 @@ export abstract class BaseControlComponent<TData> {
     effect(() => {
       const control = untracked(() => this.control());
       const changedValue = this.controlValueChanged();
-      if (changedValue != this.oldValue) {
+      if (!this.isValueEquals(changedValue)) {
         control.value = changedValue;
         this.valueChanged.emit(control);
         this.oldValue = changedValue;
@@ -77,4 +77,6 @@ export abstract class BaseControlComponent<TData> {
     });
   }
 
+
+  protected abstract isValueEquals(changedValue: TData): boolean;
 }

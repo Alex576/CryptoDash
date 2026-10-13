@@ -36,6 +36,7 @@ export function errorInterceptor(
                         console.error(error.message);
                     }
                     else {
+                        // debugger;
                         notificationService.notifyError("Server Internal Error");
                     }
 

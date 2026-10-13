@@ -6,14 +6,18 @@ namespace CryptoDashWeb.Core.Builders.Layouts
 {
     public abstract class BaseLayoutBuilder
     {
-        public abstract List<FormControlData> GetFilters(ToolCode toolCode);
+        //public abstract List<FormControlData> GetFilters(ToolCode toolCode);
 
-        protected FormControlData CrateFormControl(string name, TileItemCode tileItemCode, ControlType type, List<ControlState> states) => new FormControlData()
+        protected FormControlData GetControlData(string name, TileItemCode tileItemCode, ControlType type, List<ControlState> states, List<ControlDependency>? dependencies = null)
         {
-            Name = name,
-            Type = type,
-            States = states,
-            TileItemCode = tileItemCode,
-        };
+            return new FormControlData()
+            {
+                Name = name,
+                TileItemCode = tileItemCode,
+                Type = type,
+                States = states,
+                Dependencies = dependencies ?? [],
+            };
+        }
     }
 }

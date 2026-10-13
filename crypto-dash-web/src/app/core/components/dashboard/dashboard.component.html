@@ -1,3 +1,10 @@
-<p>
-  home works!
-</p>
+<div class="dashboard">
+  <app-filters [filters]="filters()" (valueChanged)="onFilterChanged($event)" />
+  @let dashboardItems = items();
+  @if (dashboardItems){
+  <app-dashboard-panel [options]="options()" [items]="dashboardItems" />
+  }
+  @else {
+  <app-loading />
+  }
+</div>

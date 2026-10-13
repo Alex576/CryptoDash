@@ -3,12 +3,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslatePipe } from '@ngx-translate/core';
 import { tap } from 'rxjs';
-import { OperationResult, OperationResultData } from '../../../../models/operation-result/operation-result';
+import { OperationResult } from '../../../../models/operation-result/operation-result';
 import { isSuccess } from '../../../../models/operation-result/result-code';
 import { FormComponent } from "../../../form/form.component";
 import { LayoutEditorService } from '../../../layout-editor/layout-editor.service';
 import { ItemFormDataModel } from '../../../layout-editor/models/item-form-data-model';
-import { LayoutEditorModel } from '../../../layout-editor/models/layout-editor-model';
 import { LayoutItemEditorService } from '../../layout-item-editor.service';
 import { SidePanelViewComponent } from "../../side-panel-view/side-panel-view.component";
 import { BaseLayoutItemSidePanelComponent } from '../base-layout-item-side-panel.component';
@@ -27,6 +26,10 @@ export class ItemEditorComponent extends BaseLayoutItemSidePanelComponent {
 
   private get data(): ItemFormDataModel {
     return this.panelData.data as ItemFormDataModel;
+  }
+
+  protected get isNewItem(): boolean {
+    return !this.data.itemId;
   }
 
   constructor() {
@@ -70,9 +73,9 @@ export class ItemEditorComponent extends BaseLayoutItemSidePanelComponent {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
-        next: (result: OperationResultData<LayoutEditorModel>) => {
+        next: (result: OperationResult) => {
           if (isSuccess(result.code)) {
-            this.layoutService.applyEditorLayout(result.data);
+            this.layoutService.reloadLayoutAsync();
             this.sidePanelService.close();
           }
         }

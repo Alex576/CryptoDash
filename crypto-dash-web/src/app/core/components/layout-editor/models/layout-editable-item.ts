@@ -4,7 +4,8 @@ import { TileCode } from "../../../models/tile-code";
 import { PinPosition } from "../../ag-grid/models/column";
 import { ColumnDataType } from "../../ag-grid/models/column-data-type";
 import { Grid } from "../../ag-grid/models/grid";
-import { DashboardLayout } from "../../dashboard-panel/models/dashboard-layout";
+import { DashboardItem } from "../../dashboard-panel/models/dashboard-item";
+import { DashboardOptions } from "../../dashboard-panel/models/dashboard-options";
 import { TileTypeCode } from "./tile-type-code";
 
 
@@ -34,7 +35,10 @@ export interface LayoutEntity {
 
 export interface DashboardLayoutEntity extends LayoutEntityBase {
     // tileType: TileTypeCode.Dashboard;
-    dashboardLayout: DashboardLayout;
+    // dashboardLayout: DashboardLayout;
+    options: DashboardOptions;
+    items: DashboardItem[];
+    id: number;
 }
 export interface GridLayoutEntity extends LayoutEntityBase {
     // tileType: TileTypeCode.Grid;

@@ -18,7 +18,7 @@ namespace CryptoDashWeb.Data.Services
             return new LayoutModel<TData>(layout, tileCode);
         }
 
-        public async Task SaveLayout(int tileCode, object layout)
+        public async Task<bool> SaveLayout(int tileCode, object layout)
         {
             var oldLayout = await _context.Layouts.FirstOrDefaultAsync(x => x.TileId == tileCode);
             if (oldLayout == null)
@@ -31,7 +31,8 @@ namespace CryptoDashWeb.Data.Services
             oldLayout.LayoutJson = JsonConvert.SerializeObject(layout);
 
             _context.Layouts.Update(oldLayout);
-            await _context.SaveChangesAsync();
+            var result = await _context.SaveChangesAsync();
+            return result > 0;
         }
 
     }

@@ -4,7 +4,7 @@
     {
         Editable = 1,
         Required = 2,
-        AllowMultiple = 3,
+        AllowMultiselect = 3,
         SelectFirstValueIfEmpty = 4,
     }
 }

@@ -12,6 +12,7 @@ namespace CryptoDashWeb.Data.Models
 
         public string DisplayName { get; set; }
 
+        public ObjectModel() { }
         public ObjectModel(int id, int classCode, string name, string displayName)
         {
             Id = id;

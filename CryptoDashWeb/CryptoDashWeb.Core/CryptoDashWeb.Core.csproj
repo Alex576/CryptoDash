@@ -15,4 +15,8 @@
     <ProjectReference Include="..\CryptoDashWeb.Data\CryptoDashWeb.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Layout\" />
+  </ItemGroup>
+
 </Project>

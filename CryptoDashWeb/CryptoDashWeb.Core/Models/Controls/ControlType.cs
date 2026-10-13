@@ -5,6 +5,7 @@
         Input = 1,
         Combo = 2,
         DateTime = 3,
-        Between = 4,
+        //Between = 4,
+        DateRange = 5,
     }
 }

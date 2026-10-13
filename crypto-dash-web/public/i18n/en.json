@@ -33,8 +33,12 @@
       "Name": "Name",
       "Tool": "Tool",
       "DashboardType": "Dashboard Type",
+      "Class": "Class",
+      "Object": "Object",
       "Placeholder": {
-        "PleaseEnter": "Please Enter"
+        "PleaseEnter": "Please Enter",
+        "StartDate": "Start date",
+        "EndDate": "End date"
       }
     },
     "Button": {

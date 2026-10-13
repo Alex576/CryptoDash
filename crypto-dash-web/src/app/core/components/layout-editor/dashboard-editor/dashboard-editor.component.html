@@ -8,7 +8,9 @@
   <div class="dashboard-editor__dashboard">
     <app-dashboard-panel [options]="options()"
                          [items]="items()"
-                         (openItem)="onOpenItem($event)">
+                         [isPreview]="true"
+                         (openItem)="onOpenItem($event)"
+                         (onItemSizeChange)="onItemSizeChange($event)">
     </app-dashboard-panel>
   </div>
   }

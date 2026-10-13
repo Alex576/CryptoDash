@@ -7,8 +7,11 @@
         TileItem = 3,
         State = 4,
         Name = 5,
-        Classes = 6,
-        Objects = 7,
-        DashboardType = 8
+        Class = 6,
+        Object = 7,
+        DashboardType = 8,
+        DateTime = 9,
+        DateRange = 10,
+        Currency = 11,
     }
 }

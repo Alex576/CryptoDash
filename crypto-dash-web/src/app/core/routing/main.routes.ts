@@ -29,6 +29,11 @@ export const routes: Routes = [
                 data: { [RouteData.ToolCode]: ToolCode.Layout },
                 loadComponent: () => import('../components/layout-editor/layout-editor.component').then(c => c.LayoutEditorComponent)
             },
+            {
+                path: 'utils',
+                data: {},
+                loadComponent: () => import('../components/utils/utils.component').then(c => c.UtilsComponent)
+            },
         ]
     },
     // {

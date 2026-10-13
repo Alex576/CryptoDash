@@ -1,14 +1,17 @@
 import { Injectable, signal, untracked } from '@angular/core';
-import { CompactType, DisplayGrid, Gridster, GridsterApi, GridsterConfig, GridType } from 'angular-gridster2';
-import { DashboardItem } from './models/dashboard-item';
+import { CompactType, DisplayGrid, Gridster, GridsterApi, GridsterConfig, GridsterItem, GridsterItemConfig, GridType } from 'angular-gridster2';
+import { Subject } from 'rxjs';
+import { DashboardItem, DashboardItemChanges } from './models/dashboard-item';
 import { DashboardOptions } from './models/dashboard-options';
 
 @Injectable()
 export class DashboardPanelService {
   private readonly MIN_ITEM_SIZE = 4;
   readonly gridsterConfig = signal<GridsterConfig>(null);
-
   readonly items = signal<DashboardItem[]>([]);
+
+  private readonly onItemSizeChangedSub$ = new Subject<DashboardItemChanges>();
+  readonly onItemSizeChanged$ = this.onItemSizeChangedSub$.asObservable();
 
   private api: GridsterApi;
   private gridster: Gridster;
@@ -23,6 +26,18 @@ export class DashboardPanelService {
       initCallback: (gridster: Gridster, api: GridsterApi) => {
         this.gridster = gridster;
         this.api = api;
+      },
+      itemChangeCallback: (itemConfig: GridsterItemConfig, item: GridsterItem) => {
+        // const element = itemConfig as DashboardItem;
+        // debugger;
+        this.onItemSizeChangedSub$.next({
+          id: "",
+          x: itemConfig.x,
+          y: itemConfig.y,
+          cols: itemConfig.cols,
+          rows: itemConfig.rows,
+        });
+
       },
       gridType: GridType.ScrollVertical,
       compactType: CompactType.None,
@@ -88,21 +103,18 @@ export class DashboardPanelService {
     const oldItems = untracked(() => this.items());
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
-      item.rows ||= this.MIN_ITEM_SIZE;
-      item.cols ||= this.MIN_ITEM_SIZE;
+      item.options.rows ||= this.MIN_ITEM_SIZE;
+      item.options.cols ||= this.MIN_ITEM_SIZE;
       if (this.gridster) {
         const oldItem = oldItems.find(x => x.id === item.id);
         if (oldItem) {
-          item.x = oldItem.x;
-          item.y = oldItem.y;
+          item.options.x = oldItem.options.x;
+          item.options.y = oldItem.options.y;
         } else {
-          const { x, y } = this.gridster.getFirstPossiblePosition(item);
-          item.x = x;
-          item.y = y;
+          const { x, y } = this.gridster.getFirstPossiblePosition(item.options);
+          item.options.x = x;
+          item.options.y = y;
         }
-      } else {
-        item.x ||= -1;
-        item.y ||= -1;
       }
       dashboardItems.push(item);
     }

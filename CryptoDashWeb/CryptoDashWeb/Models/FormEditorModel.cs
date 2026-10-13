@@ -3,10 +3,8 @@ using CryptoDashWeb.Data.Models;
 
 namespace CryptoDashWeb.Models
 {
-    public class FormEditorModel
+    public class FormEditorModel : GetFormEditorModel
     {
-        public FormValues? FormValues { get; set; }
-        public TileCode TileCode { get; set; }
-        public string ItemId { get; set; }
+        public FormValues FormValues { get; set; }
     }
 }

@@ -12,13 +12,13 @@ namespace CryptoDashWeb.Core.Builders.Filters
             _formControlDatas = formControlDatas;
         }
 
-        public List<FormControl> GetFilters(TData data)
+        public async Task<List<FormControl>> GetFilters(TData data)
         {
             var filters = new List<FormControl>();
             for (int i = 0; i < _formControlDatas.Count; i++)
             {
                 var controlData = _formControlDatas[i];
-                var control = GetControl(controlData);
+                var control = await GetControl(controlData);
                 control.Value = GetControlValue(control, controlData, data);
                 filters.Add(control);
             }

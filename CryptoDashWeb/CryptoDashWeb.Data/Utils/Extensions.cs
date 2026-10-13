@@ -8,7 +8,7 @@ namespace CryptoDashWeb.Data.Utils
 {
     public static class Extensions
     {
-        public static bool TryParseValue<T>(this JToken? value, [NotNullWhen(true)] out T? result)
+        public static bool TryParseValue<T>(this JToken? value, [NotNullWhen(true)] out T result)
         {
             if (value == null)
             {

@@ -1,4 +1,5 @@
 using CryptoDashWeb.Core;
+using CryptoDashWeb.Core.Models.Coingecko;
 using CryptoDashWeb.Data.DBContext;
 using CryptoDashWeb.Middlewares;
 using CryptoDashWeb.Models;
@@ -47,6 +48,7 @@ public partial class Program
         builder.Services.AddControllers().AddNewtonsoftJson(options =>
         {
             options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
+            options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
         });
 
         var isInDocker = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
@@ -63,6 +65,7 @@ public partial class Program
 
         builder.Services.Configure<ConfigModel>(builder.Configuration.GetSection("Config"));
         builder.Services.Configure<JWTModel>(builder.Configuration.GetSection("JWT"));
+        builder.Services.Configure<CoingeckoModel>(builder.Configuration.GetSection("Coingecko"));
         //builder.Services.Configure<KafkaModel>(builder.Configuration.GetSection("Kafka"));
 
         //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

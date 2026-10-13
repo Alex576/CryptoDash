@@ -2,7 +2,7 @@
 {
     public class ComboSettings : ControlSettings
     {
-        public bool AllowMultiple { get; set; }
+        public bool AllowMultiselect { get; set; }
         public List<Item> Items { get; set; }
     }
 }

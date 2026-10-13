@@ -2,10 +2,17 @@
   <mat-form-field [class.changed]="updated()" [class.invalid]="isInvalid()">
     <mat-label>{{name() | translate}}</mat-label>
     <mat-select multiple
-                [formControl]="formControl">
-      @for (item of items(); track item.id) {
+                [formControl]="formControl"
+                (opened)="onOpen()"
+                (closed)="onClosed()"
+                (openedChange)="isOpened.set($event)">
+      @if (isOpened()){
+      <app-search (onSearchTextChanged)="onSearch($event)" />
+      }
+      @for (item of filteredItems(); track item.id) {
       <mat-option [value]="item.id">{{item.name}}</mat-option>
       }
+
     </mat-select>
   </mat-form-field>
 </div>

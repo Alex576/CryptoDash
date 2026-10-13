@@ -9,6 +9,9 @@ namespace CryptoDashWeb.Data
         {
             services.AddScoped<LayoutContextService>();
             services.AddScoped<TileItemContextService>();
+            services.AddScoped<ObjectContextService>();
+            services.AddScoped<ClassContextService>();
+            services.AddScoped<CoinHistoryContext>();
         }
     }
 }

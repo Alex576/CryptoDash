@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 80" width="100%" height="100%">
+    <!-- Фон -->
+    <rect width="120" height="80" rx="6" fill="#0D1117" stroke="#21262D" stroke-width="1"/>
+
+    <!-- Базовая линия -->
+    <line x1="15" y1="65" x2="105" y2="65" stroke="#21262D" stroke-width="1"/>
+
+    <!-- Столбцы (с аккуратным скруглением сверху) -->
+    <path d="M 22 65 L 22 45" stroke="#8892B0" stroke-width="6" stroke-linecap="round"/>
+    <path d="M 36 65 L 36 30" stroke="#00E676" stroke-width="6" stroke-linecap="round"/>
+    <path d="M 50 65 L 50 55" stroke="#8892B0" stroke-width="6" stroke-linecap="round"/>
+    <path d="M 64 65 L 64 20" stroke="#00E676" stroke-width="6" stroke-linecap="round"/>
+    <path d="M 78 65 L 78 40" stroke="#8892B0" stroke-width="6" stroke-linecap="round"/>
+    <path d="M 92 65 L 92 50" stroke="#8892B0" stroke-width="6" stroke-linecap="round"/>
+    <path d="M 106 65 L 106 35" stroke="#00E676" stroke-width="6" stroke-linecap="round"/>
+</svg>

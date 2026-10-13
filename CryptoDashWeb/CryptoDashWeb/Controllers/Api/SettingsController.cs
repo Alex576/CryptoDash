@@ -1,5 +1,7 @@
 ﻿using CryptoDashWeb.Core.Models.Form;
+using CryptoDashWeb.Core.Models.OperationResult;
 using CryptoDashWeb.Core.Models.Settings;
+using CryptoDashWeb.Core.Models.Settings.LayoutEntities;
 using CryptoDashWeb.Core.Services.Interfaces;
 using CryptoDashWeb.Data.Models;
 using CryptoDashWeb.Models;
@@ -22,7 +24,7 @@ namespace CryptoDashWeb.Controllers.Api
         [HttpGet("[action]")]
         public async Task<SettingsFilters> GetFilters(ToolCode toolCode)
         {
-            return _service.GetFilters(toolCode);
+            return await _service.GetFilters(toolCode);
         }
 
         [HttpPost("[action]")]
@@ -32,21 +34,33 @@ namespace CryptoDashWeb.Controllers.Api
         }
 
         [HttpPost("[action]")]
-        public async Task<FormModel> GetForm(FormEditorModel model)
+        public async Task<FormModel> GetForm(GetFormEditorModel model)
         {
             return await _service.GetForm(model.TileCode, model.ItemId);
         }
-        
+
         [HttpPost("[action]")]
         public async Task<FormModel> UpdateForm(FormEditorModel model)
         {
             return await _service.UpdateForm(model.TileCode, model.ItemId, model.FormValues);
         }
-        
+
         [HttpPost("[action]")]
-        public async Task<FormModel> RemoveItem(FormEditorModel model)
+        public async Task<OperationResult> SaveForm(FormEditorModel model)
         {
-            return await _service.GetForm(model.TileCode, model.ItemId);
+            return await _service.SaveForm(model.TileCode, model.ItemId, model.FormValues);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<FormModel> RemoveItem(GetFormEditorModel model)
+        {
+            return await _service.RemoveItem(model.TileCode, model.ItemId);
+        }
+
+        [HttpPost("[action]")]
+        public async Task SaveDashboardItem(DashboardItemChangesModel model)
+        {
+            await _service.SaveDashboardItem(model.TileCode, model.Changes);
         }
     }
 }

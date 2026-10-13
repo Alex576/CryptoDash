@@ -1,6 +1,8 @@
 ﻿using CryptoDashWeb.Data.DBModels;
 using CryptoDashWeb.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Newtonsoft.Json;
 
 namespace CryptoDashWeb.Data.DBContext
 {
@@ -9,11 +11,14 @@ namespace CryptoDashWeb.Data.DBContext
         public virtual DbSet<Tile> Tiles { get; set; }
         public virtual DbSet<Layout> Layouts { get; set; }
         public virtual DbSet<TileType> TileTypes { get; set; }
+        public virtual DbSet<ObjectEntity> ObjectEntities { get; set; }
+        public virtual DbSet<ClassEntity> ClassEntities { get; set; }
+        public virtual DbSet<CoinHistory> CoinHistories { get; set; }
+
         public CryptoDashContext(DbContextOptions<CryptoDashContext> options)
             : base(options)
         {
         }
-        //public virtual DbSet<> Roles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,10 +37,41 @@ namespace CryptoDashWeb.Data.DBContext
             {
                 entity.Property(e => e.LayoutJson).HasColumnType("text");
             });
+
+            modelBuilder.Entity<ObjectEntity>(entity =>
+            {
+                entity.Property(x => x.Id).HasIdentityOptions(1000);
+                entity.HasIndex(x => x.Name);
+            });
+            modelBuilder.Entity<CoinHistory>(entity =>
+            {
+                entity.OwnsOne(x => x.HistoryData, x =>
+                {
+                    x.ToJson();
+                    var dictionaryComparer = new ValueComparer<Dictionary<long, float>>(
+                        (d1, d2) => d1 != null && d2 != null && d1.Count == d2.Count && d1.Except(d2).Any(),
+                        d => d.Aggregate(0, (hash, item) => HashCode.Combine(hash, item.Key.GetHashCode(), item.Value.GetHashCode())),
+                        d => new Dictionary<long, float>(d));
+
+                    x.Property(p => p.MarketCaps)
+                    .HasConversion(v => JsonConvert.SerializeObject(v), v => JsonConvert.DeserializeObject<Dictionary<long, float>>(v) ?? new(), dictionaryComparer);
+                    x.Property(p => p.Prices)
+                    .HasConversion(v => JsonConvert.SerializeObject(v), v => JsonConvert.DeserializeObject<Dictionary<long, float>>(v) ?? new(), dictionaryComparer);
+                    x.Property(p => p.TotalVolumes)
+                    .HasConversion(v => JsonConvert.SerializeObject(v), v => JsonConvert.DeserializeObject<Dictionary<long, float>>(v) ?? new(), dictionaryComparer);
+                });
+                //entity.Property(x => x.HistoryData).HasColumnName("history_data");
+            });
+            FillClassCode(modelBuilder);
             FillTileTypeCode(modelBuilder);
             FillTileItemTable(modelBuilder);
         }
 
+        private void FillClassCode(ModelBuilder builder)
+        {
+            var items = Enum.GetValues<ClassCode>().Select(x => new ClassEntity() { Id = (int)x, Name = x.ToString() });
+            builder.Entity<ClassEntity>().HasData(items);
+        }
         private void FillTileTypeCode(ModelBuilder builder)
         {
             var items = Enum.GetValues<TileTypeCode>().Select(x => new TileType() { Id = (int)x, Name = x.ToString() });
@@ -45,18 +81,19 @@ namespace CryptoDashWeb.Data.DBContext
         private void FillTileItemTable(ModelBuilder builder)
         {
             builder.Entity<Tile>().HasData(
-                GetTile((int)TileCode.DashboardLayout, "Dashboard Layout", (int)ToolCode.Dashboard, (int)TileTypeCode.Layout, null),
-                GetTile((int)TileCode.DashboardFilters, "Dashboard Filters", null, (int)TileTypeCode.Filter, (int)TileCode.DashboardLayout),
-                GetTile((int)TileCode.DashboardDashboard, "Dashboard Dashboard", null, (int)TileTypeCode.Dashboard, (int)TileCode.DashboardLayout)
+                GetTile((int)TileCode.DashboardLayout, "Dashboard Layout", (int)ToolCode.Dashboard, (int)TileTypeCode.Layout, null, 0),
+                GetTile((int)TileCode.DashboardFilters, "Dashboard Filters", null, (int)TileTypeCode.Filter, (int)TileCode.DashboardLayout, 1),
+                GetTile((int)TileCode.DashboardDashboard, "Dashboard Dashboard", null, (int)TileTypeCode.Dashboard, (int)TileCode.DashboardLayout, 2)
                 );
 
-            Tile GetTile(int id, string name, int? tooLCode, int typeCode, int? parentId) => new Tile()
+            Tile GetTile(int id, string name, int? tooLCode, int typeCode, int? parentId, int rank) => new Tile()
             {
                 Id = id,
                 Name = name,
                 ToolCode = tooLCode,
                 TypeCode = typeCode,
-                ParentId = parentId
+                ParentId = parentId,
+                Rank = rank,
             };
         }
     }

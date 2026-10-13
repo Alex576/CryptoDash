@@ -55,7 +55,7 @@ export class GridEditorComponent {
       )
       .subscribe({
         next: ({ data }: GridActionModel) => {
-          this.layoutService.removeLayoutItemAsync({ tileCode: this.tileCode(), itemId: data.id });
+          // this.layoutService.removeLayoutItemAsync({ tileCode: this.tileCode(), itemId: data.id });
         }
       });
   }

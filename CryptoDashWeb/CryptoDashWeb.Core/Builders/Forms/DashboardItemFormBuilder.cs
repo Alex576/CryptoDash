@@ -4,6 +4,8 @@ using CryptoDashWeb.Core.Models.Controls;
 using CryptoDashWeb.Core.Models.Form;
 using CryptoDashWeb.Core.Models.Settings.LayoutDBEntities;
 using CryptoDashWeb.Core.Utils;
+using CryptoDashWeb.Data.Models;
+using CryptoDashWeb.Data.Services;
 using CryptoDashWeb.Data.Utils;
 using Newtonsoft.Json.Linq;
 using System;
@@ -15,18 +17,24 @@ namespace CryptoDashWeb.Core.Builders.Forms
     public class DashboardItemFormBuilder : BaseControlBuilder<DashboardItemLayout>
     {
         private List<FormControlData> _formControlDatas;
+        private readonly TileCode _tileCode;
+        private readonly ObjectContextService _objectContextService;
+        private readonly ClassContextService _classContextService;
 
-        public DashboardItemFormBuilder(List<FormControlData> formControlDatas)
+        public DashboardItemFormBuilder(List<FormControlData> formControlDatas, TileCode tileCode, ObjectContextService objectContextService, ClassContextService classContextService)
         {
             _formControlDatas = formControlDatas;
+            _tileCode = tileCode;
+            _objectContextService = objectContextService;
+            _classContextService = classContextService;
         }
 
-        public FormModel GetForm(DashboardItemLayout data)
+        public async Task<FormModel> GetForm(DashboardItemLayout data)
         {
-            var form = new FormModel();
+            var form = new FormModel() { TileCode = _tileCode };
             foreach (var controlData in _formControlDatas)
             {
-                var control = GetControl(controlData);
+                var control = await GetControl(controlData);
                 control.Value = GetControlValue(control, controlData, data);
                 form.Controls.Add(control);
 
@@ -34,12 +42,13 @@ namespace CryptoDashWeb.Core.Builders.Forms
             return form;
         }
 
-        protected override List<Item> GetComboItems(FormControlData controlData)
+        protected override async Task<List<Item>> GetComboItems(FormControlData controlData)
         {
             return controlData.TileItemCode switch
             {
-                TileItemCode.Classes => throw new NotImplementedException(),
-                TileItemCode.Objects => throw new NotImplementedException(),
+                TileItemCode.Class => (await _classContextService.GetAll()).Select(x => new Item() { Id = x.Id, Name = x.Name }).ToList(),
+                TileItemCode.Object => (await _objectContextService.GetAll()).Select(x => new Item() { Id = x.Id, Name = x.Name }).ToList(),
+                TileItemCode.Currency => (await _objectContextService.GetByClass((int)ClassCode.Currency)).Select(x => new Item() { Id = x.Id, Name = x.Name }).ToList(),
                 TileItemCode.DashboardType => GetItemsByEnum<DashboardType>(),
                 _ => []
             };
@@ -53,8 +62,8 @@ namespace CryptoDashWeb.Core.Builders.Forms
             return controlData.TileItemCode switch
             {
                 TileItemCode.Name => data.Name,
-                TileItemCode.Classes => throw new NotImplementedException(),
-                TileItemCode.Objects => throw new NotImplementedException(),
+                TileItemCode.Class => data.ClassCodes,
+                TileItemCode.Object => data.ObjCodes,
                 TileItemCode.DashboardType => data.Type,
                 _ => null
             };
@@ -63,10 +72,11 @@ namespace CryptoDashWeb.Core.Builders.Forms
         public void UpdateData(FormValues formValues, DashboardItemLayout data)
         {
             var controlIds = _formControlDatas.Select(ItemCodeHelper.GetItemCode).ToList();
+            data.ObjCodes.Clear();
             foreach (var formValue in formValues.Controls)
             {
-                if (!formValue.Updated.HasValue || !formValue.Updated.Value)
-                    continue;
+                //if (!formValue.Updated.HasValue || !formValue.Updated.Value)
+                //    continue;
 
                 var controlIndex = controlIds.FindIndex(x => x == formValue.Id);
                 if (controlIndex < 0)
@@ -93,9 +103,14 @@ namespace CryptoDashWeb.Core.Builders.Forms
                 case TileItemCode.Name when value.TryParseValue(out string name):
                     data.Name = name;
                     break;
-                case TileItemCode.Classes:
+                case TileItemCode.Class when value.TryParseValue(out List<int> classes):
+                    data.ClassCodes = classes;
                     break;
-                case TileItemCode.Objects:
+                case TileItemCode.Object when value.TryParseValue(out List<int> objs):
+                    data.ObjCodes.AddRange(objs);
+                    break;
+                case TileItemCode.Currency when value.TryParseValue(out int obj):
+                    data.ObjCodes.Add(obj);
                     break;
                 case TileItemCode.DashboardType when value.TryParseValue(out DashboardType dashboardType):
                     data.Type = dashboardType;

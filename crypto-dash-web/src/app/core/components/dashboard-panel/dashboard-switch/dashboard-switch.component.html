@@ -2,10 +2,9 @@
   @let dashboardItem = item();
   @switch (dashboardItem.type) {
   @case (dashboardType.Bars) {
-  <app-dashboard-bars [item]="dashboardItem" [data]="data()" />
   }
   @case (dashboardType.Chart) {
-  <app-dashboard-chart [item]="dashboardItem" />
+  <app-dashboard-bars [item]="dashboardItem" [data]="data()" />
   }
   @case (dashboardType.Table) {
   <app-dashboard-table [item]="dashboardItem" />

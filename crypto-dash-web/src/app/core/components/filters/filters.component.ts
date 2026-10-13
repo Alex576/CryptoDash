@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, input, OnInit, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { ComboControl } from '../../models/controls/combo-control';
 import { ControlType } from '../../models/controls/control-type';
 import { FormControl } from '../../models/controls/form-control';
+import { FormValues, getFormValues } from '../../models/form-editor/form-values';
 import { DateRangeComponent } from '../controls/date-range/date-range.component';
 import { SelectSwitchComponent } from "../controls/selectors/select-switch/select-switch.component";
 
@@ -12,7 +13,7 @@ import { SelectSwitchComponent } from "../controls/selectors/select-switch/selec
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [SelectSwitchComponent, DateRangeComponent]
 })
-export class FiltersComponent implements OnInit {
+export class FiltersComponent {
   readonly filters = input.required<ComboControl[], ComboControl[] | ComboControl | null>({
     transform: (filers: ComboControl | ComboControl[] | null) => {
       if (!filers) {
@@ -25,15 +26,11 @@ export class FiltersComponent implements OnInit {
     }
   });
 
-  readonly valueChanged = output<FormControl>();
+  readonly valueChanged = output<FormValues>();
 
   protected readonly controlType = ControlType;
-  constructor() { }
 
-  ngOnInit() {
-  }
-
-  onValueChanged(control: FormControl): void {
-    this.valueChanged.emit(control);
+  onValueChanged(_control: FormControl): void {
+    this.valueChanged.emit(getFormValues(this.filters()));
   }
 }

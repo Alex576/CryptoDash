@@ -6,7 +6,7 @@ namespace CryptoDashWeb.Data.Models
     {
         public int Id { get; set; }
 
-        public int ClassCode { get; set; }
+        public ClassCode ClassCode { get; set; }
 
         public string Name { get; set; }
 
@@ -16,7 +16,7 @@ namespace CryptoDashWeb.Data.Models
         public ObjectModel(int id, int classCode, string name, string displayName)
         {
             Id = id;
-            ClassCode = classCode;
+            ClassCode = (ClassCode)classCode;
             Name = name;
             DisplayName = displayName;
         }

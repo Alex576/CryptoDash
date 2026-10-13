@@ -42,8 +42,11 @@ namespace CryptoDashWeb.Core.Services
             };
         }
 
-        public async Task<DashboardItemData> GetDashboardData(DateRange dateRange, string id)
+        public async Task<DashboardItemData> GetDashboardData(FormValues filtersValues, string id)
         {
+            if (!filtersValues.TryGetValue("DateRangeFilter", out DateRange dateRange))
+                return new DashboardItemData() { LoadError = true };
+
             var dashboardLayout = await _layoutContext.GetLayout<DashboardLayoutEntity>((int)TileCode.DashboardDashboard);
             var dashboardItem = dashboardLayout.Layout.Items.FirstOrDefault(x => x.Id == id) ?? throw new ArgumentException($"Dashboard not found with id = {id}");
             var builder = new DashboardBuilder(dashboardLayout.Layout);

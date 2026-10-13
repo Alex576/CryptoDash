@@ -8,18 +8,14 @@ export interface DashboardItem {
     name: string;
     type: DashboardType;
     data: DashboardItemData;
+    isLoading?: boolean;
     // fields: DashboardField[];
 }
 
 export interface DashboardItemData {
     data: unknown[];
-    // series: {
-    //     type: string;
-    //     xKey: string;
-    //     yKey: string;
-
-    // };
     series: AgPolarSeriesOptions[];
+    loadError?: boolean;
 }
 
 export type DashboardItemChanges = Pick<DashboardItem & GridsterItemConfig, 'id' | 'x' | 'y' | 'cols' | 'rows'>;

@@ -46,7 +46,7 @@ namespace CryptoDashWeb.Core.Builders.Controls
             return settings;
         }
         protected abstract Task<List<Item>> GetComboItems(FormControlData controlData);
-        protected abstract void UpdateDataByControlValue(TData data, FormControlData controlData, JToken? value);
+        protected abstract Task UpdateDataByControlValue(TData data, FormControlData controlData, JToken? value);
 
         protected abstract object? GetValue(FormControl control, FormControlData controlData, TData data);
         protected JToken? GetControlValue(FormControl control, FormControlData controlData, TData data)

@@ -33,7 +33,7 @@ namespace CryptoDashWeb.Controllers.Api
         [HttpPost("[action]")]
         public async Task<DashboardItemData> GetDashboardData(GetDashboardData model)
         {
-            return await _dashboardService.GetDashboardData(model.Range, model.ItemId);
+            return await _dashboardService.GetDashboardData(model.FiltersValues, model.ItemId);
         }
 
 

@@ -89,7 +89,7 @@ namespace CryptoDashWeb.Core.Services
                     var item = layout.Layout.Items.FirstOrDefault(x => x.Id == itemId) ?? new DashboardItemLayout();
                     var builder = new DashboardItemLayoutBuilder();
                     var formBuilder = new DashboardItemFormBuilder(builder.GetControls(), tileCode, _objectContextService, _classContextService);
-                    return await formBuilder.GetForm(item);
+                    return await formBuilder.GetForm(new DashboardItemLayoutEx(item));
                 case TileTypeCode.Grid:
                     break;
                 case TileTypeCode.Form:
@@ -116,10 +116,12 @@ namespace CryptoDashWeb.Core.Services
                 case TileTypeCode.Dashboard:
                     var layout = await _layoutContext.GetLayout<DashboardLayoutEntity>((int)tileCode);
                     var item = string.IsNullOrEmpty(itemId) ? new() : layout.Layout.Items.FirstOrDefault(x => x.Id == itemId) ?? new DashboardItemLayout();
+                    var dashboardItemEx = new DashboardItemLayoutEx(item);
+
                     var builder = new DashboardItemLayoutBuilder();
                     var formBuilder = new DashboardItemFormBuilder(builder.GetControls(), tileCode, _objectContextService, _classContextService);
-                    formBuilder.UpdateData(formValues, item);
-                    return await formBuilder.GetForm(item);
+                    await formBuilder.UpdateData(formValues, dashboardItemEx);
+                    return await formBuilder.GetForm(dashboardItemEx);
                 case TileTypeCode.Grid:
                     break;
                 case TileTypeCode.Form:
@@ -153,9 +155,10 @@ namespace CryptoDashWeb.Core.Services
 
                     var builder = new DashboardItemLayoutBuilder();
                     var formBuilder = new DashboardItemFormBuilder(builder.GetControls(), tileCode, _objectContextService, _classContextService);
-                    formBuilder.UpdateData(formValues, item);
+                    var dashboardItemEx = new DashboardItemLayoutEx(item);
+                    await formBuilder.UpdateData(formValues, dashboardItemEx);
                     layoutModel.Layout.Items.RemoveAll(x => x.Id == itemId);
-                    layoutModel.Layout.Items.Add(item);
+                    layoutModel.Layout.Items.Add(new DashboardItemLayout(dashboardItemEx));
                     var saveResult = await _layoutContext.SaveLayout((int)tileCode, layoutModel.Layout);
                     return new OperationResult(saveResult ? ResultCode.Success : ResultCode.Error);
 

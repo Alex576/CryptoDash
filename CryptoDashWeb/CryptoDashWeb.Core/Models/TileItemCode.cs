@@ -8,10 +8,11 @@
         State = 4,
         Name = 5,
         Class = 6,
-        Object = 7,
+        Coin = 7,
         DashboardType = 8,
         DateTime = 9,
         DateRange = 10,
         Currency = 11,
+        DataView = 12,
     }
 }

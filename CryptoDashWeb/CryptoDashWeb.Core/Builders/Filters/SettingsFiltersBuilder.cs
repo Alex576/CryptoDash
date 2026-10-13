@@ -32,7 +32,7 @@ namespace CryptoDashWeb.Core.Builders.Filters
             return null;
         }
 
-        protected override void UpdateDataByControlValue(FiltersBuilderMockData data, FormControlData controlData, JToken? value)
+        protected override Task UpdateDataByControlValue(FiltersBuilderMockData data, FormControlData controlData, JToken? value)
         {
             throw new NotImplementedException();
         }

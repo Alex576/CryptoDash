@@ -49,37 +49,11 @@ namespace CryptoDashWeb.Core.Builders
         {
             var data = new DashboardItemData();
             var objects = await objectContext.Get(item.ObjCodes);
-            var currencyId = new Lazy<int>(() => objects.First(x => x.ClassCode == (int)ClassCode.Currency).Id);
-            foreach (var coin in objects.Where(x => x.ClassCode == (int)ClassCode.Coin))
+            var currencyId = new Lazy<int>(() => objects.First(x => x.ClassCode == ClassCode.Currency).Id);
+            foreach (var coin in objects.Where(x => x.ClassCode == ClassCode.Coin))
             {
-                var histories = (await coinHistoryContext.GetCoinHistory(range.From, range.To, coin.Id)).OrderBy(x => x.Date).ToList();
-                if (histories.Count > 0)
-                {
-                    var missingRanges = new List<DateRange>();
-                    for (int i = 0; i < histories.Count - 1; i++)
-                    {
-                        var currentDate = histories[i].Date;
-                        var nextDate = histories[i + 1].Date;
-                        if ((nextDate - currentDate).TotalDays == 1)
-                            nextDate = histories[i].Date;
-                        else
-                            missingRanges.Add(new DateRange(currentDate.AddDays(1), nextDate.AddDays(-1)));
-                    }
-                    await Parallel.ForEachAsync(missingRanges, new ParallelOptions() { MaxDegreeOfParallelism = 2 }, async (range, token) =>
-                    {
-                        histories.AddRange(await PullCoinHistoryData(range, coinHistoryContext, coingeckoService, currencyId.Value, coin));
-                    });
-                }
-                else
-                {
-                    histories.AddRange(await PullCoinHistoryData(range, coinHistoryContext, coingeckoService, currencyId.Value, coin));
-                }
-                var series = new Series
-                {
-                    Type = "bar",
-                    XKey = "date",
-                    YKey = "coin"
-                };
+                var histories = await GetHistories(range, coinHistoryContext, coingeckoService, currencyId, coin);
+                var series = GetSeries(item);
                 data.Series.Add(series);
 
                 foreach (var history in histories.OrderBy(x => x.Date))
@@ -88,6 +62,64 @@ namespace CryptoDashWeb.Core.Builders
                 }
             }
             return data;
+        }
+
+        private Series GetSeries(DashboardItemLayout item)
+        {
+            var type = item.Type switch
+            {
+                DashboardType.Chart => GetTypeByDataView(item.DataView),
+                DashboardType.Table => "table",
+                _ => throw new NotImplementedException(),
+            };
+            return new Series
+            {
+                Type = type,
+                XKey = "date",
+                YKey = "coin"
+            };
+            string GetTypeByDataView(DashboardDataView? dataView) => dataView switch
+            {
+                DashboardDataView.Bars => "bar",
+                DashboardDataView.Chart => "line",
+                DashboardDataView.Area => "area",
+                DashboardDataView.Scatter => "scatter",
+                DashboardDataView.Bubble => "bubble",
+                DashboardDataView.Pie => "pie",
+                DashboardDataView.Donut => "donut",
+                null => throw new ArgumentNullException(),
+                _ => throw new NotImplementedException(),
+            };
+        }
+
+
+
+        private async Task<List<CoinHistoryModel>> GetHistories(DateRange range, CoinHistoryContext coinHistoryContext, ICoingeckoService coingeckoService, Lazy<int> currencyId, ObjectModel coin)
+        {
+            var histories = (await coinHistoryContext.GetCoinHistory(range.From, range.To, coin.Id)).OrderBy(x => x.Date).ToList();
+            if (histories.Count > 0)
+            {
+                var missingRanges = new List<DateRange>();
+                for (int i = 0; i < histories.Count - 1; i++)
+                {
+                    var currentDate = histories[i].Date;
+                    var nextDate = histories[i + 1].Date;
+                    if ((nextDate - currentDate).TotalDays == 1)
+                        nextDate = histories[i].Date;
+                    else
+                        missingRanges.Add(new DateRange(currentDate.AddDays(1), nextDate.AddDays(-1)));
+                }
+                await Parallel.ForEachAsync(missingRanges, new ParallelOptions() { MaxDegreeOfParallelism = 2 }, async (range, token) =>
+                {
+                    histories.AddRange(await PullCoinHistoryData(range, coinHistoryContext, coingeckoService, currencyId.Value, coin));
+                });
+            }
+            else
+            {
+                histories.AddRange(await PullCoinHistoryData(range, coinHistoryContext, coingeckoService, currencyId.Value, coin));
+            }
+
+            return histories;
         }
 
         private async Task<List<CoinHistoryModel>> PullCoinHistoryData(DateRange range, CoinHistoryContext coinHistoryContext, ICoingeckoService coingeckoService, int currencyId, ObjectModel coin)

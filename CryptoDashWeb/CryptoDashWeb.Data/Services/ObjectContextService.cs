@@ -46,13 +46,13 @@ namespace CryptoDashWeb.Data.Services
 
         public async Task<int> Save(ObjectModel model)
         {
-            _context.ObjectEntities.Update(new DBModels.ObjectEntity() { Id = model.Id, ClassCode = model.ClassCode, DisplayName = model.DisplayName, Name = model.Name });
+            _context.ObjectEntities.Update(new DBModels.ObjectEntity() { Id = model.Id, ClassCode = (int)model.ClassCode, DisplayName = model.DisplayName, Name = model.Name });
             return await _context.SaveChangesAsync();
         }
 
         public async Task<int> Save(List<ObjectModel> models)
         {
-            var entities = models.Select(model => new DBModels.ObjectEntity() { Id = model.Id, ClassCode = model.ClassCode, DisplayName = model.DisplayName, Name = model.Name });
+            var entities = models.Select(model => new DBModels.ObjectEntity() { Id = model.Id, ClassCode = (int)model.ClassCode, DisplayName = model.DisplayName, Name = model.Name });
             return await Save(entities);
         }
 

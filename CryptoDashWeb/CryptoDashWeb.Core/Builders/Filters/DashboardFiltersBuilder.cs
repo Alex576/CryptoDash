@@ -28,14 +28,14 @@ namespace CryptoDashWeb.Core.Builders.Filters
         {
             return controlData.TileItemCode switch
             {
-                TileItemCode.Object => throw new NotImplementedException(),
+                TileItemCode.Coin => throw new NotImplementedException(),
                 TileItemCode.DateTime => throw new NotImplementedException(),
                 TileItemCode.DateRange => data,
                 _ => throw new NotImplementedException(),
             };
         }
 
-        protected override void UpdateDataByControlValue(DateRange data, FormControlData controlData, JToken? value)
+        protected override Task UpdateDataByControlValue(DateRange data, FormControlData controlData, JToken? value)
         {
             throw new NotImplementedException();
         }

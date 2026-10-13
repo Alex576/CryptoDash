@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { FormModel } from '../../models/form-editor/form-model';
-import { FormValues } from '../../models/form-editor/form-values';
+import { FormValues, getFormValues } from '../../models/form-editor/form-values';
 import { SIDE_PANEL_DATA } from '../../models/side-panel/side-panel-data-token';
 import { TileCode } from '../../models/tile-code';
 import { SidePanelService } from '../../services/side-panel.service';
@@ -27,12 +27,7 @@ export abstract class BaseSidePanelComponent {
 
     protected getFormUpdateModel(): FormValues {
         const form = this.form();
-        const model: FormValues = new FormValues();
-        for (let i = 0; i < form.controls.length; i++) {
-            const control = form.controls[i];
-            model.controls.push({ id: control.id, value: control.value, updated: control.updated });
-        }
-        return model;
+        return getFormValues(form.controls);
     }
 
     protected onCanSaveForm(canSave: boolean): void {

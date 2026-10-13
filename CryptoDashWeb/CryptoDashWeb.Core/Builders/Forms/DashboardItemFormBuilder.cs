@@ -3,6 +3,7 @@ using CryptoDashWeb.Core.Models;
 using CryptoDashWeb.Core.Models.Controls;
 using CryptoDashWeb.Core.Models.Form;
 using CryptoDashWeb.Core.Models.Settings.LayoutDBEntities;
+using CryptoDashWeb.Core.Models.Settings.LayoutEntities;
 using CryptoDashWeb.Core.Utils;
 using CryptoDashWeb.Data.Models;
 using CryptoDashWeb.Data.Services;
@@ -14,7 +15,7 @@ using System.Text;
 
 namespace CryptoDashWeb.Core.Builders.Forms
 {
-    public class DashboardItemFormBuilder : BaseControlBuilder<DashboardItemLayout>
+    public class DashboardItemFormBuilder : BaseControlBuilder<DashboardItemLayoutEx>
     {
         private List<FormControlData> _formControlDatas;
         private readonly TileCode _tileCode;
@@ -29,8 +30,9 @@ namespace CryptoDashWeb.Core.Builders.Forms
             _classContextService = classContextService;
         }
 
-        public async Task<FormModel> GetForm(DashboardItemLayout data)
+        public async Task<FormModel> GetForm(DashboardItemLayoutEx data)
         {
+            await data.Initialize(_objectContextService);
             var form = new FormModel() { TileCode = _tileCode };
             foreach (var controlData in _formControlDatas)
             {
@@ -47,9 +49,10 @@ namespace CryptoDashWeb.Core.Builders.Forms
             return controlData.TileItemCode switch
             {
                 TileItemCode.Class => (await _classContextService.GetAll()).Select(x => new Item() { Id = x.Id, Name = x.Name }).ToList(),
-                TileItemCode.Object => (await _objectContextService.GetAll()).Select(x => new Item() { Id = x.Id, Name = x.Name }).ToList(),
+                TileItemCode.Coin => (await _objectContextService.GetByClass((int)ClassCode.Coin)).Select(x => new Item() { Id = x.Id, Name = x.Name }).ToList(),
                 TileItemCode.Currency => (await _objectContextService.GetByClass((int)ClassCode.Currency)).Select(x => new Item() { Id = x.Id, Name = x.Name }).ToList(),
                 TileItemCode.DashboardType => GetItemsByEnum<DashboardType>(),
+                TileItemCode.DataView => GetItemsByEnum<DashboardDataView>(),
                 _ => []
             };
         }
@@ -57,26 +60,30 @@ namespace CryptoDashWeb.Core.Builders.Forms
         private static List<Item> GetItemsByEnum<T>() where T : struct, Enum =>
             Enum.GetValues<T>().Select(x => new Item() { Id = Convert.ToInt32(x), Name = x.ToString() }).ToList();
 
-        protected override object? GetValue(FormControl control, FormControlData controlData, DashboardItemLayout data)
+        protected override object? GetValue(FormControl control, FormControlData controlData, DashboardItemLayoutEx data)
         {
             return controlData.TileItemCode switch
             {
                 TileItemCode.Name => data.Name,
                 TileItemCode.Class => data.ClassCodes,
-                TileItemCode.Object => data.ObjCodes,
+                TileItemCode.Coin => data.Objects.Where(x => x.ClassCode == ClassCode.Coin).Select(x => x.Id).ToList(),
+                TileItemCode.Currency => data.Objects.FirstOrDefault(x => x.ClassCode == ClassCode.Currency)?.Id, // todo think to goup all object up in single to avoid multi/single value errors
                 TileItemCode.DashboardType => data.Type,
+                TileItemCode.DataView => data.DataView,
                 _ => null
             };
         }
 
-        public void UpdateData(FormValues formValues, DashboardItemLayout data)
+        public async Task UpdateData(FormValues formValues, DashboardItemLayoutEx data)
         {
+            await data.Initialize(_objectContextService);
+
             var controlIds = _formControlDatas.Select(ItemCodeHelper.GetItemCode).ToList();
-            data.ObjCodes.Clear();
+            //data.ObjCodes.Clear();
             foreach (var formValue in formValues.Controls)
             {
-                //if (!formValue.Updated.HasValue || !formValue.Updated.Value)
-                //    continue;
+                if (!formValue.Updated.HasValue || !formValue.Updated.Value)
+                    continue;
 
                 var controlIndex = controlIds.FindIndex(x => x == formValue.Id);
                 if (controlIndex < 0)
@@ -84,11 +91,12 @@ namespace CryptoDashWeb.Core.Builders.Forms
                     continue;
                 }
                 var controlData = _formControlDatas[controlIndex];
-                UpdateDataByControlValue(data, controlData, formValue.Value);
+                await UpdateDataByControlValue(data, controlData, formValue.Value);
             }
+            data.UpdateVariableValues();
         }
 
-        protected override void UpdateDataByControlValue(DashboardItemLayout data, FormControlData controlData, JToken? value)
+        protected override async Task UpdateDataByControlValue(DashboardItemLayoutEx data, FormControlData controlData, JToken? value)
         {
             switch (controlData.TileItemCode)
             {
@@ -106,14 +114,17 @@ namespace CryptoDashWeb.Core.Builders.Forms
                 case TileItemCode.Class when value.TryParseValue(out List<int> classes):
                     data.ClassCodes = classes;
                     break;
-                case TileItemCode.Object when value.TryParseValue(out List<int> objs):
-                    data.ObjCodes.AddRange(objs);
+                case TileItemCode.Coin when value.TryParseValue(out List<int> objs):
+                    data.SetObjects(await _objectContextService.Get(objs));
                     break;
                 case TileItemCode.Currency when value.TryParseValue(out int obj):
-                    data.ObjCodes.Add(obj);
+                    data.SetObjects(await _objectContextService.Get(obj));
                     break;
                 case TileItemCode.DashboardType when value.TryParseValue(out DashboardType dashboardType):
                     data.Type = dashboardType;
+                    break;
+                case TileItemCode.DataView when value.TryParseValue(out DashboardDataView dashboardDataView):
+                    data.DataView = dashboardDataView;
                     break;
                 default:
                     break;

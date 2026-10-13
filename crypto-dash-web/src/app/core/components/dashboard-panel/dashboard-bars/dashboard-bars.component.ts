@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, input, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, input, signal, viewChild } from '@angular/core';
 import { AgCharts } from 'ag-charts-angular';
 import { AgChartInstance, AgChartOptions } from 'ag-charts-community';
 import { LoadingComponent } from '../../loading/loading.component';
@@ -17,6 +17,8 @@ export class DashboardBarsComponent {
 
   protected readonly chartOption = signal<AgChartOptions>(null);
   private readonly chart = viewChild<AgCharts>(AgCharts);
+  protected readonly isLoadError = computed<boolean>(() => this.data().loadError);
+  protected readonly isLoading = computed<boolean>(() => this.item().isLoading);
 
   constructor() {
     effect(() => {
@@ -29,8 +31,8 @@ export class DashboardBarsComponent {
         if (!chart) {
           return;
         }
-        // chart.chart.applyTransaction({ add: data.data, remove: chart.chart.getOptions().data });
-        // chart.chart.getOptions().series = [data.series];
+        chart.chart.applyTransaction({ add: data.data, remove: chart.chart.getOptions().data });
+        chart.chart.getOptions().series = data.series;
       } else {
 
         this.chartOption.set({

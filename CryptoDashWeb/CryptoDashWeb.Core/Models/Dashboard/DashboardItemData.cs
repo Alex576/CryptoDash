@@ -8,6 +8,7 @@ namespace CryptoDashWeb.Core.Models.Dashboard
     {
         public List<Dictionary<string, object>> Data { get; set; } = [];
         public List<Series> Series { get; set; } = [];
+        public bool LoadError { get; set; }
     }
 
     public class Series

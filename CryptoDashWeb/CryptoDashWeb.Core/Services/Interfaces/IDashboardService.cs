@@ -9,7 +9,7 @@ namespace CryptoDashWeb.Core.Services.Interfaces
 {
     public interface IDashboardService
     {
-        Task<DashboardItemData> GetDashboardData(DateRange dateRange, string id);
+        Task<DashboardItemData> GetDashboardData(FormValues filtersValues, string id);
         Task<List<FormControl>> GetDashboardFilters();
         Task<DashboardLayout> GetDashboardLayout();
     }

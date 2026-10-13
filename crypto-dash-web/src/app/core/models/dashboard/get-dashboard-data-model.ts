@@ -1,6 +1,6 @@
-import { DateRange } from "../controls/date-range";
+import { FormValues } from "../form-editor/form-values";
 
 export interface GetDashboardDataModel {
-    range: DateRange;
+    filtersValues: FormValues;
     itemId: string;
 }

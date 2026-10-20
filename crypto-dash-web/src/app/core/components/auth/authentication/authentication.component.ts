@@ -30,7 +30,7 @@ export class AuthenticationComponent {
   protected readonly isLoginForm = signal<boolean>(true);
 
   constructor() {
-    const userId = this.storageService.getValue<UserModel>(LocalStorageKeys.UserId)?.id ?? null;
+    const userId = this.storageService.getValue<UserModel>(LocalStorageKeys.User)?.id ?? null;
     if (userId) {
       this.authService.logout(userId)
         .pipe(
@@ -40,7 +40,7 @@ export class AuthenticationComponent {
           tap({
             next: () => {
               this.storageService.remove(LocalStorageKeys.Token);
-              this.storageService.remove(LocalStorageKeys.UserId);
+              this.storageService.remove(LocalStorageKeys.User);
             }
           }),
           takeUntilDestroyed()

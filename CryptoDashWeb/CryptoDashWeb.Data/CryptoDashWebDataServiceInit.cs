@@ -12,6 +12,7 @@ namespace CryptoDashWeb.Data
             services.AddScoped<ObjectContextService>();
             services.AddScoped<ClassContextService>();
             services.AddScoped<CoinHistoryContext>();
+            services.AddScoped<UserSettingsContext>();
         }
     }
 }

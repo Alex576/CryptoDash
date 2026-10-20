@@ -50,14 +50,19 @@ namespace CryptoDashWeb.Core.Builders.Forms
             {
                 TileItemCode.Class => (await _classContextService.GetAll()).Select(x => new Item() { Id = x.Id, Name = x.Name }).ToList(),
                 TileItemCode.Object => (await _objectContextService.GetByClass(controlData.ControlMasterData.ClassCodes)).Select(x => new Item() { Id = x.Id, Name = x.Name }).ToList(),
-                //TileItemCode.Currency => (await _objectContextService.GetByClass((int)ClassCode.Currency)).Select(x => new Item() { Id = x.Id, Name = x.Name }).ToList(),
                 TileItemCode.DashboardType => GetItemsByEnum<DashboardType>(),
-                TileItemCode.DataView => GetItemsByEnum<DashboardDataView>(),
+                TileItemCode.DataView => GetDataViewGroups(),
                 _ => []
             };
         }
 
-        private static List<Item> GetItemsByEnum<T>() where T : struct, Enum =>
+        private List<Item> GetDataViewGroups() => Enum.GetValues<DashboardDataView>()
+                  .GroupBy(x => x.ToBaseChartType(), x => x)
+                  .SelectMany((dataViewByBaseChartType) =>
+                    dataViewByBaseChartType.Select(value => new Item() { Id = Convert.ToInt32(value), Name = value.ToString(), GroupName = dataViewByBaseChartType.Key?.ToString() }))
+                  .ToList();
+
+        private List<Item> GetItemsByEnum<T>() where T : struct, Enum =>
             Enum.GetValues<T>().Select(x => new Item() { Id = Convert.ToInt32(x), Name = x.ToString() }).ToList();
 
         protected override object? GetValue(FormControl control, FormControlData controlData, DashboardItemLayoutEx data)
@@ -75,14 +80,15 @@ namespace CryptoDashWeb.Core.Builders.Forms
 
         private object? GetControlObjectValue(FormControlData controlData, DashboardItemLayoutEx data)
         {
+            var objsByClassCodes = data.Objects.IntersectBy(controlData.ControlMasterData.ClassCodes, x => (int)x.ClassCode);
             if (controlData.Type == ControlType.Combo)
             {
                 if (controlData.States.Contains(ControlState.AllowMultiselect))
-                    return data.Objects.IntersectBy(controlData.ControlMasterData.ClassCodes, x => (int)x.ClassCode).Select(x => x.Id).ToList();
+                    return objsByClassCodes.Select(x => x.Id).ToList();
                 else
-                    return data.Objects.IntersectBy(controlData.ControlMasterData.ClassCodes, x => (int)x.ClassCode).FirstOrDefault()?.Id;
+                    return objsByClassCodes.FirstOrDefault()?.Id;
             }
-            return data.Objects.IntersectBy(controlData.ControlMasterData.ClassCodes, x => (int)x.ClassCode).FirstOrDefault()?.Id;
+            return objsByClassCodes.FirstOrDefault()?.Id;
         }
 
         public async Task UpdateData(FormValues formValues, DashboardItemLayoutEx data)

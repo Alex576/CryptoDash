@@ -14,6 +14,7 @@ namespace CryptoDashWeb.Data.DBContext
         public virtual DbSet<ObjectEntity> ObjectEntities { get; set; }
         public virtual DbSet<ClassEntity> ClassEntities { get; set; }
         public virtual DbSet<CoinHistory> CoinHistories { get; set; }
+        public virtual DbSet<UserSetting> UserSettings { get; set; }
 
         public CryptoDashContext(DbContextOptions<CryptoDashContext> options)
             : base(options)
@@ -61,6 +62,11 @@ namespace CryptoDashWeb.Data.DBContext
                     .HasConversion(v => JsonConvert.SerializeObject(v), v => JsonConvert.DeserializeObject<Dictionary<long, float>>(v) ?? new(), dictionaryComparer);
                 });
                 //entity.Property(x => x.HistoryData).HasColumnName("history_data");
+            });
+            modelBuilder.Entity<UserSetting>(entity =>
+            {
+                entity.Property(x => x.DataJson).HasColumnType("text");
+                entity.HasIndex(x => x.SettingKey);
             });
             FillClassCode(modelBuilder);
             FillTileTypeCode(modelBuilder);

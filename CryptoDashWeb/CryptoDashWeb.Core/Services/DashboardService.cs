@@ -6,6 +6,7 @@ using CryptoDashWeb.Core.Models;
 using CryptoDashWeb.Core.Models.Controls;
 using CryptoDashWeb.Core.Models.Dashboard;
 using CryptoDashWeb.Core.Models.Settings.LayoutDBEntities;
+using CryptoDashWeb.Core.Models.UserSettings;
 using CryptoDashWeb.Core.Services.Interfaces;
 using CryptoDashWeb.Data.DBModels;
 using CryptoDashWeb.Data.Models;
@@ -22,13 +23,16 @@ namespace CryptoDashWeb.Core.Services
         private readonly ObjectContextService _objectContextService;
         private readonly CoinHistoryContext _coinHistoryContext;
         private readonly ICoingeckoService _coingeckoService;
+        private readonly IUserSettingsService _userSettingsService;
 
-        public DashboardService(LayoutContextService layoutContext, ObjectContextService objectContextService, CoinHistoryContext coinHistoryContext, ICoingeckoService coingeckoService)
+        public DashboardService(LayoutContextService layoutContext, ObjectContextService objectContextService, CoinHistoryContext coinHistoryContext,
+            ICoingeckoService coingeckoService, IUserSettingsService userSettingsService)
         {
             _layoutContext = layoutContext;
             _objectContextService = objectContextService;
             _coinHistoryContext = coinHistoryContext;
             _coingeckoService = coingeckoService;
+            _userSettingsService = userSettingsService;
         }
 
         public async Task<DashboardLayout> GetDashboardLayout()
@@ -53,11 +57,13 @@ namespace CryptoDashWeb.Core.Services
             return await builder.GetDashboardData(dateRange, dashboardItem, _objectContextService, _coinHistoryContext, _coingeckoService);
         }
 
-        public Task<List<FormControl>> GetDashboardFilters()
+        public async Task<List<FormControl>> GetDashboardFilters()
         {
             var layout = new DashboardFiltersLayoutBuilder().GetFilters();
             var builder = new DashboardFiltersBuilder(layout);
-            return builder.GetFilters(new(new DateTime(DateTime.UtcNow.Year, 1, 1), new DateTime(DateTime.UtcNow.Year, 12, 31)));
+            var userSettings = await _userSettingsService.GetUserSettings(SettingsCode.DashboardFilters, ToolCode.Dashboard, null);
+            var filters = userSettings is FilterUserSettings userFilterssData ? userFilterssData.FiltersValues : [];
+            return await builder.GetFilters(filters);
         }
     }
 }

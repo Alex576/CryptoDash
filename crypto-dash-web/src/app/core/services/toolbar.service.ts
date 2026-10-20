@@ -18,7 +18,7 @@ export class ToolbarService {
   }
 
   constructor() {
-    this._currentUser = this.storageService.getValue<UserModel>(LocalStorageKeys.UserId);
+    this._currentUser = this.storageService.getValue<UserModel>(LocalStorageKeys.User);
     if (!this._currentUser) {
       this.navigationService.navigateToLoginPage();
     }
@@ -26,7 +26,7 @@ export class ToolbarService {
 
   setUser(id: number, name: string, accessToken: string) {
     this._currentUser = { id, email: name };
-    this.storageService.saveValue(LocalStorageKeys.UserId, JSON.stringify(this._currentUser));
+    this.storageService.saveValue(LocalStorageKeys.User, JSON.stringify(this._currentUser));
     this.storageService.saveValue(LocalStorageKeys.Token, accessToken);
   }
 }

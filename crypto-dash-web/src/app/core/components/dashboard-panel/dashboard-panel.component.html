@@ -3,7 +3,9 @@
   @if (config) {
   <gridster class="dashboard-panel__gridster" [options]="config">
     @for (item of dashboardItems(); track item.id) {
-    <gridster-item class="dashboard-panel__gridster__item" [item]="item.options">
+    <gridster-item class="dashboard-panel__gridster__item"
+                   [item]="item.options"
+                   (itemChange)="onItemChange($event, item)">
       <div class="item">
         <div class="item__header">
           <div class="item__header__name" [appDynamicToolTip]="item.name">

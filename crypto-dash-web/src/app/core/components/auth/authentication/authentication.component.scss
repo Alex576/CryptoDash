@@ -4,11 +4,55 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: radial-gradient(circle, var(--mat-sys-primary) 0%, var(--mat-sys-background) 100%);
+    background-color: var(--mat-sys-surface);
+    isolation: isolate;
+    position: relative;
+    overflow: hidden;
+
+    &::before,
+    &::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(120px);
+        opacity: 0.25;
+        z-index: -1;
+    }
+
+    &::before {
+        width: 45vw;
+        height: 45vw;
+        background: var(--mat-sys-primary);
+        top: -10%;
+        left: -10%;
+    }
+
+    &::after {
+        width: 50vw;
+        height: 50vw;
+        background: var(--mat-sys-tertiary);
+        bottom: -15%;
+        right: -10%;
+    }
 
     &__container {
-        min-width: 25%;
-        min-height: 35%;
+        // min-width: 25%;
+        // min-height: 35%;
+        z-index: 1; /* Гарантирует, что форма будет выше размытых кругов */
+        width: 100%;
+        max-width: 30%;
+        padding: 16px; // Внутренние отступы карточки
+        box-sizing: border-box;
+
+        // Переопределяем цвета mat-card под M3 High Container для контраста
+        background-color: var(--mat-sys-surface-container-high);
+        color: var(--mat-sys-on-surface);
+
+        // Границы и скругления по гайдлайнам Material 3
+        border: 1px solid var(--mat-sys-outline-variant);
+        border-radius: 28px;
+        box-shadow: var(--mat-sys-level3);
+
         .form {
             display: flex;
             flex-direction: column;

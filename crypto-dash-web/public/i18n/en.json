@@ -39,7 +39,9 @@
         "PleaseEnter": "Please Enter",
         "StartDate": "Start date",
         "EndDate": "End date"
-      }
+      },
+      "Back": "Back",
+      "Register": "Register"
     },
     "Button": {
       "Close": "Close",

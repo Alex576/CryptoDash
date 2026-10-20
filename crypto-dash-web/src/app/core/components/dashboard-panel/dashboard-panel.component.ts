@@ -3,7 +3,7 @@ import { outputFromObservable } from '@angular/core/rxjs-interop';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatIconModule } from "@angular/material/icon";
 import { MatTooltip } from '@angular/material/tooltip';
-import { Gridster, GridsterItem } from 'angular-gridster2';
+import { Gridster, GridsterItem, GridsterItemConfig } from 'angular-gridster2';
 import { DynamicToolTipDirective } from '../../directives/dynamic-tool-tip.directive';
 import { DashboardPanelService } from './dashboard-panel.service';
 import { DashboardSwitchComponent } from './dashboard-switch/dashboard-switch.component';
@@ -47,5 +47,9 @@ export class DashboardPanelComponent {
       case DashboardType.Table: return 'dash:table';
     }
     return null;
+  }
+
+  onItemChange({ item }: { item: GridsterItemConfig; itemComponent: GridsterItem; }, dashboardItem: DashboardItem) {
+    this.service.onItemSize(item, dashboardItem);
   }
 }

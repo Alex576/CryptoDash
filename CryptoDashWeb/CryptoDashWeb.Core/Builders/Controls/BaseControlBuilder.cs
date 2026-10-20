@@ -1,4 +1,5 @@
-﻿using CryptoDashWeb.Core.Models.Controls;
+﻿using CryptoDashWeb.Core.Models;
+using CryptoDashWeb.Core.Models.Controls;
 using CryptoDashWeb.Core.Models.Controls.Settings;
 using CryptoDashWeb.Core.Utils;
 using Newtonsoft.Json.Linq;
@@ -28,7 +29,7 @@ namespace CryptoDashWeb.Core.Builders.Controls
             {
                 ControlType.Combo => await GetComboSettings(controlData),
                 ControlType.Input => new InputSettings(),
-                ControlType.DateRange => new DateRangeSettings() { Max = new DateTime(DateTime.UtcNow.Year + 5, 12, 31), Min = new DateTime(DateTime.UtcNow.Year - 5, 1, 1) },
+                ControlType.DateRange => GetDateRangeSettings(),
                 _ => throw new NotImplementedException(),
             };
             settings.Required = IsRequired(controlData);
@@ -36,14 +37,28 @@ namespace CryptoDashWeb.Core.Builders.Controls
             return settings;
         }
 
+        protected virtual DateRangeSettings GetDateRangeSettings()
+        {
+            return new DateRangeSettings();
+        }
+
         private async Task<ControlSettings> GetComboSettings(FormControlData controlData)
         {
             var settings = new ComboSettings
             {
                 AllowMultiselect = IsAllowMultiple(controlData),
-                Items = (await GetComboItems(controlData)).OrderBy(x => x.Name).ToList(),
+                Items = OrderItems(await GetComboItems(controlData)),
             };
             return settings;
+        }
+
+        protected List<Item> OrderItems(List<Item> items)
+        {
+            return items
+                .OrderBy(x => string.IsNullOrEmpty(x.GroupName))
+                .ThenBy(x => x.GroupName)
+                .ThenBy(x => x.Name)
+                .ToList();
         }
         protected abstract Task<List<Item>> GetComboItems(FormControlData controlData);
         protected abstract Task UpdateDataByControlValue(TData data, FormControlData controlData, JToken? value);
@@ -59,6 +74,11 @@ namespace CryptoDashWeb.Core.Builders.Controls
             {
                 value = GetFirstValue(control);
                 return value == null ? null : JToken.FromObject(value, new Newtonsoft.Json.JsonSerializer() { ContractResolver = new CamelCasePropertyNamesContractResolver() });
+            }
+
+            if (controlData.TileItemCode == Models.TileItemCode.DateRange)
+            {
+                return JToken.FromObject(new DateRange(new DateTime(DateTime.UtcNow.Year, 1, 1), new DateTime(DateTime.UtcNow.Year, 12, 31)));
             }
 
             return null;

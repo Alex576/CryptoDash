@@ -1,4 +1,4 @@
 export class LocalStorageKeys {
-    public static readonly UserId = 'Id';
+    public static readonly User = 'User';
     public static readonly Token = 'token';
 }

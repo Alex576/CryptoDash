@@ -53,7 +53,7 @@ export class AuthorizationService {
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.BadRequest) {
             this.storageService.remove(LocalStorageKeys.Token);
-            this.storageService.remove(LocalStorageKeys.UserId);
+            this.storageService.remove(LocalStorageKeys.User);
             this.notificationService.notifyError("Session is over");
             this.cancelSub$.next();
             this.navigationService.navigateToLoginPage();

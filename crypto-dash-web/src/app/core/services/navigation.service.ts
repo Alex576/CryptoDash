@@ -37,7 +37,7 @@ export class NavigationService {
   }
 
   validateUrl(sessionSetting: LastSessionSetting): void {
-    const targetUrl = ToolCodeUrlMap.get(sessionSetting.lastOpenedTool);
+    const targetUrl = ToolCodeUrlMap.get(sessionSetting.toolCode);
     if (!targetUrl) { return; }
 
     if (targetUrl != this.router.url.split('?')[0]) {

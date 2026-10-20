@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CryptoDashWeb.Core.Models.Dashboard;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -23,7 +24,7 @@ namespace CryptoDashWeb.Core.Models.Settings.LayoutDBEntities
 
         public string Name { get; set; }
         public DashboardType Type { get; set; }
-        public DashboardDataView? DataView { get; set; }
+        public DashboardDataView DataView { get; set; }
         public List<int> ObjCodes { get; set; } = [];
         public List<int> ClassCodes { get; set; } = [];
 

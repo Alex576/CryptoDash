@@ -1,3 +1,6 @@
+import { FormControl } from "../models/controls/form-control";
+import { FiltersUserSettingsData } from "../models/user-settings/filters-user-settings";
+
 export async function calculateHash(value: string): Promise<string> {
     var encoder = new TextEncoder().encode(value);
     var buffer = await crypto.subtle.digest('SHA-256', encoder);
@@ -77,4 +80,9 @@ export function isEqual(obj1: unknown, obj2: unknown): boolean {
     }
 
     return true;
+}
+
+
+export function getFiltersData(controls: FormControl[]): FiltersUserSettingsData[] {
+    return controls.map(c => ({ id: c.id, value: c.value }));
 }

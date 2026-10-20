@@ -1,3 +1,13 @@
-<p>
-  dashboard-chart works!
-</p>
+<div class="dashboard-chart">
+  @if (isLoadError()){
+  <div>error</div>
+  }
+  @else {
+  @if (!isLoading() && chartOption()) {
+  <ag-charts style="display: flex; height: 100%;" [options]="$any(chartOption())" (chartReady)="onChartReady($event)" />
+  }
+  @else {
+  <app-loading />
+  }
+  }
+</div>

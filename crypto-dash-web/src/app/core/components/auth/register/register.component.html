@@ -2,10 +2,10 @@
   <mat-card>
     <mat-card-header>
       <mat-card-title>
-        <div class="register__header">Isunaki</div>
+        <div class="register__header">CryptoDash</div>
       </mat-card-title>
       <mat-card-subtitle>
-        <div class="register__title">{{'Form.Title.Register'| translate }}</div>
+        <div class="register__title">{{'Register.Title'| translate }}</div>
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
@@ -30,13 +30,13 @@
         <button tabIndex="5"
                 matButton="outlined"
                 (click)="onBack()">
-          {{'Form.Back' | translate }}
+          {{'Form.Control.Back' | translate }}
         </button>
         <button tabIndex="4"
                 matButton="filled"
                 [disabled]="isRegisterDisabled()"
                 (click)="onRegister()">
-          {{'Form.Register' | translate }}
+          {{'Form.Control.Register' | translate }}
         </button>
 
       </div>

@@ -21,20 +21,20 @@ export class UserSettingsService {
   }
 
   public getLastSessionSettings<T extends LastSessionSetting>(model: UserSettingsModel): Observable<T> {
-    return this.getOrLoadSettings<T>(model, (model) => this.api.getLastSessionSettings(model));
+    return this.getOrLoadSettings<T>(model, (model) => this.api.getSettings(model));
   }
 
   public getLoadedSettings<T extends UserSetting>(model: UserSettingsModel): T {
     const data = this.settingsMap.get(this.getKey(model));
     if (!data) {
-      console.error(`Failed to get loaded settings setting code = ${model.settingCode}, tool code = ${model.toolCode}, tile code = ${model.tileCode}`);
+      console.error(`Failed to get loaded settings setting code = ${model.settingsCode}, tool code = ${model.toolCode}, tile code = ${model.tileCode}`);
     }
     return data as T;
   }
 
-  public saveUserLastSessionSettingAsync<T extends UserSetting>(model: UserSettingsModel, value: T): void {
+  public saveUserSettingAsync<T extends UserSetting>(model: UserSettingsModel, value: T): void {
     this.settingsMap.set(this.getKey(model), value);
-    this.api.saveUserLastSessionSetting({ ...model, value })
+    this.api.saveUserSettings({ ...model, value })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe();
   }
@@ -50,11 +50,11 @@ export class UserSettingsService {
     }
     return loadFunc<T>(model)
       .pipe(
-        tap({ next: (data) => this.settingsMap.set(key, data ?? {}) })
+        tap({ next: (data) => this.settingsMap.set(key, data) })
       );
   }
 
-  private getKey({ toolCode = 0, tileCode = 0, settingCode }: UserSettingsModel): string {
-    return `${toolCode}${tileCode}${settingCode}`;
+  private getKey({ toolCode = 0, tileCode = 0, settingsCode: settingCode }: UserSettingsModel): string {
+    return `${toolCode}_${tileCode}_${settingCode}`;
   }
 }

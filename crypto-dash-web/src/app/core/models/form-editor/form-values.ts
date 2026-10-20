@@ -9,6 +9,7 @@ export function getFormValues(controls: FormControl[]): FormValues {
     }
     return model;
 }
+
 export class FormValues {
     controls: FormControlValue[] = [];
 

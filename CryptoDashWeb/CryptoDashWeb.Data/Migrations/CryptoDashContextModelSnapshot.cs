@@ -258,6 +258,34 @@ namespace CryptoDashWeb.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("CryptoDashWeb.Data.DBModels.UserSetting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("DataJson")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("data_json");
+
+                    b.Property<string>("SettingKey")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("setting_key");
+
+                    b.HasKey("Id")
+                        .HasName("pk_user_settings");
+
+                    b.HasIndex("SettingKey")
+                        .HasDatabaseName("ix_user_settings_setting_key");
+
+                    b.ToTable("user_settings", "dbo");
+                });
+
             modelBuilder.Entity("CryptoDashWeb.Data.DBModels.CoinHistory", b =>
                 {
                     b.HasOne("CryptoDashWeb.Data.DBModels.ObjectEntity", "ObjectEntity")

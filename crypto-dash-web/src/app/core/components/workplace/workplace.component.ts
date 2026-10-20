@@ -3,6 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterOutlet } from "@angular/router";
 import { forkJoin, tap } from 'rxjs';
 import { MenuCodeIcon, MenuItem } from '../../models/menu-item';
+import { SettingsCode } from '../../models/settings-code';
 import { NavigationService } from '../../services/navigation.service';
 import { BaseToolComponent } from '../base-tool/base-tool.component';
 import { LoadingComponent } from '../loading/loading.component';
@@ -30,7 +31,7 @@ export class WorkplaceComponent extends BaseToolComponent {
 
     forkJoin([
       this.navigationMenuService.getMenuItems(),
-      // this.userSettingsService.getLastSessionSettings({ settingCode: UserSettingCode.LastOpenedTool }),
+      this.userSettingsService.getLastSessionSettings({ settingsCode: SettingsCode.LastOpenedTool }),
       // this.service.getAppConfig(),
     ])
       .pipe(

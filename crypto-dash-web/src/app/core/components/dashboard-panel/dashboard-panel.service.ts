@@ -1,5 +1,5 @@
 import { Injectable, signal, untracked } from '@angular/core';
-import { CompactType, DisplayGrid, Gridster, GridsterApi, GridsterConfig, GridsterItem, GridsterItemConfig, GridType } from 'angular-gridster2';
+import { CompactType, DisplayGrid, Gridster, GridsterApi, GridsterConfig, GridsterItemConfig, GridType } from 'angular-gridster2';
 import { Subject } from 'rxjs';
 import { DashboardItem, DashboardItemChanges } from './models/dashboard-item';
 import { DashboardOptions } from './models/dashboard-options';
@@ -26,18 +26,6 @@ export class DashboardPanelService {
       initCallback: (gridster: Gridster, api: GridsterApi) => {
         this.gridster = gridster;
         this.api = api;
-      },
-      itemChangeCallback: (itemConfig: GridsterItemConfig, item: GridsterItem) => {
-        // const element = itemConfig as DashboardItem;
-        // debugger;
-        this.onItemSizeChangedSub$.next({
-          id: "",
-          x: itemConfig.x,
-          y: itemConfig.y,
-          cols: itemConfig.cols,
-          rows: itemConfig.rows,
-        });
-
       },
       gridType: GridType.ScrollVertical,
       compactType: CompactType.None,
@@ -119,5 +107,15 @@ export class DashboardPanelService {
       dashboardItems.push(item);
     }
     this.items.set(dashboardItems);
+  }
+
+  onItemSize(item: GridsterItemConfig, dashboardItem: DashboardItem) {
+    this.onItemSizeChangedSub$.next({
+      id: dashboardItem.id,
+      x: item.x,
+      y: item.y,
+      cols: item.cols,
+      rows: item.rows,
+    });
   }
 }

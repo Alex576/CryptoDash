@@ -5,8 +5,26 @@
                 (opened)="onOpen()"
                 (closed)="onClosed()">
       <app-search (onSearchTextChanged)="onSearch($event)" />
+      @if (isGroupedItems()){
+      @for (group of filteredItemsGroups(); track group.name) {
+      @if (group.name === noItemGroup){
+      @for (item of group.items; track item.id) {
+      <mat-option [value]="item.id">{{item.name}}</mat-option>
+      }
+      }
+      @else {
+      <mat-optgroup [label]="group.name">
+        @for (item of group.items; track item.id) {
+        <mat-option [value]="item.id">{{item.name}}</mat-option>
+        }
+      </mat-optgroup>
+      }
+      }
+      }
+      @else{
       @for (item of filteredItems(); track item.id) {
       <mat-option [value]="item.id">{{item.name}}</mat-option>
+      }
       }
     </mat-select>
   </mat-form-field>

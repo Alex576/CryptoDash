@@ -47,7 +47,7 @@ namespace CryptoDashWeb.Core.Builders
         public async Task<DashboardItemData> GetDashboardData(DateRange range, DashboardItemLayout item, ObjectContextService objectContext,
             CoinHistoryContext coinHistoryContext, ICoingeckoService coingeckoService)
         {
-            var data = new DashboardItemData();
+            var data = new DashboardItemData() { ChartBaseType = item.DataView.ToBaseChartType() ?? ChartBaseType.None };
             var objects = await objectContext.Get(item.ObjCodes);
             var currencyId = new Lazy<int>(() => objects.First(x => x.ClassCode == ClassCode.Currency).Id);
             foreach (var coin in objects.Where(x => x.ClassCode == ClassCode.Coin))
@@ -66,29 +66,12 @@ namespace CryptoDashWeb.Core.Builders
 
         private Series GetSeries(DashboardItemLayout item)
         {
-            var type = item.Type switch
-            {
-                DashboardType.Chart => GetTypeByDataView(item.DataView),
-                DashboardType.Table => "table",
-                _ => throw new NotImplementedException(),
-            };
+
             return new Series
             {
-                Type = type,
+                Type = item.DataView,
                 XKey = "date",
                 YKey = "coin"
-            };
-            string GetTypeByDataView(DashboardDataView? dataView) => dataView switch
-            {
-                DashboardDataView.Bars => "bar",
-                DashboardDataView.Chart => "line",
-                DashboardDataView.Area => "area",
-                DashboardDataView.Scatter => "scatter",
-                DashboardDataView.Bubble => "bubble",
-                DashboardDataView.Pie => "pie",
-                DashboardDataView.Donut => "donut",
-                null => throw new ArgumentNullException(),
-                _ => throw new NotImplementedException(),
             };
         }
 

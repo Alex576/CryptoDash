@@ -7,9 +7,9 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MenuItem, ToolCodeUrlMap } from '../../models/menu-item';
+import { SettingsCode } from '../../models/settings-code';
 import { ToolCode } from '../../models/tool-code';
 import { TreeFlatItem } from '../../models/tree-flat-item-model';
-import { UserSettingCode } from '../../models/user-setting-code';
 import { LastSessionSetting } from '../../models/user-settings/last-session-setting';
 import { NavigationService } from '../../services/navigation.service';
 import { StorageService } from '../../services/storage.service';
@@ -41,14 +41,14 @@ export class NavigationMenuComponent extends TreeFlatViewComponent<MenuItem> {
 
     this.initAutoThemeSwitch();
 
-    const settings = this.userSettingsService.getLoadedSettings<LastSessionSetting>({ settingCode: UserSettingCode.LastOpenedTool }) ?? { lastOpenedTool: ToolCode.Dashboard };
-    this.selectedItem.set(settings.lastOpenedTool);
+    const settings = this.userSettingsService.getLoadedSettings<LastSessionSetting>({ settingsCode: SettingsCode.LastOpenedTool }) ?? { toolCode: ToolCode.Dashboard };
+    this.selectedItem.set(settings.toolCode);
 
     effect(() => {
       const selectedItem = this.selectedItem();
-      if (selectedItem != settings.lastOpenedTool) {
-        settings.lastOpenedTool = selectedItem;
-        // this.userSettingsService.saveUserLastSessionSettingAsync({ settingCode: UserSettingCode.LastOpenedTool }, settings);
+      if (selectedItem != settings.toolCode) {
+        settings.toolCode = selectedItem;
+        this.userSettingsService.saveUserSettingAsync({ settingsCode: SettingsCode.LastOpenedTool }, settings);
       }
     });
   }

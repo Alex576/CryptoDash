@@ -36,8 +36,8 @@ export function errorInterceptor(
                         console.error(error.message);
                     }
                     else {
-                        // debugger;
-                        notificationService.notifyError("Server Internal Error");
+                        console.error(error);
+                        // notificationService.notifyError("Server Internal Error");
                     }
 
                     return throwError(() => error);
@@ -49,7 +49,7 @@ export function errorInterceptor(
         req: HttpRequest<unknown>,
         next: HttpHandlerFn,
     ): Observable<HttpEvent<unknown>> {
-        if (!storageService.getValue(LocalStorageKeys.Token) || !storageService.getValue(LocalStorageKeys.UserId)) {
+        if (!storageService.getValue(LocalStorageKeys.Token) || !storageService.getValue(LocalStorageKeys.User)) {
             notificationService.notifyError("Session is over");
             navigationService.navigateToLoginPage();
             return throwError(() => new Error("Refresh token is missing"));

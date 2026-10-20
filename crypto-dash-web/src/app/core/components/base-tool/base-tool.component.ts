@@ -32,4 +32,6 @@ export abstract class BaseToolComponent {
   protected getUserSettings<T = unknown>(model: UserSettingsModel): Observable<T> {
     return this.userSettingsService.getSettings<T>(model);
   }
+
+
 }

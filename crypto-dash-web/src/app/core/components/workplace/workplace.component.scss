@@ -22,6 +22,11 @@
             position: relative;
             height: 100%;
             overflow-y: auto;
+            background-image: linear-gradient(
+                135deg,
+                var(--mat-sys-surface) 0%,
+                var(--mat-sys-surface-container-low) 100%
+            );
         }
     }
 }

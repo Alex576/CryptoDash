@@ -15,6 +15,9 @@ namespace CryptoDashWeb.Core
             services.AddScoped<ISettingsService, SettingsService>();
             services.AddScoped<IDashboardService, DashboardService>();
             services.AddScoped<ICoingeckoService, CoingeckoService>();
+            services.AddScoped<IUserSettingsService, UserSettingsService>();
+            services.AddScoped<IUserPreviewLayout, UserPreviewLayout>();
+            services.AddSingleton<IUserSettingsStoreService, UserSettingsStoreService>();
         }
     }
 }

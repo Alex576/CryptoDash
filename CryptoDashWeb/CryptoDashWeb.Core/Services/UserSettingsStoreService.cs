@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 
@@ -23,7 +24,7 @@ namespace CryptoDashWeb.Core.Services
             {SettingsCode.DashboardLayout, typeof(DashboardLayoutUserSettings) },
         };
 
-        private readonly Dictionary<string, BaseUserSettings> _userSettings = new();
+        private readonly ConcurrentDictionary<string, BaseUserSettings> _userSettings = new();
         private readonly ILogger<UserSettingsStoreService> _logger;
 
         public UserSettingsStoreService(ILogger<UserSettingsStoreService> logger)
@@ -49,7 +50,7 @@ namespace CryptoDashWeb.Core.Services
             //if (userSettings == null)
             //    throw new Exception($"Can't parse or create user settings with code = {(int)settingsCode}");
 
-            //_userSettings[key] = userSettings;
+            //_userSettings.TryAdd(key, userSettings);
             //return new UserSettingsModel(userId, toolCode, tileCode, settingsCode, userSettings);
         }
 
@@ -60,7 +61,7 @@ namespace CryptoDashWeb.Core.Services
                 return;
 
             var key = GetSaveKey(userId, toolCode, tileCode, settingsCode);
-            _userSettings[key] = baseUserData;
+            _userSettings.TryAdd(key, baseUserData);
             await userSettingsContext.SaveUserSettings(key, baseUserData);
         }
 

@@ -2,6 +2,7 @@
 using CryptoDashWeb.Core.Models.Dashboard;
 using CryptoDashWeb.Core.Models.Settings.LayoutDBEntities;
 using CryptoDashWeb.Core.Models.Settings.LayoutEntities;
+using CryptoDashWeb.Core.Models.UserSettings;
 using CryptoDashWeb.Core.Services.Interfaces;
 using CryptoDashWeb.Data.Models;
 using CryptoDashWeb.Data.Services;

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormValues } from '../../models/form-editor/form-values';
 import { BaseToolComponent } from '../base-tool/base-tool.component';
 import { DashboardPanelComponent } from '../dashboard-panel/dashboard-panel.component';
+import { DashboardItemChanges } from '../dashboard-panel/models/dashboard-item';
 import { FiltersComponent } from '../filters/filters.component';
 import { LoadingComponent } from '../loading/loading.component';
 import { DashboardService } from './dashboard.service';
@@ -23,5 +24,9 @@ export class DashboardComponent extends BaseToolComponent {
 
   onFilterChanged(filterValues: FormValues): void {
     this.service.onFiltersChanged(filterValues);
+  }
+
+  onItemSizeChange(item: DashboardItemChanges): void {
+    this.service.onItemSizeChange(item);
   }
 }

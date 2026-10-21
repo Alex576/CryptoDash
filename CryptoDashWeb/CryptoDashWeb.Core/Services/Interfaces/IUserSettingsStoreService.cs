@@ -11,6 +11,6 @@ namespace CryptoDashWeb.Core.Services.Interfaces
     public interface IUserSettingsStoreService
     {
         Task<UserSettingsModel> GetUserSettings(int userId, SettingsCode settingsCode, UserSettingsContext userSettingsContext, ToolCode? toolCode = null, TileCode? tileCode = null);
-        Task SaveUserSettings(int currentUser, SettingsCode settingsCode, UserSettingsContext userSettingsContext, JToken userSettings, ToolCode? toolCode, TileCode? tileCode);
+        Task SaveUserSettings(int currentUser, SettingsCode settingsCode, UserSettingsContext userSettingsContext, JToken userSettings, ToolCode? toolCode = null, TileCode? tileCode = null);
     }
 }

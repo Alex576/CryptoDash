@@ -25,16 +25,16 @@ namespace CryptoDashWeb.Core.Services
             _userSettingsStoreService = userSettingsStoreService;
         }
 
-        public async Task<BaseUserSettings?> GetUserSettings(SettingsCode settingsCode, ToolCode? toolCode, TileCode? tileCode)
+        public async Task<BaseUserSettings?> GetUserSettings(SettingsCode settingsCode, ToolCode? toolCode = null, TileCode? tileCode = null)
         {
             var settings = await _userSettingsStoreService.GetUserSettings(_sessionService.CurrentUser, settingsCode, _userSettingsContext, toolCode, tileCode);
             return settings.UserSettings;
         }
 
-        public async Task SaveUserSettings(SettingsCode settingsCode, ToolCode? toolCode, TileCode? tileCode, JToken userSettings)
+        public async Task SaveUserSettings(SettingsCode settingsCode, JToken userSettings, ToolCode? toolCode = null, TileCode? tileCode = null)
         {
             await _userSettingsStoreService.SaveUserSettings(_sessionService.CurrentUser, settingsCode, _userSettingsContext, userSettings, toolCode, tileCode);
-            
+
         }
     }
 }

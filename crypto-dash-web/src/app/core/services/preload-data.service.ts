@@ -19,7 +19,7 @@ export abstract class PreloadDataService extends BaseApiService {
     return this.post(this.GET_FILTERS_PREVIEW, data);
   };
 
-  private readonly toolCodeSource = rxResource<ToolCode, unknown>({
+  protected readonly toolCodeSource = rxResource<ToolCode, unknown>({
     stream: () => this.activatedRoute.data
       .pipe(
         map((data) => data[RouteData.ToolCode])

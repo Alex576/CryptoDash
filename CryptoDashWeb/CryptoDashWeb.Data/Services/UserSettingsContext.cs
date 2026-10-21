@@ -3,6 +3,7 @@ using CryptoDashWeb.Data.DBModels;
 using CryptoDashWeb.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -35,7 +36,12 @@ namespace CryptoDashWeb.Data.Services
                     SettingKey = settingsKey,
                 };
             }
-            oldSettings.DataJson = JsonConvert.SerializeObject(data);
+            oldSettings.DataJson = JsonConvert.SerializeObject(data, new JsonSerializerSettings()
+            {
+                DefaultValueHandling = DefaultValueHandling.Ignore,
+                NullValueHandling = NullValueHandling.Ignore,
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            });
             _context.UserSettings.Update(oldSettings);
             return await _context.SaveChangesAsync();
         }

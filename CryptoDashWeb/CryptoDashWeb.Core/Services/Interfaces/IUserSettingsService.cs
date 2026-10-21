@@ -9,7 +9,7 @@ namespace CryptoDashWeb.Core.Services.Interfaces
 {
     public interface IUserSettingsService
     {
-        Task<BaseUserSettings?> GetUserSettings(SettingsCode settingsCode, ToolCode? toolCode, TileCode? tileCode);
-        Task SaveUserSettings(SettingsCode settingsCode, ToolCode? toolCode, TileCode? tileCode, JToken userSettings);
+        Task<BaseUserSettings?> GetUserSettings(SettingsCode settingsCode, ToolCode? toolCode = null, TileCode? tileCode = null);
+        Task SaveUserSettings(SettingsCode settingsCode, JToken userSettings, ToolCode? toolCode = null, TileCode? tileCode = null);
     }
 }

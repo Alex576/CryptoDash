@@ -28,7 +28,7 @@ namespace CryptoDashWeb.Controllers.Api
         [HttpPost("[action]")]
         public async Task SaveUserSettings(SaveUserSettingsModel model)
         {
-            await _userSettingsService.SaveUserSettings(model.SettingsCode, model.ToolCode, model.TileCode, model.Value);
+            await _userSettingsService.SaveUserSettings(model.SettingsCode, model.Value, model.ToolCode, model.TileCode);
         }
     }
 }

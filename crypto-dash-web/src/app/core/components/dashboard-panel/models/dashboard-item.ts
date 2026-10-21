@@ -2,7 +2,7 @@ import { GridsterItemConfig } from "angular-gridster2";
 import { DashboardType } from "./dashboard-type";
 
 export interface DashboardItem {
-    options: GridsterItemConfigEx;
+    options: DashboardItemOptions;
     id: string;
     name: string;
     type: DashboardType;
@@ -10,11 +10,7 @@ export interface DashboardItem {
     isLoading?: boolean;
     // fields: DashboardField[];
 }
-
-export interface GridsterItemConfigEx extends GridsterItemConfig {
-    id: string;
-}
-
+export interface DashboardItemOptions extends GridsterItemConfig { }
 export interface DashboardItemData {
     chartBaseType: ChartBaseType;
     data: unknown[];

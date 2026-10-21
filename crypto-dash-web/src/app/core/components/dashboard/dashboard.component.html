@@ -2,7 +2,7 @@
   <app-filters [filters]="filters()" (valueChanged)="onFilterChanged($event)" />
   @let dashboardItems = items();
   @if (dashboardItems){
-  <app-dashboard-panel [options]="options()" [items]="dashboardItems" />
+  <app-dashboard-panel [options]="options()" [items]="dashboardItems" (onItemSizeChange)="onItemSizeChange($event)" />
   }
   @else {
   <app-loading />

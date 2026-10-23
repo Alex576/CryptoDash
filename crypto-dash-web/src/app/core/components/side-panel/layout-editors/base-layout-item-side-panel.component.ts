@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TileCode } from '../../../models/tile-code';
-import { BaseSidePanelComponent } from '../base-side-panel.component';
+import { BaseFormSidePanelComponent } from '../base-form-side-panel.component';
 import { LayoutItemFormEditorModel } from './item-editor/layout-item-form-editor-model';
 
 @Component({
@@ -9,7 +9,7 @@ import { LayoutItemFormEditorModel } from './item-editor/layout-item-form-editor
     styleUrls: [],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export abstract class BaseLayoutItemSidePanelComponent extends BaseSidePanelComponent {
+export abstract class BaseLayoutItemSidePanelComponent extends BaseFormSidePanelComponent {
 
     protected getLayoutItemFormUpdateModel(itemId: string, tileCode: TileCode): LayoutItemFormEditorModel {
         const updateModel = this.getFormUpdateModel();

@@ -22,39 +22,12 @@ $panel-padding: 10px;
         cursor: default;
     }
 
-    // &__blob {
-    //     position: absolute;
-    //     width: 100px;
-    //     height: 100px;
-    //     left: 50%;
-    //     top: 75%;
-    //     background: #7000ff;
-    //     filter: blur(80px);
-    //     border-radius: 50%;
-    //     z-index: 1;
-    //     // animation: move-and-fade 1ms linear 2 alternate;
-    //     // animation-timeline: scroll(y block);
-
-    //     // @keyframes move-and-fade {
-    //     //     from {
-    //     //         opacity: 0;
-    //     //         transform: translateY(0);
-    //     //     }
-    //     //     to {
-    //     //         opacity: 1;
-    //     //         transform: translateY(-250px);
-    //     //     }
-    //     // }
-    // }
-
     &__data {
         position: relative;
         padding: 0 $panel-padding;
         flex: 1;
         overflow-y: auto;
         display: flex;
-        // justify-content: center;
-        // align-items: center;
     }
 
     &__loading {
@@ -70,8 +43,5 @@ $panel-padding: 10px;
         align-items: center;
         padding: $panel-padding;
         background: var(--mat-sys-surface-container-high);
-
-        &-close {
-        }
     }
 }

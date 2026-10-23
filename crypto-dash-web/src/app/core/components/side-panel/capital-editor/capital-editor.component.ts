@@ -6,7 +6,7 @@ import { OperationResult, OperationResultData } from '../../../models/operation-
 import { isSuccess } from '../../../models/operation-result/result-code';
 import { DashboardItem } from '../../dashboard-panel/models/dashboard-item';
 import { FormComponent } from "../../form/form.component";
-import { BaseSidePanelComponent } from '../base-side-panel.component';
+import { BaseFormSidePanelComponent } from '../base-form-side-panel.component';
 import { SidePanelViewComponent } from "../side-panel-view/side-panel-view.component";
 import { CapitalEditorService } from './capital-editor.service';
 
@@ -18,7 +18,7 @@ import { CapitalEditorService } from './capital-editor.service';
   imports: [SidePanelViewComponent, FormComponent, MatButtonModule],
   providers: [CapitalEditorService],
 })
-export class CapitalEditorComponent extends BaseSidePanelComponent {
+export class CapitalEditorComponent extends BaseFormSidePanelComponent {
   private readonly service = inject(CapitalEditorService);
 
   private get data(): number {

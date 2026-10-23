@@ -1,5 +1,5 @@
 <div class="capital-editor">
-  <app-side-panel-view [isMainDataReady]="isFormReady()">
+  <app-side-panel-view [isMainDataReady]="isFormReady()" (onClosed)="onClose()">
     <ng-container main-data>
       <div class="capital-editor__form">
         <app-form [form]="form()" (formChanged)="onFormChanged()" (canSaveForm)="onCanSaveForm($event)" />

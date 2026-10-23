@@ -4,6 +4,10 @@
     </div>
     <div class="toolbar_right">
         <div class="user">
+            <button matIconButton
+                    (click)="onOpenNotifications()">
+                <mat-icon>notifications</mat-icon>
+            </button>
             <app-profile />
             <button matIconButton
                     (click)="onLogout()">

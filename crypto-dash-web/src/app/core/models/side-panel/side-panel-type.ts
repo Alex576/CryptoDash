@@ -4,4 +4,5 @@ export enum SidePanelType {
     LayoutDashboardItemEditor = 3,
     CapitalEditor = 4,
     LayoutFormEditor = 5,
+    Notifications = 6,
 }

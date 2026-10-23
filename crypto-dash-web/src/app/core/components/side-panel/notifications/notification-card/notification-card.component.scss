@@ -1,0 +1,37 @@
+.notification-card {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+
+    &.success {
+        border-left: var(--success-border-color) 4px solid;
+        background-color: var(--success-background-color);
+
+        &.is-already-read {
+            border-left: var(--success-border-color-half) 4px solid;
+            background-color: var(--success-background-color);
+        }
+    }
+
+    &.warning {
+        border-left: var(--warning-border-color) 4px solid;
+        background-color: var(--warning-background-color);
+
+        &.is-already-read {
+            border-left: var(--warning-border-color-half) 4px solid;
+            background-color: var(--warning-background-color);
+        }
+    }
+
+    &.error {
+        border-left: var(--error-border-color) 4px solid;
+        background-color: var(--error-background-color);
+
+        &.is-already-read {
+            border-left: var(--error-border-color-half) 4px solid;
+            background-color: var(--error-background-color);
+        }
+    }
+}

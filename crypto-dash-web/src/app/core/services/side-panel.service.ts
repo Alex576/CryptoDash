@@ -31,6 +31,7 @@ export class SidePanelService {
 
     const panelData: SidePanelData = {
       tileCode: data.tileCode,
+      type: data.type,
       data: data.data,
     };
     const panelInjector = Injector.create({

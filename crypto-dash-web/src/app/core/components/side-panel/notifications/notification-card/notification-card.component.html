@@ -1,0 +1,25 @@
+<mat-card class="notification-card"
+          [class.success]="isSuccess()"
+          [class.warning]="isWarning()"
+          [class.error]="isError()"
+          [class.is-already-read]="isAlreadyRead()">
+  <mat-card-header class="notification-card__title">
+    <mat-card-title>
+      {{title()}}
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="notification-card__message">
+    {{message()}}
+  </mat-card-content>
+</mat-card>
+<!-- <div class="notification-card"
+     [class.success]="isSuccess()"
+     [class.warning]="isWarning()"
+     [class.error]="isError()">
+  <div class="notification-card__title">
+    {{title()}}
+  </div>
+  <div class="notification-card__message">
+    {{message()}}
+  </div>
+</div> -->

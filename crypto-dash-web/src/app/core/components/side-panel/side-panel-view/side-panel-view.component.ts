@@ -1,7 +1,6 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { SIDE_PANEL_HEADER } from '../../../models/side-panel/side-panel-data-token';
-import { SidePanelService } from '../../../services/side-panel.service';
 import { LoadingComponent } from "../../loading/loading.component";
 
 @Component({
@@ -13,11 +12,11 @@ import { LoadingComponent } from "../../loading/loading.component";
 })
 export class SidePanelViewComponent {
   readonly isMainDataReady = input<boolean>(true);
+  readonly onClosed = output<void>();
 
   protected readonly header = inject(SIDE_PANEL_HEADER);
-  private readonly sidePanelService = inject(SidePanelService);
 
   onClose(): void {
-    this.sidePanelService.close();
+    this.onClosed.emit();
   }
 }

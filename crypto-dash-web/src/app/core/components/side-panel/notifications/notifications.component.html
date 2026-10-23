@@ -1,0 +1,11 @@
+<div class="notifications">
+  <app-side-panel-view (onClosed)="onClose()">
+    <ng-container main-data>
+      <div class="notifications__items">
+        @for (notification of notifications(); track notification.id) {
+        <app-notification-card [item]="notification" />
+        }
+      </div>
+    </ng-container>
+  </app-side-panel-view>
+</div>

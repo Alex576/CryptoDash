@@ -28,6 +28,11 @@ body {
   &.light-theme {
     --mat-icon-button-touch-target-size: 100%;
   }
+  --success-border-color-half: color-mix(in srgb, var(--success-border-color), transparent 80%);
+  --warning-border-color-half: color-mix(in srgb, var(--warning-border-color), transparent 80%);
+  --error-border-color-half: color-mix(in srgb, var(--error-border-color), transparent 80%);
+  --form-field-changed-indicator-color: var(--warning-color);
+  --form-field-changed-indicator-color-hover: color-mix(in srgb, var(--form-field-changed-indicator-color), white 25%);
 }
 
 @mixin themeConfig($theme) {
@@ -44,20 +49,33 @@ body {
   @include themeConfig(darkTheme.$dark-theme);
   color-scheme: darkTheme;
   --warning-color: #fbbf24;
-  --form-field-changed-indicator-color: #fbbf24;
-  --form-field-changed-indicator-color-hover: color-mix(in srgb, var(--form-field-changed-indicator-color), white 25%);
+  --warning-border-color: #ffe082;
+  --warning-background-color: #282313;
+  --error-color: var(--mat-sys-error);
+  --error-border-color: #ffb4ab;
+  --error-background-color: #2c1816;
+  --success-color: #81c784;
+  --success-border-color: #4caf50;
+  --success-background-color: #1c281d;
 }
 
 .light-theme {
   @include themeConfig(lightTheme.$light-theme);
   color-scheme: lightTheme;
   --warning-color: #f59e0b;
-  --form-field-changed-indicator-color: #f59e0b;
-  --form-field-changed-indicator-color-hover: color-mix(in srgb, var(--form-field-changed-indicator-color), white 25%);
+  --warning-border-color: #b26a00;
+  --warning-background-color: #fff8e1;
+  --error-color: var(--mat-sys-error);
+  --error-border-color: #b00020;
+  --error-background-color: #fde8e8;
+  --success-color: #388e3c;
+  --success-border-color: #4caf50;
+  --success-background-color: #e8f5e9;
 }
 
-.side-panel {
-  display: flex;
+.cdk-overlay-pane.side-panel {
+  display: grid;
+  grid-template-columns: 1fr;
   flex-direction: column;
   min-width: 30vw;
   height: 100vh;

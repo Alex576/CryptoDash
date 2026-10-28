@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatFormFieldModule } from "@angular/material/form-field";
-import { AvatarComponent } from 'ngx-avatar-2';
 import { ToolbarService } from '../../services/toolbar.service';
-
+import { AvatarComponent } from 'ngx-avatars';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',

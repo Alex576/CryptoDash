@@ -1,13 +1,13 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
 import { NotificationData } from '../models/notifications/notification-data';
 import { NotificationStatus } from '../models/notifications/notification-status';
+import { NgxMatToastService } from 'ngx-mat-toast';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
-  private readonly toast = inject(ToastrService);
+  private readonly toast = inject(NgxMatToastService);
   private readonly notifications = signal<NotificationData[]>([], { equal: () => false });
 
   readonly notificationsData = computed<NotificationData[]>(() => this.notifications());

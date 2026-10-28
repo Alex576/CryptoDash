@@ -8,13 +8,12 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { provideRouter } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
-import { AvatarModule } from 'ngx-avatar-2';
-import { provideToastr } from 'ngx-toastr';
 import { routes } from './app.routes';
 import { errorInterceptor } from './core/interceptors/error-interceptor';
 import { httpInterceptor } from './core/interceptors/http-interceptor';
 import { userInterception } from './core/interceptors/user-interceptor';
 import { Language } from './utils/translations/languages';
+import { provideNgxMatToast } from 'ngx-mat-toast';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,11 +21,13 @@ export const appConfig: ApplicationConfig = {
       withXhr(),
       withInterceptors([httpInterceptor, userInterception, errorInterceptor]),
     ),
-    provideToastr({
+    provideNgxMatToast({
+      duration: 3000,
       progressBar: true,
-      closeButton: false,
+      closeable: true,
+      position: { horizontal: 'end', vertical: 'top' },
     }),
-    importProvidersFrom(AvatarModule.forRoot()),
+
     provideTranslateService({
       loader: provideTranslateHttpLoader({
         prefix: '/i18n/',

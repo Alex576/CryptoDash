@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <SpaRoot>..\crypto-dash-web\</SpaRoot>
+    <SpaRoot>..\..\crypto-dash-web\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
   </PropertyGroup>
 

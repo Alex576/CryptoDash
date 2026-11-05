@@ -39,7 +39,7 @@ jobs:
       - name: Run Angular Tests
         run: |
           npm ci
-          npm run test -- --watch=false --browsers=ChromeHeadless
+          npm run test -- --watch=false --run
         working-directory: ./crypto-dash-web
         continue-on-error: false
 

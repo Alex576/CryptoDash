@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from "@angular/material/icon";
-import { ɵEmptyOutletComponent } from '@angular/router';
 import { SidePanelType } from '../../models/side-panel/side-panel-type';
 import { TileCode } from '../../models/tile-code';
 import { NavigationService } from '../../services/navigation.service';
@@ -15,7 +14,7 @@ import { NotificationsComponent } from '../side-panel/notifications/notification
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatIcon, ProfileComponent, MatButtonModule, MatIcon, BadgeComponent, ɵEmptyOutletComponent]
+  imports: [MatIcon, ProfileComponent, MatButtonModule, MatIcon, BadgeComponent]
 })
 export class ToolbarComponent {
   private readonly navigationService = inject(NavigationService);

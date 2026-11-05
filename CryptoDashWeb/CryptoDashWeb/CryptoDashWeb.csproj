@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>c8f7b41c-90ef-48ed-a0ec-b4e2211a4ea1</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>

@@ -33,7 +33,7 @@ jobs:
               ${{ runner.os }}-nuget-
 
       - name: Restore .NET dependencies
-        run: dotnet restore
+        run: dotnet restore CryptoDashWeb.slnx
         working-directory: ./CryptoDashWeb
 
       - name: Run Angular Tests
@@ -44,10 +44,10 @@ jobs:
         continue-on-error: false
 
       - name: Run .NET Tests
-        run: dotnet test --configuration Release --no-restore --verbosity normal
+        run: dotnet test CryptoDashWeb.slnx --configuration Release --no-restore --verbosity normal
         working-directory: ./CryptoDashWeb
 
 
       - name: Publish Integrated Application
-        run: dotnet publish --configuration Release --output ../publish
+        run: dotnet publish CryptoDashWeb.slnx --configuration Release --output ../publish
         working-directory: ./CryptoDashWeb

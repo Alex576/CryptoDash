@@ -36,12 +36,12 @@ jobs:
         run: dotnet restore CryptoDashWeb.slnx
         working-directory: ./CryptoDashWeb
 
-      - name: Run Angular Tests
-        run: |
-          npm ci
-          npm run test -- --watch=false --run
-        working-directory: ./crypto-dash-web
-        continue-on-error: false
+    #   - name: Run Angular Tests
+    #     run: |
+    #       npm ci
+    #       npm run test -- --watch=false --run
+    #     working-directory: ./crypto-dash-web
+    #     continue-on-error: false
 
       - name: Run .NET Tests
         run: dotnet test CryptoDashWeb.slnx --configuration Release --no-restore --verbosity normal

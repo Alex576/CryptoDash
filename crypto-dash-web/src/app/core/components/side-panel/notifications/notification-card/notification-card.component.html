@@ -7,6 +7,9 @@
     <mat-card-title>
       {{title()}}
     </mat-card-title>
+    <mat-card-subtitle>
+      {{createdAt() | date: 'short'}}
+    </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content class="notification-card__message">
     {{message()}}

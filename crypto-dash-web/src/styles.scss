@@ -62,7 +62,7 @@ body {
 .light-theme {
   @include themeConfig(lightTheme.$light-theme);
   color-scheme: lightTheme;
-  --warning-color: #f59e0b;
+  --warning-color: #f7ae31;
   --warning-border-color: #b26a00;
   --warning-background-color: #fff8e1;
   --error-color: var(--mat-sys-error);

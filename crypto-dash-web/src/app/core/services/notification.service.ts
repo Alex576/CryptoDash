@@ -37,6 +37,7 @@ export class NotificationService {
       title,
       message,
       status,
+      createdAt: new Date(Date.now())
     };
     this.notifications.update(notifications => {
       notifications.push(data);

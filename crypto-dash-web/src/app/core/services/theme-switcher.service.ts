@@ -1,6 +1,7 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject } from 'rxjs';
+import { LocalStorageKeys } from '../models/local-storage-keys';
 import { Constants } from '../utils/constants';
 import { StorageService } from './storage.service';
 
@@ -19,7 +20,7 @@ export class ThemeSwitcherService {
   private readonly toggleTheme$ = this.toggleThemeSub$.asObservable();
 
   private get currentTheme(): string {
-    return this.darkThemeName;
+    return this.storageService.getValue(LocalStorageKeys.Theme) || this.darkThemeName;
   }
 
   constructor() { }
@@ -80,7 +81,7 @@ export class ThemeSwitcherService {
 
   private setTheme(themeName: string, saveTheme = true): void {
     if (saveTheme) {
-      // this.storageService.saveValue(LocalStorageKeys.Theme, themeName);
+      this.storageService.saveValue(LocalStorageKeys.Theme, themeName);
     }
     document.body.dataset['agThemeMode'] = themeName;
     document.body.classList.remove(...this.themeList);

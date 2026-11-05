@@ -10,6 +10,7 @@ using NLog.Web;
 using Security.Core;
 using Security.Core.Models;
 using Security.Data.DBContext;
+using StackExchange.Redis;
 
 public partial class Program
 {
@@ -54,77 +55,27 @@ public partial class Program
         var isInDocker = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
 
 
-        var connection = isInDocker ? builder.Configuration.GetConnectionString("DockerConnection") : builder.Configuration.GetConnectionString("DefaultConnection");
-        builder.Services.AddDbContext<CryptoDashContext>(options => SetDbOptions(options, connection, "dbo"));
-        builder.Services.AddDbContext<SecurityContext>(options => SetDbOptions(options, connection, "sc"));
+        var dbConnection = isInDocker ? builder.Configuration.GetConnectionString("DockerConnection") : builder.Configuration.GetConnectionString("DefaultConnection");
+        var redisConnection = isInDocker ? builder.Configuration.GetConnectionString("RedisDockerConnection") : builder.Configuration.GetConnectionString("RedisDefaultConnection");
+
+        builder.Services.AddDbContext<CryptoDashContext>(options => SetDbOptions(options, dbConnection, "dbo"));
+        builder.Services.AddDbContext<SecurityContext>(options => SetDbOptions(options, dbConnection, "sc"));
 
         var jwtConfig = builder.Configuration.GetSection("JWT").Get<JWTModel>() ?? new JWTModel();
-        //var kafkaOptions = builder.Configuration.GetSection("Kafka").Get<KafkaModel>() ?? new();
-        //if (string.IsNullOrEmpty(kafkaOptions.BootstrapServer) || string.IsNullOrEmpty(kafkaOptions.Topic))
-        //    logger.Error("Kafka configuration is empty!");
+        //builder.Services.AddStackExchangeRedisCache(options =>
+        //{
+        //    options.Configuration = redisConnection;
+        //    options.InstanceName = "UserNotifications_";
+        //});
+        if (string.IsNullOrEmpty(redisConnection))
+            throw new InvalidOperationException("Redis connection string is empty");
 
+        builder.Services.AddSingleton<IConnectionMultiplexer>(options => ConnectionMultiplexer.Connect(redisConnection));
         builder.Services.Configure<ConfigModel>(builder.Configuration.GetSection("Config"));
         builder.Services.Configure<JWTModel>(builder.Configuration.GetSection("JWT"));
         builder.Services.Configure<CoingeckoModel>(builder.Configuration.GetSection("Coingecko"));
-        //builder.Services.Configure<KafkaModel>(builder.Configuration.GetSection("Kafka"));
 
-        //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        //    .AddJwtBearer(options =>
-        //    {
-        //        options.TokenValidationParameters = new TokenValidationParameters()
-        //        {
-        //            ValidateIssuer = true,
-        //            ValidIssuer = jwtConfig.Issuer,
-        //            ValidateAudience = true,
-        //            ValidAudience = jwtConfig.Audience,
-        //            ValidateLifetime = true,
-        //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtConfig.SecretKey)),
-        //            ValidateIssuerSigningKey = true,
-        //        };
-        //        options.Events = new JwtBearerEvents
-        //        {
-        //            OnMessageReceived = context =>
-        //            {
-        //                var token = context.Request.Headers["Authorization"];
-        //                // Здесь удобно смотреть, пришел ли токен вообще
-        //                return Task.CompletedTask;
-        //            },
-        //            OnAuthenticationFailed = context =>
-        //            {
-        //                // А здесь можно поймать причину, почему токен отклонен (истек, кривой ключ и т.д.)
-        //                Console.WriteLine("Ошибка: " + context.Exception.Message);
-        //                return Task.CompletedTask;
-        //            },
-        //            OnForbidden = context =>
-        //            {
-        //                return Task.CompletedTask;
-        //            }
-        //        };
-        //    });
-
-        //builder.Services.AddAuthorization(options =>
-        //{
-        //    options.FallbackPolicy = new AuthorizationPolicyBuilder()
-        //        .RequireAuthenticatedUser()
-        //        .Build();
-        //});
         builder.Services.AddSingleton<IJWTOptions>(s => s.GetRequiredService<IOptions<JWTModel>>().Value);
-        //var producerConfig = new ProducerConfig()
-        //{
-        //    BootstrapServers = kafkaOptions.BootstrapServer, //"localhost:9092",
-        //    SocketTimeoutMs = 5000,
-        //    MessageTimeoutMs = 5000
-        //};
-
-        //builder.Services.AddSingleton<IProducer<Null, SendKafkaFileModel>>(sp =>
-        //    new ProducerBuilder<Null, SendKafkaFileModel>(producerConfig)
-        //        .SetValueSerializer(new KafkaNewtonsoftSerDes<SendKafkaFileModel>())
-        //        .Build());
-        //builder.Services.AddSingleton<KafkaFileConvertProducer>();
-
-        //builder.Services.AddHostedService<KafkaMissedFilesProducer>();
-        //builder.Services.AddHostedService<KafkaConsumerService>();
-
         CryptoDashWebServiceContext.InitializeServices(builder.Services);
         SecurityServiceHelper.InitializeServices(builder.Services);
 

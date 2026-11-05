@@ -17,6 +17,7 @@ namespace CryptoDashWeb.Core
             services.AddScoped<ICoingeckoService, CoingeckoService>();
             services.AddScoped<IUserSettingsService, UserSettingsService>();
             services.AddScoped<IUserPreviewLayout, UserPreviewLayout>();
+            services.AddScoped<IUserNotificationsService, UserNotificationsService>();
             services.AddSingleton<IUserSettingsStoreService, UserSettingsStoreService>();
         }
     }

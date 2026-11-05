@@ -258,6 +258,32 @@ namespace CryptoDashWeb.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("CryptoDashWeb.Data.DBModels.UserNotificationHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_read");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_user_notification_histories");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_user_notification_histories_user_id");
+
+                    b.ToTable("user_notification_histories", "dbo");
+                });
+
             modelBuilder.Entity("CryptoDashWeb.Data.DBModels.UserSetting", b =>
                 {
                     b.Property<int>("Id")
@@ -369,6 +395,39 @@ namespace CryptoDashWeb.Data.Migrations
                     b.Navigation("Parent");
 
                     b.Navigation("TileType");
+                });
+
+            modelBuilder.Entity("CryptoDashWeb.Data.DBModels.UserNotificationHistory", b =>
+                {
+                    b.OwnsOne("CryptoDashWeb.Data.Models.UserNotificationHistoryEntity", "Data", b1 =>
+                        {
+                            b1.Property<int>("UserNotificationHistoryId");
+
+                            b1.Property<DateTime>("CreatedAt");
+
+                            b1.Property<bool?>("IsRead");
+
+                            b1.Property<string>("Message");
+
+                            b1.Property<int>("Status");
+
+                            b1.Property<string>("Title");
+
+                            b1.HasKey("UserNotificationHistoryId");
+
+                            b1.ToTable("user_notification_histories", "dbo");
+
+                            b1
+                                .ToJson("data")
+                                .HasColumnType("jsonb");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserNotificationHistoryId")
+                                .HasConstraintName("fk_user_notification_histories_user_notification_histories_id");
+                        });
+
+                    b.Navigation("Data")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CryptoDashWeb.Data.DBModels.ClassEntity", b =>

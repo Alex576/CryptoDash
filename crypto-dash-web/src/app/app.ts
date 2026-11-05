@@ -1,7 +1,8 @@
-import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterOutlet } from '@angular/router';
+import { ThemeSwitcherService } from './core/services/theme-switcher.service';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,7 @@ export class App {
   private readonly darkThemeName = 'dark-theme';
   private readonly iconRegistry = inject(MatIconRegistry);
   private readonly sanitizer = inject(DomSanitizer);
+  private readonly themeSwitchService = inject(ThemeSwitcherService);
 
   constructor() {
     // this.translate.addLangs([Language.RU]);
@@ -23,15 +25,6 @@ export class App {
       'dash',
       this.sanitizer.bypassSecurityTrustResourceUrl('chart-previews.svg'),
     );
-    this.setTheme(this.darkThemeName);
-  }
-
-  private setTheme(themeName: string, saveTheme = true): void {
-    // if (saveTheme) {
-    //   this.storageService.saveValue(LocalStorageKeys.Theme, themeName);
-    // }
-    // document.body.dataset['agThemeMode'] = themeName;
-    // document.body.classList.remove(...this.themeList);
-    document.body.classList.add(themeName);
+    this.themeSwitchService.init();
   }
 }

@@ -1,0 +1,23 @@
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(-360deg);
+    }
+}
+
+.badge {
+    display: flex;
+    position: relative;
+    &__icon {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        width: 16px;
+        height: 16px;
+        font-size: 16px;
+        color: var(--warning-color);
+        animation: spin 1s linear infinite;
+    }
+}

@@ -40,7 +40,6 @@ export class NavigationMenuComponent extends TreeFlatViewComponent<MenuItem> {
     super();
 
     this.initAutoThemeSwitch();
-
     const settings = this.userSettingsService.getLoadedSettings<LastSessionSetting>({ settingsCode: SettingsCode.LastOpenedTool });
     this.selectedItem.set(settings.toolCode ?? ToolCode.Dashboard);
 

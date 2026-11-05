@@ -15,6 +15,7 @@ namespace CryptoDashWeb.Data.DBContext
         public virtual DbSet<ClassEntity> ClassEntities { get; set; }
         public virtual DbSet<CoinHistory> CoinHistories { get; set; }
         public virtual DbSet<UserSetting> UserSettings { get; set; }
+        public virtual DbSet<UserNotificationHistory> UserNotificationHistories { get; set; }
 
         public CryptoDashContext(DbContextOptions<CryptoDashContext> options)
             : base(options)
@@ -67,6 +68,11 @@ namespace CryptoDashWeb.Data.DBContext
             {
                 entity.Property(x => x.DataJson).HasColumnType("text");
                 entity.HasIndex(x => x.SettingKey);
+            });
+            modelBuilder.Entity<UserNotificationHistory>(entity =>
+            {
+                entity.HasIndex(x => x.UserId);
+                entity.OwnsOne(x => x.Data, x => x.ToJson());
             });
             FillClassCode(modelBuilder);
             FillTileTypeCode(modelBuilder);

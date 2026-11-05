@@ -6,7 +6,11 @@
         <div class="user">
             <button matIconButton
                     (click)="onOpenNotifications()">
-                <mat-icon>notifications</mat-icon>
+                <app-badge>
+                    <ng-container>
+                        <mat-icon>notifications</mat-icon>
+                    </ng-container>
+                </app-badge>
             </button>
             <app-profile />
             <button matIconButton
